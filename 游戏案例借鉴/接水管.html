@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>水管迷宫</title>
+    <style>
+        :root {
+            /* 核心配色参数 */
+            --bg-color: #eaf4f4;
+            --ui-text-color: #2b2d42;
+            --water-color: #00bbf9;
+            --target-color: #f15bb5;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, var(--bg-color) 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            touch-action: none;
+        }
+        #game-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+        .header {
+            text-align: center;
+            color: var(--ui-text-color);
+            text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+            margin-top: 10px;
+        }
+        h1 { margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: 4px; }
+        p#level-text { margin: 5px 0 0 0; font-size: 1.2rem; color: var(--water-color); font-weight: bold; }
+        
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(43, 44, 62, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            opacity: 1;
+            transition: opacity 0.5s;
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+        #overlay.hidden { opacity: 0; pointer-events: none; }
+        .panel {
+            background: #ffffff; 
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 85%;
+            color: var(--ui-text-color);
+        }
+        #overlay:not(.hidden) .panel { transform: scale(1); }
+        .panel h2 { color: var(--ui-text-color); margin-top: 0; font-size: 2.2rem; margin-bottom: 10px; }
+        .btn {
+            background: #f15bb5;
+            color: white;
+            border: none;
+            padding: 15px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 25px;
+            box-shadow: 0 8px 20px rgba(241, 91, 181, 0.4);
+        }
+        .btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 25px rgba(241, 91, 181, 0.5); }
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+        .controls-hint {
+            color: var(--ui-text-color);
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border-left: 6px solid var(--water-color);
+            font-weight: 500;
+        }
+        #solve-btn {
+            background: transparent;
+            color: transparent;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            backdrop-filter: none;
+            transition: none;
+            box-shadow: none;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+            opacity: 0;
+        }
+        #solve-btn:hover { background: transparent; transform: none; box-shadow: none; }
+        .solve-sub { font-size: 0.75rem; font-weight: normal; opacity: 0.7; margin-top: 2px; }
+
+        #hint-btn {
+            position: fixed;
+            left: 50%;
+            bottom: calc(72px + env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            z-index: 9;
+            border: 2px solid rgba(255, 255, 255, 0.78);
+            border-radius: 999px;
+            min-width: 170px;
+            height: 52px;
+            padding: 0 24px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #ffffff;
+            background: linear-gradient(135deg, #00bbf9 0%, #19d3ff 100%);
+            box-shadow: 0 12px 28px rgba(0, 187, 249, 0.38);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+        }
+        #hint-btn:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 16px 32px rgba(0, 187, 249, 0.44);
+        }
+        #hint-btn:disabled {
+            cursor: default;
+            opacity: 0.6;
+            color: #eff5f7;
+            background: #8ea2ad;
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            transform: translateX(-50%);
+        }
+        
+        #celebration-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 8;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 18px;
+            border-radius: 2px;
+            opacity: 0.95;
+            will-change: transform, opacity;
+        }
+
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="game-container"></div>
+    <div id="ui-layer">
+        <div class="header">
+            <h1>水管迷宫</h1>
+            <p id="level-text">第 1 关</p>
+        </div>
+        <div class="footer">
+            <div class="controls-hint">🖐 拖动管道：旋转 90°<br>🖐 拖动空白：旋转视角（第二关起含上下层）</div>
+            <button id="solve-btn">
+                <span>一键通关</span>
+                <span class="solve-sub">(自动连通水路)</span>
+            </button>
+        </div>
+    </div>
+    <button id="hint-btn">提示（本关一次）</button>
+    <div id="celebration-layer"></div>
+
+    <div id="overlay">
+        <div class="panel">
+            <h2 id="screen-title">接通水路</h2>
+            <p id="overlay-desc" style="color:#555; font-size:1.1rem; line-height: 1.6; font-weight: bold;">
+                把水从起点引到所有终点。<br>
+                每次旋转都会改变管道方向。<br>
+                全部终点通水即可过关。
+            </p>
+            <button class="btn" id="action-btn">开始游戏</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // ==========================================
+        // 0. 配置参数
+        // ==========================================
+        const CONFIG = {
+            pipeColor: '#ffffff',     
+            waterColor: '#00bbf9',    
+            targetColor: '#f15bb5',   
+            bgColor: '#eaf4f4',       
+            uiTextColor: '#2b2d42',
+            inactiveFluid: '#dce4e4', 
+            dragSensitivity: 0.006, pipeDragSpeed: 0.015,
+            dampingFactor: 0.12, particleCount: 100, bounceHeight: 0.15,
+            pipeOpacity: 0.6 // 管道透明度 60%
+        };
+
+        const BASE_DIRS = [
+            new THREE.Vector3(0, 0, -1), new THREE.Vector3(1, 0, 0),
+            new THREE.Vector3(0, 0, 1),  new THREE.Vector3(-1, 0, 0),
+            new THREE.Vector3(0, 1, 0),  new THREE.Vector3(0, -1, 0)
+        ];
+
+        const RAW_LEVELS = [
+            { density: 0.18, dim: [3, 1, 3], path: [{x:0,y:0,z:0,t:'source',c:[0,1,0,0,0,0]},{x:1,y:0,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:1,y:0,z:1,t:'pipe',c:[1,1,0,0,0,0]},{x:2,y:0,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:0,z:2,t:'target',c:[1,0,0,0,0,0]}]},
+            { density: 0.35, dim: [4, 2, 3], path: [{x:0,y:0,z:0,t:'source',c:[0,1,0,0,0,0]},{x:1,y:0,z:0,t:'pipe',c:[0,0,0,1,1,0]},{x:1,y:1,z:0,t:'pipe',c:[0,0,1,0,0,1]},{x:1,y:1,z:1,t:'pipe',c:[1,1,0,0,0,0]},{x:2,y:1,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:1,z:2,t:'pipe',c:[1,0,0,0,0,1]},{x:2,y:0,z:2,t:'pipe',c:[0,1,0,0,1,0]},{x:3,y:0,z:2,t:'target',c:[0,0,0,1,0,0]}]},
+            { density: 0.52, dim: [3, 2, 3], path: [{x:0,y:0,z:0,t:'source',c:[0,0,0,0,1,0]},{x:0,y:1,z:0,t:'pipe',c:[0,1,0,0,0,1]},{x:1,y:1,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:1,y:1,z:1,t:'pipe',c:[1,1,0,0,0,1]},{x:2,y:1,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:1,z:2,t:'target',c:[1,0,0,0,0,0]},{x:1,y:0,z:1,t:'pipe',c:[0,1,0,0,1,0]},{x:2,y:0,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:0,z:2,t:'target',c:[1,0,0,0,0,0]}]},
+            { density: 0.66, dim: [4, 2, 4], path: [{x:0,y:0,z:0,t:'source',c:[0,1,0,0,0,0]},{x:1,y:0,z:0,t:'pipe',c:[0,0,0,1,1,0]},{x:1,y:1,z:0,t:'pipe',c:[0,1,0,0,0,1]},{x:2,y:1,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:1,z:1,t:'pipe',c:[1,1,0,1,0,0]},{x:1,y:1,z:1,t:'target',c:[0,1,0,0,0,0]},{x:3,y:1,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:3,y:1,z:2,t:'pipe',c:[1,0,0,0,0,1]},{x:3,y:0,z:2,t:'pipe',c:[0,0,1,0,1,0]},{x:3,y:0,z:3,t:'target',c:[1,0,0,0,0,0]}]},
+            { density: 0.78, dim: [3, 3, 3], path: [{x:1,y:0,z:1,t:'source',c:[0,0,0,0,1,0]},{x:1,y:1,z:1,t:'pipe',c:[1,0,1,0,0,1]},{x:1,y:1,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:0,y:1,z:0,t:'target',c:[0,1,0,0,0,0]},{x:1,y:1,z:2,t:'pipe',c:[1,0,0,0,1,0]},{x:1,y:2,z:2,t:'pipe',c:[0,1,0,0,0,1]},{x:2,y:2,z:2,t:'target',c:[0,0,0,1,0,0]}]},
+            { density: 0.88, dim: [4, 3, 5], path: [{x:0,y:0,z:0,t:'source',c:[0,1,0,0,0,0]},{x:1,y:0,z:0,t:'pipe',c:[0,0,0,1,1,0]},{x:1,y:1,z:0,t:'pipe',c:[0,1,0,0,0,1]},{x:2,y:1,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:1,z:1,t:'pipe',c:[1,1,0,0,0,1]},{x:2,y:0,z:1,t:'target',c:[0,0,0,0,1,0]},{x:3,y:1,z:1,t:'pipe',c:[0,0,0,1,1,0]},{x:3,y:2,z:1,t:'pipe',c:[0,0,1,0,0,1]},{x:3,y:2,z:2,t:'pipe',c:[1,0,0,1,0,0]},{x:2,y:2,z:2,t:'pipe',c:[0,1,1,1,0,0]},{x:1,y:2,z:2,t:'pipe',c:[0,1,0,0,0,0]},{x:2,y:2,z:3,t:'pipe',c:[1,0,0,0,0,1]},{x:2,y:1,z:3,t:'pipe',c:[0,0,0,1,1,0]},{x:1,y:1,z:3,t:'pipe',c:[0,1,1,0,1,0]},{x:1,y:2,z:3,t:'target',c:[0,0,0,0,0,1]},{x:1,y:1,z:4,t:'pipe',c:[1,0,0,0,0,1]},{x:1,y:0,z:4,t:'target',c:[0,0,0,0,1,0]}]},
+            { density: 0.95, dim: [4, 3, 3], path: [{x:1,y:0,z:1,t:'source',c:[0,0,0,0,1,0]},{x:1,y:1,z:1,t:'pipe',c:[1,1,0,1,0,1]},{x:1,y:1,z:0,t:'pipe',c:[0,0,1,1,0,0]},{x:0,y:1,z:0,t:'target',c:[0,1,0,0,0,0]},{x:2,y:1,z:1,t:'pipe',c:[0,0,0,1,1,0]},{x:2,y:2,z:1,t:'pipe',c:[0,1,0,0,0,1]},{x:3,y:2,z:1,t:'target',c:[0,0,0,1,0,0]},{x:0,y:1,z:1,t:'pipe',c:[0,1,1,0,1,0]},{x:0,y:2,z:1,t:'target',c:[0,0,0,0,0,1]},{x:0,y:1,z:2,t:'pipe',c:[1,0,0,0,0,1]},{x:0,y:0,z:2,t:'target',c:[0,0,0,0,1,0]}]},
+            { density: 1.0, dim: [4, 4, 4], path: [{x:1,y:1,z:1,t:'source',c:[0,0,0,0,1,0]},{x:1,y:2,z:1,t:'pipe',c:[1,1,1,1,1,1]},{x:1,y:3,z:1,t:'target',c:[0,0,0,0,0,1]},{x:1,y:2,z:0,t:'pipe',c:[0,0,1,0,1,0]},{x:1,y:3,z:0,t:'pipe',c:[0,1,0,0,0,1]},{x:2,y:3,z:0,t:'target',c:[0,0,0,1,0,0]},{x:2,y:2,z:1,t:'pipe',c:[0,0,1,1,0,0]},{x:2,y:2,z:2,t:'pipe',c:[1,1,0,0,0,0]},{x:3,y:2,z:2,t:'target',c:[0,0,0,1,0,0]},{x:1,y:2,z:2,t:'pipe',c:[1,0,0,0,0,1]},{x:1,y:1,z:2,t:'pipe',c:[0,0,1,0,1,0]},{x:1,y:1,z:3,t:'pipe',c:[1,1,0,0,0,0]},{x:2,y:1,z:3,t:'target',c:[0,0,0,1,0,0]},{x:0,y:2,z:1,t:'pipe',c:[0,1,0,0,1,0]},{x:0,y:3,z:1,t:'target',c:[0,0,0,0,0,1]}]}
+        ];
+
+        const PROCEDURAL_LEVELS = RAW_LEVELS.map((level, idx) => {
+            const nodes = [...level.path];
+            const existing = new Set(nodes.map(n => `${n.x},${n.y},${n.z}`));
+            const mainPathSet = new Set(level.path.map(n => `${n.x},${n.y},${n.z}`));
+            const fakeTemplates = [[1,1,0,0,0,0], [0,1,1,0,0,0], [0,0,1,1,0,0], [1,0,0,1,0,0], [1,0,0,0,1,0], [0,1,0,0,0,1], [1,0,1,0,0,0], [0,1,0,1,0,0], [0,0,0,0,1,1]];
+            const neighborOffsets = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+            for(let x=0; x<level.dim[0]; x++) {
+                for(let y=0; y<level.dim[1]; y++) {
+                    for(let z=0; z<level.dim[2]; z++) {
+                        const key = `${x},${y},${z}`;
+                        if(existing.has(key)) continue;
+
+                        const nearMainPath = neighborOffsets.some(([dx, dy, dz]) => mainPathSet.has(`${x+dx},${y+dy},${z+dz}`));
+                        const lateBoost = idx >= 4 ? (0.06 + (idx - 4) * 0.02) : 0;
+                        const proximityBoost = (idx >= 4 && nearMainPath) ? 0.1 : 0;
+                        const chance = Math.min(1, level.density + lateBoost + proximityBoost);
+
+                        if(Math.random() < chance) {
+                            const template = fakeTemplates[Math.floor(Math.random() * fakeTemplates.length)];
+                            nodes.push({ x, y, z, t: 'pipe', c: [...template] });
+                        }
+                    }
+                }
+            }
+            return { nodes };
+        });
+
+        // ==========================================
+        // 1. 系统管理类
+        // ==========================================
+        class TweenManager {
+            constructor() { this.tweens = []; }
+            to(obj, props, duration, easing, onComplete) {
+                if (!obj) return;
+                this.tweens = this.tweens.filter(t => !(t.obj === obj && Object.keys(props).some(k => k in t.target)));
+                const start = {};
+                for (let k in props) start[k] = (obj[k]?.isQuaternion || obj[k]?.isColor) ? obj[k].clone() : obj[k];
+                this.tweens.push({ obj, start, target: props, duration, elapsed: 0, easing, onComplete });
+            }
+            update(dt) {
+                const activeTweens = [...this.tweens];
+                for (let i = activeTweens.length - 1; i >= 0; i--) {
+                    const t = activeTweens[i]; if (!t || !t.obj) continue;
+                    t.elapsed += dt;
+                    const p = Math.min(t.elapsed / t.duration, 1), ev = t.easing(p);
+                    for (let k in t.target) {
+                        if (t.obj[k]?.isQuaternion) t.obj[k].copy(t.start[k]).slerp(t.target[k], ev);
+                        else if (t.obj[k]?.isColor) t.obj[k].copy(t.start[k]).lerp(t.target[k], ev);
+                        else t.obj[k] = t.start[k] + (t.target[k] - t.start[k]) * ev;
+                    }
+                    if (p >= 1) { 
+                        const idx = this.tweens.indexOf(t); if (idx !== -1) this.tweens.splice(idx, 1); 
+                        if (t.onComplete) try { t.onComplete(); } catch(e) {}
+                    }
+                }
+            }
+        }
+        const Tweens = new TweenManager();
+        const Easing = { outQuad: t => t*(2-t) };
+
+        class AudioManager {
+            constructor() { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+            resume() { if(this.ctx.state === 'suspended') this.ctx.resume(); }
+            playClick() { 
+                if(this.ctx.state !== 'running') return;
+                const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+                o.frequency.setValueAtTime(800, this.ctx.currentTime);
+                g.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+                o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.1);
+            }
+            playWin() { [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => {
+                if(this.ctx.state !== 'running') return;
+                const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+                o.frequency.setValueAtTime(f, this.ctx.currentTime);
+                g.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
+                o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.5);
+            }, i * 100)); }
+        }
+        const audio = new AudioManager();
+
+        // ==========================================
+        // 2. 游戏核心类
+        // ==========================================
+        class Game {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.FogExp2(CONFIG.bgColor, 0.02);
+                this.pivotY = new THREE.Group(); 
+                this.pivotX = new THREE.Group(); 
+                this.scene.add(this.pivotY); this.pivotY.add(this.pivotX);
+                this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+                this.pivotX.add(this.camera);
+                this.targetRotY = 0; this.targetRotX = 0;
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setClearColor(0x000000, 0); // 配合 CSS 渐变背景
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                document.getElementById('game-container').appendChild(this.renderer.domElement);
+                this.tiles = []; this.currentLevel = 0;
+                this.isPointerDown = false;
+                this.hintUsedThisLevel = false;
+                this.isHintPreviewing = false;
+                this.hintTimers = [];
+                this.hintButton = document.getElementById('hint-btn');
+                this.initCelebrationLayer();
+                this.setupLights(); this.setupInteraction();
+                this.loadLevel(0, true);
+                this.clock = new THREE.Clock(); this.animate();
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth/window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+                document.getElementById('action-btn').addEventListener('click', () => {
+                    try { audio.resume(); } catch(e) {}
+                    document.getElementById('overlay').classList.add('hidden');
+                    this.loadLevel(this.currentLevel, false);
+                });
+                document.getElementById('solve-btn').addEventListener('click', () => this.showSolution());
+                this.hintButton.addEventListener('click', () => this.showHintPreview());
+            }
+
+            clearHintTimers() {
+                this.hintTimers.forEach(timer => clearTimeout(timer));
+                this.hintTimers = [];
+            }
+
+            updateHintButtonState() {
+                if (!this.hintButton) return;
+                if (this.gameState !== 'playing') {
+                    this.hintButton.disabled = true;
+                    this.hintButton.innerText = '提示（本关一次）';
+                    return;
+                }
+                if (this.hintUsedThisLevel) {
+                    this.hintButton.disabled = true;
+                    this.hintButton.innerText = '本关已提示';
+                    return;
+                }
+                this.hintButton.disabled = false;
+                this.hintButton.innerText = '提示（本关一次）';
+            }
+
+            showHintPreview() {
+                if (this.gameState !== 'playing' || this.hintUsedThisLevel || this.isHintPreviewing) return;
+
+                this.hintUsedThisLevel = true;
+                this.isHintPreviewing = true;
+                this.gameState = 'hinting';
+                this.updateHintButtonState();
+
+                const saved = this.tiles.map(t => ({ tile: t, quat: t.mesh.quaternion.clone() }));
+                this.tiles.forEach(t => {
+                    t.isAnimating = true;
+                    Tweens.to(t.mesh, { quaternion: new THREE.Quaternion() }, 0.32, Easing.outQuad);
+                });
+
+                const previewTimer = setTimeout(() => this.calculateWaterFlow(), 360);
+                const restoreTimer = setTimeout(() => {
+                    saved.forEach(({ tile, quat }) => {
+                        Tweens.to(tile.mesh, { quaternion: quat }, 0.26, Easing.outQuad, () => { tile.isAnimating = false; });
+                    });
+                }, 1250);
+                const finishTimer = setTimeout(() => {
+                    this.isHintPreviewing = false;
+                    this.gameState = 'playing';
+                    this.calculateWaterFlow();
+                    this.updateHintButtonState();
+                }, 1600);
+
+                this.hintTimers.push(previewTimer, restoreTimer, finishTimer);
+            }
+
+            setupLights() {
+                this.scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+                const dir = new THREE.DirectionalLight(0xffffff, 0.8); 
+                dir.position.set(0, 20, 10); this.camera.add(dir); 
+            }
+
+            initCelebrationLayer() {
+                this.celebrationLayer = document.getElementById('celebration-layer');
+                this.activeConfetti = new Set();
+                this.celebrationTimers = [];
+                this.confettiParticles = [];
+                this.confettiRaf = 0;
+                this.confettiLastTs = 0;
+            }
+
+            clearCelebration() {
+                this.celebrationTimers.forEach(timer => clearTimeout(timer));
+                this.celebrationTimers = [];
+                if (this.confettiRaf) {
+                    cancelAnimationFrame(this.confettiRaf);
+                    this.confettiRaf = 0;
+                }
+                this.confettiParticles = [];
+                this.activeConfetti.forEach(node => node.remove());
+                this.activeConfetti.clear();
+                this.confettiLastTs = 0;
+            }
+
+            startConfettiLoop() {
+                if (this.confettiRaf) return;
+                this.confettiLastTs = performance.now();
+                const tick = (ts) => {
+                    const dt = Math.min((ts - this.confettiLastTs) / 1000, 0.033);
+                    this.confettiLastTs = ts;
+                    this.updateConfetti(dt);
+                    if (this.confettiParticles.length > 0) {
+                        this.confettiRaf = requestAnimationFrame(tick);
+                    } else {
+                        this.confettiRaf = 0;
+                    }
+                };
+                this.confettiRaf = requestAnimationFrame(tick);
+            }
+
+            updateConfetti(dt) {
+                if (!this.confettiParticles.length) return;
+                const h = window.innerHeight;
+                const alive = [];
+
+                for (let i = 0; i < this.confettiParticles.length; i++) {
+                    const p = this.confettiParticles[i];
+                    p.age += dt;
+                    if (p.age > p.life || p.y > h + 120) {
+                        p.el.remove();
+                        this.activeConfetti.delete(p.el);
+                        continue;
+                    }
+
+                    p.vy += p.gravity * dt;
+                    p.vx *= Math.pow(p.dragX, dt * 60);
+                    p.vy *= Math.pow(p.dragY, dt * 60);
+                    p.swayPhase += p.swayFreq * dt;
+                    const sway = Math.sin(p.swayPhase) * p.swayAmp;
+
+                    p.x += p.vx * dt + sway * dt;
+                    p.y += p.vy * dt;
+                    p.rotation += p.omega * dt;
+
+                    const progress = p.age / p.life;
+                    const opacity = progress < 0.72 ? 1 : Math.max(0, 1 - (progress - 0.72) / 0.28);
+                    p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) rotate(${p.rotation}deg)`;
+                    p.el.style.opacity = opacity.toFixed(3);
+                    alive.push(p);
+                }
+
+                this.confettiParticles = alive;
+            }
+
+            spawnConfettiBurst(count, launcher) {
+                if (!this.celebrationLayer) return;
+                const colors = ['#ff4d6d', '#ffd166', '#06d6a0', '#4cc9f0', '#f72585', '#ff9f1c'];
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'confetti-piece';
+                    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    el.style.width = `${7 + Math.random() * 6}px`;
+                    el.style.height = `${12 + Math.random() * 16}px`;
+                    this.celebrationLayer.appendChild(el);
+                    this.activeConfetti.add(el);
+
+                    let x;
+                    let y;
+                    let angleDeg;
+                    let speed;
+                    let gravity;
+                    let life;
+                    let swayAmp;
+
+                    if (launcher === 'rain') {
+                        x = Math.random() * w;
+                        y = -30 - Math.random() * 80;
+                        angleDeg = 70 + Math.random() * 40;
+                        speed = 260 + Math.random() * 260;
+                        gravity = 1200 + Math.random() * 280;
+                        life = 1.6 + Math.random() * 0.7;
+                        swayAmp = 8 + Math.random() * 14;
+                    } else if (launcher === 'left') {
+                        x = w * (0.09 + Math.random() * 0.07);
+                        y = h * (0.7 + Math.random() * 0.1);
+                        angleDeg = -70 + Math.random() * 50;
+                        speed = 480 + Math.random() * 280;
+                        gravity = 1150 + Math.random() * 260;
+                        life = 1.8 + Math.random() * 0.6;
+                        swayAmp = 12 + Math.random() * 16;
+                    } else {
+                        x = w * (0.84 + Math.random() * 0.07);
+                        y = h * (0.7 + Math.random() * 0.1);
+                        angleDeg = -160 + Math.random() * 50;
+                        speed = 480 + Math.random() * 280;
+                        gravity = 1150 + Math.random() * 260;
+                        life = 1.8 + Math.random() * 0.6;
+                        swayAmp = 12 + Math.random() * 16;
+                    }
+
+                    const rad = angleDeg * Math.PI / 180;
+                    const particle = {
+                        el,
+                        x,
+                        y,
+                        vx: Math.cos(rad) * speed,
+                        vy: Math.sin(rad) * speed,
+                        gravity,
+                        dragX: 0.992,
+                        dragY: 0.996,
+                        rotation: Math.random() * 360,
+                        omega: (Math.random() > 0.5 ? 1 : -1) * (240 + Math.random() * 520),
+                        swayAmp,
+                        swayFreq: 5 + Math.random() * 4,
+                        swayPhase: Math.random() * Math.PI * 2,
+                        age: 0,
+                        life
+                    };
+
+                    el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${particle.rotation}deg)`;
+                    this.confettiParticles.push(particle);
+                }
+
+                this.startConfettiLoop();
+            }
+
+            playConfettiCelebration(isFinalLevel = false) {
+                this.clearCelebration();
+                const total = isFinalLevel ? 130 : 80;
+                const sideCount = Math.floor(total * 0.36);
+                const rainCount = total - sideCount * 2;
+                const waveA = Math.floor(sideCount * 0.5);
+                const waveB = Math.floor(sideCount * 0.3);
+                const waveC = sideCount - waveA - waveB;
+                const rainA = Math.floor(rainCount * 0.45);
+                const rainB = rainCount - rainA;
+
+                this.spawnConfettiBurst(waveA, 'left');
+                this.spawnConfettiBurst(waveA, 'right');
+
+                const waveTimer1 = setTimeout(() => {
+                    this.spawnConfettiBurst(waveB, 'left');
+                    this.spawnConfettiBurst(waveB, 'right');
+                }, 120);
+
+                const waveTimer2 = setTimeout(() => {
+                    this.spawnConfettiBurst(waveC, 'left');
+                    this.spawnConfettiBurst(waveC, 'right');
+                    this.spawnConfettiBurst(rainA, 'rain');
+                }, 260);
+
+                const rainTimer = setTimeout(() => {
+                    this.spawnConfettiBurst(rainB, 'rain');
+                }, 420);
+
+                const clearTimer = setTimeout(() => {
+                    this.clearCelebration();
+                }, 3200);
+
+                this.celebrationTimers.push(waveTimer1, waveTimer2, rainTimer, clearTimer);
+            }
+
+            createPipeMesh(type, conn) {
+                const g = new THREE.Group();
+                const hitbox = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false }));
+                hitbox.userData.isHitbox = true; g.add(hitbox);
+
+                // 核心修改：管身设为 60% 透明度
+                const shellMat = new THREE.MeshStandardMaterial({ 
+                    color: (type === 'target' ? CONFIG.targetColor : CONFIG.pipeColor), 
+                    roughness: 0.6, 
+                    metalness: 0.1,
+                    transparent: true, 
+                    opacity: CONFIG.pipeOpacity 
+                });
+                const fluidMat = new THREE.MeshStandardMaterial({ color: CONFIG.inactiveFluid, emissive: 0x000000, emissiveIntensity: 0, roughness: 0.2 });
+                g.userData.fluidMaterials = []; g.userData.shellMat = shellMat; g.userData.type = type; 
+
+                const addSeg = (idx) => {
+                    const p = new THREE.Group(), c = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.5, 12), shellMat);
+                    c.geometry.translate(0, 0.25, 0);
+                    const f = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.51, 12), fluidMat.clone());
+                    f.geometry.translate(0, 0.25, 0);
+                    p.add(c); p.add(f); g.userData.fluidMaterials.push(f.material);
+                    if (idx === 0) p.rotation.x = -Math.PI/2; else if (idx === 1) p.rotation.z = -Math.PI/2; else if (idx === 2) p.rotation.x = Math.PI/2; else if (idx === 3) p.rotation.z = Math.PI/2; else if (idx === 5) p.rotation.x = Math.PI;
+                    g.add(p);
+                };
+                if(type !== 'empty') {
+                    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), shellMat));
+                    const cf = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), fluidMat.clone());
+                    g.userData.fluidMaterials.push(cf.material); g.add(cf);
+                }
+                for(let i=0; i<6; i++) if(conn[i] === 1) addSeg(i);
+                if(type === 'source') g.add(new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({color: CONFIG.waterColor, emissive: CONFIG.waterColor, emissiveIntensity: 0.8})));
+                if(type === 'target') g.add(new THREE.Mesh(new THREE.OctahedronGeometry(0.35), new THREE.MeshStandardMaterial({color: CONFIG.targetColor, flatShading: true})));
+                return g;
+            }
+
+            applyRandomQuarterTurn(mesh) {
+                const axes = [
+                    new THREE.Vector3(1, 0, 0),
+                    new THREE.Vector3(0, 1, 0),
+                    new THREE.Vector3(0, 0, 1)
+                ];
+                const axis = axes[Math.floor(Math.random() * axes.length)];
+                const angle = (Math.random() > 0.5 ? 1 : -1) * Math.PI / 2;
+                mesh.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(axis, angle)).normalize();
+            }
+
+            scrambleTile(mesh, steps) {
+                for (let i = 0; i < steps; i++) this.applyRandomQuarterTurn(mesh);
+            }
+
+            getConnectionStats() {
+                if (!this.tiles.length) return { allTargetsConnected: false, wateredRatio: 0 };
+                const targets = this.tiles.filter(t => t.type === 'target');
+                if (!targets.length) return { allTargetsConnected: false, wateredRatio: 0 };
+
+                const connectableCount = this.tiles.filter(t => t.type !== 'empty').length;
+                const visited = new Set();
+                const q = this.tiles.filter(t => t.type === 'source');
+                q.forEach(t => visited.add(`${t.x},${t.y},${t.z}`));
+
+                while (q.length > 0) {
+                    const cur = q.shift();
+                    const curC = this.getCurrentConnections(cur);
+                    curC.forEach(d => {
+                        const nb = this.tiles.find(t => Math.abs(t.x - (cur.x + d.x)) < 0.1 && Math.abs(t.y - (cur.y + d.y)) < 0.1 && Math.abs(t.z - (cur.z + d.z)) < 0.1);
+                        if (!nb || nb.type === 'empty') return;
+
+                        const key = `${nb.x},${nb.y},${nb.z}`;
+                        if (visited.has(key)) return;
+
+                        const rev = d.clone().negate();
+                        if (this.getCurrentConnections(nb).some(nd => nd.distanceTo(rev) < 0.1)) {
+                            visited.add(key);
+                            q.push(nb);
+                        }
+                    });
+                }
+
+                return {
+                    allTargetsConnected: targets.every(t => visited.has(`${t.x},${t.y},${t.z}`)),
+                    wateredRatio: visited.size / Math.max(connectableCount, 1)
+                };
+            }
+
+            loadLevel(idx, isMenu) {
+                this.clearCelebration();
+                this.clearHintTimers();
+                this.isHintPreviewing = false;
+                this.hintUsedThisLevel = isMenu;
+                Tweens.tweens = []; this.tiles.forEach(t => { if (t?.mesh) this.scene.remove(t.mesh); }); this.tiles = [];
+                const levelIndex = idx % PROCEDURAL_LEVELS.length;
+                const data = PROCEDURAL_LEVELS[levelIndex];
+                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, minZ = Infinity, maxZ = -Infinity;
+                data.nodes.forEach(n => {
+                    minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x); minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y); minZ = Math.min(minZ, n.z); maxZ = Math.max(maxZ, n.z);
+                });
+                const cx = (minX + maxX)/2, cy = (minY + maxY)/2, cz = (minZ + maxZ)/2;
+                data.nodes.forEach(n => {
+                    const mesh = this.createPipeMesh(n.t, n.c);
+                    const localX = n.x - cx, localY = n.y - cy, localZ = n.z - cz;
+                    mesh.position.set(localX, localY, localZ);
+                    this.scene.add(mesh);
+                    this.tiles.push({ x: n.x, y: n.y, z: n.z, mesh, baseConn: [...n.c], type: n.t, isWatered: false, wPos: new THREE.Vector3(localX, localY, localZ), isAnimating: false });
+                });
+
+                if (!isMenu) {
+                    const scrambleSteps = 2 + levelIndex * 2;
+                    this.tiles.forEach(t => this.scrambleTile(t.mesh, scrambleSteps));
+
+                    let reshuffle = 0;
+                    const maxReshuffle = 10;
+                    const extraSteps = Math.max(2, Math.floor(scrambleSteps * 0.75));
+                    let stats = this.getConnectionStats();
+                    while (reshuffle < maxReshuffle && (stats.allTargetsConnected || stats.wateredRatio > 0.55)) {
+                        this.tiles.forEach(t => this.scrambleTile(t.mesh, extraSteps));
+                        stats = this.getConnectionStats();
+                        reshuffle++;
+                    }
+                }
+
+                const maxDim = Math.max(maxX-minX, maxY-minY, maxZ-minZ);
+                this.camera.position.set(0, 0, maxDim * 2.5 + 2.5);
+                this.targetRotY = Math.PI/4; this.targetRotX = -Math.PI/6;
+                document.getElementById('level-text').innerText = `第 ${idx + 1} 关`;
+                this.gameState = isMenu ? 'menu' : 'playing';
+                this.updateHintButtonState();
+                setTimeout(() => this.calculateWaterFlow(), 100);
+            }
+
+            getCurrentConnections(tile) {
+                if (!tile || !tile.mesh) return [];
+                const conns = [];
+                const mat = new THREE.Matrix4().makeRotationFromQuaternion(tile.mesh.quaternion);
+                BASE_DIRS.forEach((dir, i) => {
+                    if (tile.baseConn[i] === 1) conns.push(dir.clone().applyMatrix4(mat).round());
+                });
+                return conns;
+            }
+
+            calculateWaterFlow() {
+                if (!this.tiles.length) return;
+                this.tiles.forEach(t => t.isWatered = false);
+                // 核心逻辑：只要和起点连通，就流入水源
+                let q = this.tiles.filter(t => t.type === 'source'); q.forEach(t => t.isWatered = true);
+                while (q.length > 0) {
+                    const cur = q.shift(), curC = this.getCurrentConnections(cur);
+                    curC.forEach(d => {
+                        const nb = this.tiles.find(t => Math.abs(t.x-(cur.x+d.x))<0.1 && Math.abs(t.y-(cur.y+d.y))<0.1 && Math.abs(t.z-(cur.z+d.z))<0.1);
+                        if (nb && !nb.isWatered && nb.type !== 'empty') {
+                            const rev = d.clone().negate();
+                            if (this.getCurrentConnections(nb).some(nd => nd.distanceTo(rev) < 0.1)) {
+                                nb.isWatered = true; q.push(nb);
+                            }
+                        }
+                    });
+                }
+                this.tiles.forEach(t => {
+                    const em = t.isWatered ? (t.type==='target'? CONFIG.targetColor : CONFIG.waterColor) : '#000000';
+                    const co = t.isWatered ? (t.type==='target'? CONFIG.targetColor : CONFIG.waterColor) : CONFIG.inactiveFluid;
+                    t.mesh.userData.fluidMaterials.forEach(m => Tweens.to(m, { color: new THREE.Color(co), emissive: new THREE.Color(em), emissiveIntensity: t.isWatered ? 2.5 : 0 }, 0.2, Easing.outQuad));
+                });
+                if (this.tiles.filter(t=>t.type==='target').every(t=>t.isWatered) && this.gameState === 'playing') {
+                    this.gameState = 'won'; audio.playWin();
+                    this.updateHintButtonState();
+                    this.playConfettiCelebration(this.currentLevel >= PROCEDURAL_LEVELS.length - 1);
+                    setTimeout(() => { 
+                        this.currentLevel++; 
+                        if (this.currentLevel >= PROCEDURAL_LEVELS.length) {
+                            document.getElementById('screen-title').innerText = "全部通关！";
+                            document.getElementById('overlay-desc').innerHTML = "你完成了所有水管迷宫挑战。<br>再来一次，挑战更快通关。";
+                            document.getElementById('action-btn').innerText = "再玩一次";
+                            this.currentLevel = 0; 
+                        } else {
+                            document.getElementById('screen-title').innerText = "过关！";
+                            document.getElementById('overlay-desc').innerHTML = "水路已全部接通。<br>准备进入下一关。";
+                            document.getElementById('action-btn').innerText = "下一关";
+                        }
+                        document.getElementById('overlay').classList.remove('hidden'); 
+                    }, 2000);
+                }
+            }
+
+            getClosestWorldAxis(v) {
+                const axes = [new THREE.Vector3(1,0,0), new THREE.Vector3(-1,0,0), new THREE.Vector3(0,1,0), new THREE.Vector3(0,-1,0), new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,-1)];
+                let maxDot = -Infinity, closest = axes[0];
+                for(let a of axes) { const d = v.dot(a); if (d > maxDot) { maxDot = d; closest = a; } }
+                return closest;
+            }
+
+            setupInteraction() {
+                const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+                let lastP = {x:0, y:0};
+                const down = (e) => {
+                    if (this.gameState !== 'playing' || this.isHintPreviewing) return;
+                    const p = e.touches ? e.touches[0] : e; 
+                    mouse.x = (p.clientX/window.innerWidth)*2-1; mouse.y = -(p.clientY/window.innerHeight)*2+1;
+                    ray.setFromCamera(mouse, this.camera);
+                    const valid = this.tiles.filter(t => t?.mesh); if (!valid.length) return;
+                    const hits = ray.intersectObjects(valid.map(t=>t.mesh), true);
+                    const targetHit = hits.find(i => i.object.userData.isHitbox);
+                    if (targetHit) {
+                        const tile = this.tiles.find(t => t.mesh === targetHit.object.parent);
+                        if (!tile || tile.isAnimating) return; 
+                        this.activeTile = tile; this.initialQuat = this.activeTile.mesh.quaternion.clone();
+                        this.hasSwiped = false; this.isDraggingTile = true;
+                    } else { this.isDraggingSpace = true; this.activeTile = null; }
+                    this.isPointerDown = true; this.startX = p.clientX; this.startY = p.clientY; lastP = {x: p.clientX, y: p.clientY};
+                    try { this.renderer.domElement.setPointerCapture(e.pointerId); } catch(err) {}
+                };
+                const move = (e) => {
+                    if (!this.isPointerDown) return;
+                    const p = e.touches ? e.touches[0] : e;
+                    if (this.isDraggingTile && this.activeTile) {
+                        const dx = p.clientX - this.startX, dy = p.clientY - this.startY;
+                        if (!this.hasSwiped && (Math.abs(dx) > 20 || Math.abs(dy) > 20)) {
+                            this.hasSwiped = true; this.activeTile.isAnimating = true;
+                            const camQ = this.camera.getWorldQuaternion(new THREE.Quaternion());
+                            const vR = new THREE.Vector3(1,0,0).applyQuaternion(camQ), vU = new THREE.Vector3(0,1,0).applyQuaternion(camQ);
+                            let axis, angle;
+                            if (Math.abs(dx) > Math.abs(dy)) { axis = this.getClosestWorldAxis(vU); angle = dx > 0 ? Math.PI/2 : -Math.PI/2; }
+                            else { axis = this.getClosestWorldAxis(vR); angle = dy > 0 ? Math.PI/2 : -Math.PI/2; }
+                            const t = this.activeTile, m = t.mesh;
+                            Tweens.to(m, { quaternion: this.initialQuat.clone().premultiply(new THREE.Quaternion().setFromAxisAngle(axis, angle)).normalize() }, 0.25, Easing.outQuad, () => { t.isAnimating = false; this.calculateWaterFlow(); });
+                            Tweens.to(m.position, { y: t.wPos.y + CONFIG.bounceHeight }, 0.1, Easing.outQuad, () => Tweens.to(m.position, { y: t.wPos.y }, 0.15, Easing.outQuad));
+                            audio.playClick();
+                        }
+                    } else if (this.isDraggingSpace) {
+                        this.targetRotY -= (p.clientX - lastP.x) * CONFIG.dragSensitivity; this.targetRotX -= (p.clientY - lastP.y) * CONFIG.dragSensitivity;
+                    }
+                    lastP = {x: p.clientX, y: p.clientY};
+                };
+                const up = (e) => {
+                    try { if(this.renderer.domElement.hasPointerCapture(e.pointerId)) this.renderer.domElement.releasePointerCapture(e.pointerId); } catch(err) {}
+                    if (!this.isPointerDown) return; 
+                    if (this.isDraggingTile && this.activeTile && !this.hasSwiped) {
+                        this.activeTile.isAnimating = true;
+                        const vU = new THREE.Vector3(0,1,0).applyQuaternion(this.camera.getWorldQuaternion(new THREE.Quaternion()));
+                        const t = this.activeTile, m = t.mesh;
+                        Tweens.to(m, { quaternion: this.initialQuat.clone().premultiply(new THREE.Quaternion().setFromAxisAngle(this.getClosestWorldAxis(vU), -Math.PI/2)).normalize() }, 0.25, Easing.outQuad, () => { t.isAnimating = false; this.calculateWaterFlow(); });
+                        Tweens.to(m.position, { y: t.wPos.y + CONFIG.bounceHeight }, 0.1, Easing.outQuad, () => Tweens.to(m.position, { y: t.wPos.y }, 0.15, Easing.outQuad));
+                        audio.playClick();
+                    }
+                    this.isPointerDown = false; this.activeTile = null; this.isDraggingTile = false; this.isDraggingSpace = false;
+                };
+                this.renderer.domElement.addEventListener('pointerdown', down);
+                this.renderer.domElement.addEventListener('pointermove', move);
+                this.renderer.domElement.addEventListener('pointerup', up);
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                const dt = this.clock.getDelta(); Tweens.update(dt);
+                this.pivotY.rotation.y += (this.targetRotY - this.pivotY.rotation.y) * CONFIG.dampingFactor;
+                this.pivotX.rotation.x += (this.targetRotX - this.pivotX.rotation.x) * CONFIG.dampingFactor;
+                if (this.gameState === 'menu' && !this.isPointerDown) this.targetRotY += 0.2 * dt;
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            showSolution() {
+                if (this.gameState !== 'playing') return;
+                this.tiles.forEach(t => {
+                    t.isAnimating = true;
+                    Tweens.to(t.mesh, { quaternion: new THREE.Quaternion() }, 0.5, Easing.outQuad, () => { t.isAnimating = false; });
+                });
+                setTimeout(() => this.calculateWaterFlow(), 600);
+            }
+        }
+        window.onload = () => new Game();
+    </script>
+</body>
+</html>
