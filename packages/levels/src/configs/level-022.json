@@ -1,0 +1,76 @@
+{
+  "id": "level-022",
+  "chapter": 3,
+  "order": 2,
+  "title": "死按住",
+  "instruction": "坚持按住5秒，别松手！",
+  "tags": ["long-press"],
+  "background": { "type": "gradient", "value": ["#4a148c", "#880e4f"] },
+  "objects": [
+    {
+      "id": "countdown-display",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.2 },
+      "content": "5",
+      "style": { "fontSize": 64, "color": "#ffffff", "bold": true },
+      "behaviors": [
+        { "type": "countdown", "params": { "seconds": 5, "displayObjectId": "countdown-display" } }
+      ]
+    },
+    {
+      "id": "danger-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "⚡ 危险！快松手！⚡",
+      "style": { "fontSize": 18, "color": "#ff5252", "bold": true },
+      "behaviors": [
+        { "type": "shake", "params": { "intensity": 3, "duration": 99999 } }
+      ]
+    },
+    {
+      "id": "hold-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "🔴 按住我",
+      "style": {
+        "fontSize": 26,
+        "color": "#ffffff",
+        "backgroundColor": "#b71c1c",
+        "borderRadius": 50,
+        "padding": 32
+      },
+      "interactions": [
+        { "type": "long-press", "emits": "survived", "duration": 5000 },
+        { "type": "click", "emits": "released-early" }
+      ],
+      "enterAnimation": { "type": "scale-in", "duration": 500 }
+    },
+    {
+      "id": "scare-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.78 },
+      "content": "松手就爆炸💥",
+      "style": { "fontSize": 14, "color": "#ef9a9a" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "survived" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "released-early", "count": 8 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "别被吓到，坚持住", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "那些恐吓都是假的！按够5秒就赢", "showAfterFailCount": 4 }
+  ],
+  "passFeedback": {
+    "texts": ["铁石心肠！", "泰山崩于前而面不改色"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["胆小鬼！", "它没有真的会爆炸啦"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

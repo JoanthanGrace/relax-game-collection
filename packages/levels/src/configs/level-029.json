@@ -1,0 +1,70 @@
+{
+  "id": "level-029",
+  "chapter": 3,
+  "order": 9,
+  "title": "点击100次",
+  "instruction": "点击按钮100次过关",
+  "tags": ["text-trick"],
+  "background": { "type": "color", "value": "#ede7f6" },
+  "objects": [
+    {
+      "id": "big-number",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "100",
+      "style": { "fontSize": 72, "color": "#4527a0", "bold": true },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "number-clicked" }
+      ]
+    },
+    {
+      "id": "normal-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "点我",
+      "style": {
+        "fontSize": 20,
+        "color": "#ffffff",
+        "backgroundColor": "#7e57c2",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        { "type": "click", "emits": "btn-clicked" }
+      ]
+    },
+    {
+      "id": "counter-display",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.72 },
+      "content": "已点击: 0/100",
+      "style": { "fontSize": 14, "color": "#9575cd" }
+    },
+    {
+      "id": "tired-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.85 },
+      "content": "真的要点100次吗...🤔",
+      "style": { "fontSize": 12, "color": "#bdbdbd" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "number-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "你真打算点100次？", "showAfterFailCount": 5 },
+    { "level": "medium", "text": "100也是可以点击的东西", "showAfterFailCount": 10 },
+    { "level": "strong", "text": "直接点那个大大的数字\"100\"", "showAfterFailCount": 15, "highlightObjectId": "big-number" }
+  ],
+  "passFeedback": {
+    "texts": ["一次就够了！", "文字本身就是答案", "聪明人不会真点100次"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["还差99次呢...", "有没有更快的方法？"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "level-026",
+  "chapter": 3,
+  "order": 6,
+  "title": "关灯",
+  "instruction": "关掉这盏灯",
+  "tags": ["multi-step", "fake-fail"],
+  "background": { "type": "color", "value": "#fff9c4" },
+  "objects": [
+    {
+      "id": "bulb",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "💡",
+      "style": { "fontSize": 64 },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "bulb-clicked" }
+      ]
+    },
+    {
+      "id": "room-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "灯亮着呢",
+      "style": { "fontSize": 16, "color": "#f57f17" }
+    },
+    {
+      "id": "dark-hint",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.7 },
+      "content": "黑暗中会有惊喜...",
+      "style": { "fontSize": 12, "color": "#9e9e9e" },
+      "visible": false
+    },
+    {
+      "id": "glow-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.65 },
+      "content": "✨ 过关 ✨",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffd600",
+        "backgroundColor": "#212121",
+        "borderRadius": 12,
+        "padding": 18,
+        "borderColor": "#ffd600",
+        "borderWidth": 2
+      },
+      "visible": false,
+      "interactions": [
+        { "type": "click", "emits": "glow-clicked" }
+      ],
+      "enterAnimation": { "type": "scale-in", "duration": 600 }
+    }
+  ],
+  "reactions": [
+    {
+      "trigger": "bulb-clicked",
+      "actions": [
+        { "type": "set-text", "objectId": "bulb", "value": "🌑" },
+        { "type": "set-text", "objectId": "room-text", "value": "一片漆黑..." },
+        { "type": "set-style", "objectId": "room-text", "value": { "color": "#424242" } },
+        { "type": "show", "objectId": "dark-hint" }
+      ]
+    },
+    {
+      "trigger": "bulb-clicked",
+      "delay": 1500,
+      "actions": [
+        { "type": "show", "objectId": "glow-btn" },
+        { "type": "hide", "objectId": "dark-hint" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "glow-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "先关灯试试", "showAfterFailCount": 3 },
+    { "level": "medium", "text": "关灯后等一下", "showAfterFailCount": 5 },
+    { "level": "strong", "text": "黑暗中会出现发光的按钮", "showAfterFailCount": 8 }
+  ],
+  "passFeedback": {
+    "texts": ["暗夜之光！", "关灯才是开始"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["关灯后别急着走", "等等看会发生什么"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

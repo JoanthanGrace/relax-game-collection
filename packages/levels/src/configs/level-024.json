@@ -1,0 +1,76 @@
+{
+  "id": "level-024",
+  "chapter": 3,
+  "order": 4,
+  "title": "拼图大师",
+  "instruction": "完成拼图",
+  "tags": ["drag-reveal"],
+  "background": { "type": "color", "value": "#f1f8e9" },
+  "objects": [
+    {
+      "id": "puzzle-frame",
+      "type": "shape",
+      "position": { "x": 0.6, "y": 0.45 },
+      "size": { "x": 0.25, "y": 0.18 },
+      "style": {
+        "shapeType": "rect",
+        "fill": "#ffffff",
+        "borderColor": "#66bb6a",
+        "borderWidth": 3,
+        "borderRadius": 4
+      }
+    },
+    {
+      "id": "frame-label",
+      "type": "text",
+      "position": { "x": 0.6, "y": 0.45 },
+      "content": "🧩",
+      "style": { "fontSize": 24, "color": "#c8e6c9" }
+    },
+    {
+      "id": "puzzle-piece",
+      "type": "button",
+      "position": { "x": 0.25, "y": 0.7 },
+      "content": "🧩",
+      "style": {
+        "fontSize": 36,
+        "backgroundColor": "#a5d6a7",
+        "borderRadius": 8,
+        "padding": 14,
+        "color": "#000000"
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "puzzle-placed",
+          "dragBounds": "screen",
+          "dragTarget": { "position": { "x": 0.6, "y": 0.45 }, "radius": 0.1 }
+        }
+      ]
+    },
+    {
+      "id": "hint-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.88 },
+      "content": "就一块，别想多了",
+      "style": { "fontSize": 13, "color": "#bdbdbd" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "puzzle-placed" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "真的只有一块哦", "showAfterFailCount": 3 },
+    { "level": "strong", "text": "把拼图拖到框里", "showAfterFailCount": 5, "highlightObjectId": "puzzle-piece" }
+  ],
+  "passFeedback": {
+    "texts": ["拼图大师！", "你想太复杂了吧", "一步到位"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["真的只有这一块", "没有第二块了"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

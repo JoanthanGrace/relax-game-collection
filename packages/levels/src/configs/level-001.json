@@ -1,0 +1,41 @@
+{
+  "id": "level-001",
+  "chapter": 1,
+  "order": 1,
+  "title": "点一下就行",
+  "instruction": "请点击按钮过关",
+  "tags": ["text-trick"],
+  "background": { "type": "color", "value": "#f5f5f5" },
+  "objects": [
+    {
+      "id": "pass-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "过关",
+      "style": {
+        "fontSize": 28,
+        "color": "#ffffff",
+        "backgroundColor": "#4CAF50",
+        "borderRadius": 12,
+        "padding": 20
+      },
+      "interactions": [
+        { "type": "click", "emits": "pass-btn-clicked" }
+      ],
+      "enterAnimation": { "type": "scale-in", "duration": 400 }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "pass-btn-clicked" }
+  ],
+  "passFeedback": {
+    "texts": ["就这？", "太简单了吧"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["这都能失败？"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

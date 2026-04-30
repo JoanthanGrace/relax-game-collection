@@ -1,0 +1,88 @@
+{
+  "id": "level-015",
+  "chapter": 2,
+  "order": 5,
+  "title": "拖我过去",
+  "instruction": "把「通关」拖到框里",
+  "tags": ["text-trick", "drag-reveal"],
+  "background": { "type": "color", "value": "#fff8e1" },
+  "objects": [
+    {
+      "id": "pass-word",
+      "type": "button",
+      "position": { "x": 0.3, "y": 0.35 },
+      "content": "通关",
+      "style": {
+        "fontSize": 28,
+        "color": "#ff6f00",
+        "backgroundColor": "#fff3e0",
+        "borderRadius": 8,
+        "padding": 14,
+        "borderColor": "#ffb300",
+        "borderWidth": 2
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "word-placed",
+          "dragBounds": "screen",
+          "dragTarget": { "position": { "x": 0.7, "y": 0.65 }, "radius": 0.12 }
+        }
+      ]
+    },
+    {
+      "id": "target-box",
+      "type": "shape",
+      "position": { "x": 0.7, "y": 0.65 },
+      "size": { "x": 0.25, "y": 0.12 },
+      "style": {
+        "shapeType": "rect",
+        "fill": "#fffde7",
+        "borderColor": "#f9a825",
+        "borderWidth": 3,
+        "borderRadius": 8
+      }
+    },
+    {
+      "id": "box-label",
+      "type": "text",
+      "position": { "x": 0.7, "y": 0.65 },
+      "content": "放这里",
+      "style": { "fontSize": 14, "color": "#bdbdbd" }
+    },
+    {
+      "id": "decoy-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.85 },
+      "content": "点我过关",
+      "style": {
+        "fontSize": 16,
+        "color": "#ffffff",
+        "backgroundColor": "#9e9e9e",
+        "borderRadius": 8,
+        "padding": 12
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "word-placed" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "仔细看题目说什么", "showAfterFailCount": 2 },
+    { "level": "medium", "text": "「通关」两个字可以拖动", "showAfterFailCount": 4, "highlightObjectId": "pass-word" },
+    { "level": "strong", "text": "把「通关」拖到右下的框里", "showAfterFailCount": 7 }
+  ],
+  "passFeedback": {
+    "texts": ["文字也能搬家！", "拖放大师"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["不是点，是拖", "看看有什么能拖动的"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

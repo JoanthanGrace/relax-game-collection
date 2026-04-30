@@ -1,0 +1,88 @@
+{
+  "id": "level-020",
+  "chapter": 2,
+  "order": 10,
+  "title": "找到我",
+  "instruction": "找到隐藏的通关按钮",
+  "tags": ["hidden-target"],
+  "background": { "type": "color", "value": "#efebe9" },
+  "objects": [
+    {
+      "id": "decoy-1",
+      "type": "button",
+      "position": { "x": 0.3, "y": 0.3 },
+      "content": "在这！",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#8d6e63",
+        "borderRadius": 8,
+        "padding": 12
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-1-click" }
+      ]
+    },
+    {
+      "id": "decoy-2",
+      "type": "button",
+      "position": { "x": 0.7, "y": 0.45 },
+      "content": "不对，在这！",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#795548",
+        "borderRadius": 8,
+        "padding": 12
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-2-click" }
+      ]
+    },
+    {
+      "id": "decoy-3",
+      "type": "button",
+      "position": { "x": 0.4, "y": 0.65 },
+      "content": "我我我！",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#6d4c41",
+        "borderRadius": 8,
+        "padding": 12
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-3-click" }
+      ]
+    },
+    {
+      "id": "hidden-real-btn",
+      "type": "text",
+      "position": { "x": 0.12, "y": 0.88 },
+      "content": "•",
+      "style": { "fontSize": 10, "color": "#d7ccc8" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "hidden-found" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "hidden-found" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "那些喊着「在这」的都是骗子", "showAfterFailCount": 3 },
+    { "level": "medium", "text": "真正隐藏的东西不会自我标榜", "showAfterFailCount": 5 },
+    { "level": "strong", "text": "左下角有个小点", "showAfterFailCount": 8, "highlightObjectId": "hidden-real-btn" }
+  ],
+  "passFeedback": {
+    "texts": ["火眼金睛！", "藏得够深吧"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["那不是我", "越显眼的越可疑"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

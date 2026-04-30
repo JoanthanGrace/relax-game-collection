@@ -1,0 +1,71 @@
+{
+  "id": "level-008",
+  "chapter": 1,
+  "order": 8,
+  "title": "拨云见日",
+  "instruction": "让阳光照进来",
+  "tags": ["drag-reveal"],
+  "background": { "type": "gradient", "value": ["#e3f2fd", "#ffffff"] },
+  "objects": [
+    {
+      "id": "cloud",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "☁️",
+      "style": {
+        "fontSize": 56,
+        "backgroundColor": "#e0e0e0",
+        "borderRadius": 30,
+        "padding": 24,
+        "color": "#000000"
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "cloud-removed",
+          "dragBounds": "none",
+          "dragTarget": { "offScreen": true }
+        }
+      ]
+    },
+    {
+      "id": "hidden-sun",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "🌞",
+      "style": { "fontSize": 48 },
+      "zIndex": -1
+    },
+    {
+      "id": "sad-face",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.6 },
+      "content": "😢",
+      "style": { "fontSize": 64 }
+    },
+    {
+      "id": "complaint-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.75 },
+      "content": "乌云遮住了太阳...",
+      "style": { "fontSize": 18, "color": "#546e7a" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "cloud-removed" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "试试拖动看看", "showAfterFailCount": 3 },
+    { "level": "strong", "text": "把云朵拖走吧", "showAfterFailCount": 5, "highlightObjectId": "cloud" }
+  ],
+  "passFeedback": {
+    "texts": ["晴空万里！", "阳光普照"],
+    "animation": "confetti",
+    "sfx": "pass-relieved"
+  },
+  "failFeedback": {
+    "texts": ["还是阴天"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

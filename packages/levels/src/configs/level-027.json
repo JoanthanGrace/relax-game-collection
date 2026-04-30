@@ -1,0 +1,74 @@
+{
+  "id": "level-027",
+  "chapter": 3,
+  "order": 7,
+  "title": "摇一摇",
+  "instruction": "摇一摇手机过关",
+  "tags": ["drag-reveal"],
+  "background": { "type": "color", "value": "#fce4ec" },
+  "objects": [
+    {
+      "id": "phone-icon",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.45 },
+      "content": "📱",
+      "style": {
+        "fontSize": 64,
+        "backgroundColor": "#f8bbd0",
+        "borderRadius": 16,
+        "padding": 20,
+        "color": "#000000"
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "phone-shaken",
+          "dragBounds": "screen",
+          "dragTarget": { "position": { "x": 0.5, "y": 0.2 }, "radius": 0.15 }
+        }
+      ]
+    },
+    {
+      "id": "instruction-sub",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.72 },
+      "content": "（别真的摇自己的手机啊）",
+      "style": { "fontSize": 12, "color": "#bdbdbd" },
+      "visible": false
+    },
+    {
+      "id": "shake-hint",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.78 },
+      "content": "📱 ← 试试拖动这个",
+      "style": { "fontSize": 14, "color": "#e91e63" },
+      "visible": false
+    }
+  ],
+  "reactions": [
+    {
+      "trigger": "phone-shaken",
+      "actions": [
+        { "type": "show", "objectId": "instruction-sub" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "phone-shaken" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "摇的不是你的手机", "showAfterFailCount": 3 },
+    { "level": "medium", "text": "画面里有个手机图标", "showAfterFailCount": 5, "highlightObjectId": "phone-icon" },
+    { "level": "strong", "text": "拖动画面中的手机！", "showAfterFailCount": 8, "highlightObjectId": "phone-icon" }
+  ],
+  "passFeedback": {
+    "texts": ["摇的是屏幕里的手机！", "你是不是真摇了一下自己的手机"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["别摇你自己的手机...", "看看屏幕里有什么"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

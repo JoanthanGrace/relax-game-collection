@@ -1,0 +1,48 @@
+{
+  "id": "level-010",
+  "chapter": 1,
+  "order": 10,
+  "title": "送分题",
+  "instruction": "点击绿色按钮过关",
+  "tags": ["fake-button"],
+  "background": { "type": "color", "value": "#e8f5e9" },
+  "objects": [
+    {
+      "id": "hint-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "这次真的没有陷阱",
+      "style": { "fontSize": 16, "color": "#9e9e9e" }
+    },
+    {
+      "id": "green-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "过关",
+      "style": {
+        "fontSize": 32,
+        "color": "#ffffff",
+        "backgroundColor": "#4CAF50",
+        "borderRadius": 16,
+        "padding": 28
+      },
+      "interactions": [
+        { "type": "click", "emits": "green-clicked" }
+      ],
+      "enterAnimation": { "type": "scale-in", "duration": 500 }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "green-clicked" }
+  ],
+  "passFeedback": {
+    "texts": ["你是不是犹豫了很久？", "有时候答案就是这么简单", "过度思考的你好可爱"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["这关真不骗你"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

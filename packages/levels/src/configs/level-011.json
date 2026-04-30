@@ -1,0 +1,63 @@
+{
+  "id": "level-011",
+  "chapter": 2,
+  "order": 1,
+  "title": "太热了",
+  "instruction": "好热啊！帮帮忙！",
+  "tags": ["drag-reveal"],
+  "background": { "type": "gradient", "value": ["#fff9c4", "#ffcc80"] },
+  "objects": [
+    {
+      "id": "sun",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.25 },
+      "content": "☀️",
+      "style": {
+        "fontSize": 64,
+        "backgroundColor": "#ffb300",
+        "borderRadius": 50,
+        "padding": 20,
+        "color": "#000000"
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "sun-removed",
+          "dragBounds": "none",
+          "dragTarget": { "offScreen": true }
+        }
+      ]
+    },
+    {
+      "id": "sweating-face",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "🥵",
+      "style": { "fontSize": 56 }
+    },
+    {
+      "id": "help-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.75 },
+      "content": "快中暑了...",
+      "style": { "fontSize": 18, "color": "#e65100" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "sun-removed" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "热的根源是什么？", "showAfterFailCount": 3 },
+    { "level": "strong", "text": "把太阳拖走吧！", "showAfterFailCount": 6, "highlightObjectId": "sun" }
+  ],
+  "passFeedback": {
+    "texts": ["凉快了！", "这就是物理学"],
+    "animation": "confetti",
+    "sfx": "pass-relieved"
+  },
+  "failFeedback": {
+    "texts": ["还是好热..."],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

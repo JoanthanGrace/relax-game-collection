@@ -1,0 +1,95 @@
+{
+  "id": "level-017",
+  "chapter": 2,
+  "order": 7,
+  "title": "全部点亮",
+  "instruction": "点亮所有星星",
+  "tags": ["multi-step"],
+  "background": { "type": "gradient", "value": ["#1a237e", "#311b92"] },
+  "objects": [
+    {
+      "id": "star-1",
+      "type": "text",
+      "position": { "x": 0.25, "y": 0.4 },
+      "content": "☆",
+      "style": { "fontSize": 48, "color": "#616161" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "star-1-clicked" }
+      ]
+    },
+    {
+      "id": "star-2",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.4 },
+      "content": "☆",
+      "style": { "fontSize": 48, "color": "#616161" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "star-2-clicked" }
+      ]
+    },
+    {
+      "id": "star-3",
+      "type": "text",
+      "position": { "x": 0.75, "y": 0.4 },
+      "content": "☆",
+      "style": { "fontSize": 48, "color": "#616161" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "star-3-clicked" }
+      ]
+    },
+    {
+      "id": "night-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.65 },
+      "content": "夜空需要星光",
+      "style": { "fontSize": 16, "color": "#7c4dff" }
+    }
+  ],
+  "reactions": [
+    {
+      "trigger": "star-1-clicked",
+      "actions": [
+        { "type": "set-text", "objectId": "star-1", "value": "⭐" },
+        { "type": "set-style", "objectId": "star-1", "value": { "color": "#ffd600" } }
+      ]
+    },
+    {
+      "trigger": "star-2-clicked",
+      "actions": [
+        { "type": "set-text", "objectId": "star-2", "value": "⭐" },
+        { "type": "set-style", "objectId": "star-2", "value": { "color": "#ffd600" } }
+      ]
+    },
+    {
+      "trigger": "star-3-clicked",
+      "actions": [
+        { "type": "set-text", "objectId": "star-3", "value": "⭐" },
+        { "type": "set-style", "objectId": "star-3", "value": { "color": "#ffd600" } }
+      ]
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "composite",
+      "operator": "and",
+      "children": [
+        { "type": "event-fired", "eventId": "star-1-clicked" },
+        { "type": "event-fired", "eventId": "star-2-clicked" },
+        { "type": "event-fired", "eventId": "star-3-clicked" }
+      ]
+    }
+  ],
+  "passFeedback": {
+    "texts": ["璀璨星河！", "夜空好美"],
+    "animation": "confetti",
+    "sfx": "pass-gentle"
+  },
+  "failFeedback": {
+    "texts": ["还有星星没亮"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

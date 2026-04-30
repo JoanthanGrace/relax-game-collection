@@ -1,0 +1,75 @@
+{
+  "id": "level-018",
+  "chapter": 2,
+  "order": 8,
+  "title": "深呼吸",
+  "instruction": "闭上眼，放松5秒",
+  "tags": ["wait"],
+  "background": { "type": "gradient", "value": ["#e0f7fa", "#b2ebf2"] },
+  "objects": [
+    {
+      "id": "zen-emoji",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "🧘",
+      "style": { "fontSize": 64 },
+      "behaviors": [
+        { "type": "pulse", "params": { "minScale": 0.9, "maxScale": 1.1, "speed": 3000 } }
+      ]
+    },
+    {
+      "id": "breathe-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "吸...呼...吸...呼...",
+      "style": { "fontSize": 18, "color": "#00838f" }
+    },
+    {
+      "id": "trap-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.75 },
+      "content": "跳过冥想",
+      "style": {
+        "fontSize": 14,
+        "color": "#ffffff",
+        "backgroundColor": "#90a4ae",
+        "borderRadius": 8,
+        "padding": 10
+      },
+      "interactions": [
+        { "type": "click", "emits": "trap-clicked" }
+      ]
+    },
+    {
+      "id": "wait-zone",
+      "type": "shape",
+      "position": { "x": 0, "y": 0 },
+      "size": { "x": 1, "y": 1 },
+      "visible": false,
+      "interactive": false,
+      "interactions": [
+        { "type": "wait", "waitDuration": 5000, "emits": "meditation-done" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "meditation-done" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "trap-clicked", "count": 5 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "真的只要等着就好", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "放下手指，享受5秒宁静", "showAfterFailCount": 4 }
+  ],
+  "passFeedback": {
+    "texts": ["内心平静", "禅定达成", "你做到了，什么都没做"],
+    "animation": "confetti",
+    "sfx": "pass-gentle"
+  },
+  "failFeedback": {
+    "texts": ["坐不住了？", "冥想需要耐心"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

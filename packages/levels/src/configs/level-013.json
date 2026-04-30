@@ -1,0 +1,85 @@
+{
+  "id": "level-013",
+  "chapter": 2,
+  "order": 3,
+  "title": "关闭广告",
+  "instruction": "关掉这个烦人的广告",
+  "tags": ["ui-trick", "fake-button"],
+  "background": { "type": "color", "value": "#ffffff" },
+  "objects": [
+    {
+      "id": "ad-title",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.2 },
+      "content": "🎉 恭喜你中了大奖！！！",
+      "style": { "fontSize": 22, "color": "#ff6f00", "bold": true }
+    },
+    {
+      "id": "ad-body",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "点击领取 iPhone 99 Pro Max",
+      "style": { "fontSize": 16, "color": "#424242" }
+    },
+    {
+      "id": "fake-close-big",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "✕ 关闭广告",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#f44336",
+        "borderRadius": 10,
+        "padding": 18
+      },
+      "interactions": [
+        { "type": "click", "emits": "fake-close-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 500 }
+    },
+    {
+      "id": "fake-close-corner",
+      "type": "text",
+      "position": { "x": 0.88, "y": 0.12 },
+      "content": "✕",
+      "style": { "fontSize": 24, "color": "#bdbdbd" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "fake-corner-clicked" }
+      ]
+    },
+    {
+      "id": "real-close",
+      "type": "text",
+      "position": { "x": 0.95, "y": 0.05 },
+      "content": "×",
+      "style": { "fontSize": 11, "color": "#e0e0e0" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "real-close-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "real-close-clicked" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "fake-close-clicked", "count": 5 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "大按钮不一定是真的", "showAfterFailCount": 2 },
+    { "level": "medium", "text": "真正的关闭按钮都很小", "showAfterFailCount": 4 },
+    { "level": "strong", "text": "看看右上角最角落的位置", "showAfterFailCount": 7, "highlightObjectId": "real-close" }
+  ],
+  "passFeedback": {
+    "texts": ["老网民了！", "火眼金睛"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["恭喜你又被假按钮骗了", "广告关不掉是常态"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

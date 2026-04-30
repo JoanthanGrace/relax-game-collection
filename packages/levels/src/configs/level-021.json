@@ -1,0 +1,74 @@
+{
+  "id": "level-021",
+  "chapter": 3,
+  "order": 1,
+  "title": "反着来",
+  "instruction": "千万不要点击红色按钮",
+  "tags": ["text-trick"],
+  "background": { "type": "color", "value": "#fafafa" },
+  "objects": [
+    {
+      "id": "warning-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.25 },
+      "content": "⚠️ 严禁点击 ⚠️",
+      "style": { "fontSize": 20, "color": "#d32f2f", "bold": true },
+      "behaviors": [
+        { "type": "shake", "params": { "intensity": 1, "duration": 99999 } }
+      ]
+    },
+    {
+      "id": "red-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "禁止点击",
+      "style": {
+        "fontSize": 24,
+        "color": "#ffffff",
+        "backgroundColor": "#d32f2f",
+        "borderRadius": 12,
+        "padding": 20
+      },
+      "interactions": [
+        { "type": "click", "emits": "red-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 500 }
+    },
+    {
+      "id": "safe-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.72 },
+      "content": "安全按钮",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#4CAF50",
+        "borderRadius": 10,
+        "padding": 14
+      },
+      "interactions": [
+        { "type": "click", "emits": "safe-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "red-clicked" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "safe-clicked", "count": 5 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "这游戏说的话你还信？", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "说不让点，那就偏要点！", "showAfterFailCount": 4, "highlightObjectId": "red-btn" }
+  ],
+  "passFeedback": {
+    "texts": ["叛逆精神！", "你已经学会了！"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["你也太听话了", "这游戏的话不能信"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

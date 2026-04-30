@@ -1,0 +1,121 @@
+{
+  "id": "level-030",
+  "chapter": 3,
+  "order": 10,
+  "title": "最后一关",
+  "instruction": "恭喜来到最后一关！",
+  "tags": ["multi-step", "fake-fail"],
+  "background": { "type": "gradient", "value": ["#fce4ec", "#f3e5f5"] },
+  "objects": [
+    {
+      "id": "congrats-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.2 },
+      "content": "🎉 终于到最后了！",
+      "style": { "fontSize": 22, "color": "#ad1457", "bold": true }
+    },
+    {
+      "id": "fake-pass-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.4 },
+      "content": "🏆 通关！",
+      "style": {
+        "fontSize": 28,
+        "color": "#ffffff",
+        "backgroundColor": "#e91e63",
+        "borderRadius": 16,
+        "padding": 24
+      },
+      "interactions": [
+        { "type": "click", "emits": "fake-pass-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 600 }
+    },
+    {
+      "id": "fake-confetti",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.15 },
+      "content": "🎊🎉🎊🎉🎊🎉🎊",
+      "style": { "fontSize": 28 },
+      "visible": false
+    },
+    {
+      "id": "gotcha-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.45 },
+      "content": "骗你的 😏",
+      "style": { "fontSize": 28, "color": "#6a1b9a", "bold": true },
+      "visible": false
+    },
+    {
+      "id": "sub-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "你以为这么简单就结束了？",
+      "style": { "fontSize": 14, "color": "#8e24aa" },
+      "visible": false
+    },
+    {
+      "id": "real-pass-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.72 },
+      "content": "真·通关",
+      "style": {
+        "fontSize": 20,
+        "color": "#ffffff",
+        "backgroundColor": "#4CAF50",
+        "borderRadius": 12,
+        "padding": 18
+      },
+      "visible": false,
+      "interactions": [
+        { "type": "click", "emits": "real-pass-clicked" }
+      ],
+      "enterAnimation": { "type": "scale-in", "duration": 500 }
+    }
+  ],
+  "reactions": [
+    {
+      "trigger": "fake-pass-clicked",
+      "actions": [
+        { "type": "show", "objectId": "fake-confetti" },
+        { "type": "hide", "objectId": "fake-pass-btn" },
+        { "type": "set-text", "objectId": "congrats-text", "value": "" }
+      ]
+    },
+    {
+      "trigger": "fake-pass-clicked",
+      "delay": 1500,
+      "actions": [
+        { "type": "hide", "objectId": "fake-confetti" },
+        { "type": "show", "objectId": "gotcha-text" },
+        { "type": "show", "objectId": "sub-text" }
+      ]
+    },
+    {
+      "trigger": "fake-pass-clicked",
+      "delay": 2500,
+      "actions": [
+        { "type": "show", "objectId": "real-pass-btn" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "real-pass-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "这游戏会这么好心让你直接过？", "showAfterFailCount": 2 },
+    { "level": "medium", "text": "先点那个通关按钮看看会发生什么", "showAfterFailCount": 4 },
+    { "level": "strong", "text": "等假通关结束后会出现真按钮", "showAfterFailCount": 7 }
+  ],
+  "passFeedback": {
+    "texts": ["这次是真的了！", "恭喜通关全部30关！", "你已经是老江湖了"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["最后一关怎么能这么容易", "耐心等等"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

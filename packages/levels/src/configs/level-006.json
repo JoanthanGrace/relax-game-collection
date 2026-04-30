@@ -1,0 +1,79 @@
+{
+  "id": "level-006",
+  "chapter": 1,
+  "order": 6,
+  "title": "别慌",
+  "instruction": "在时间耗尽之前过关！",
+  "tags": ["system-meta", "fake-button"],
+  "background": { "type": "color", "value": "#212121" },
+  "objects": [
+    {
+      "id": "game-over-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.25 },
+      "content": "GAME OVER",
+      "style": { "fontSize": 48, "color": "#f44336", "bold": true },
+      "enterAnimation": { "type": "scale-in", "duration": 600 }
+    },
+    {
+      "id": "fail-msg",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.38 },
+      "content": "时间到了！你输了！",
+      "style": { "fontSize": 18, "color": "#757575" }
+    },
+    {
+      "id": "score-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.48 },
+      "content": "得分：0",
+      "style": { "fontSize": 16, "color": "#616161" }
+    },
+    {
+      "id": "restart-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.62 },
+      "content": "重新开始",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#f44336",
+        "borderRadius": 10,
+        "padding": 18
+      },
+      "interactions": [
+        { "type": "click", "emits": "restart-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 500 }
+    },
+    {
+      "id": "continue-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.78 },
+      "content": "继续 →",
+      "style": { "fontSize": 13, "color": "#424242" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "continue-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "continue-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "真的失败了吗？", "showAfterFailCount": 2 },
+    { "level": "medium", "text": "还有别的东西可以点", "showAfterFailCount": 4 },
+    { "level": "strong", "text": "底下那个小字...", "showAfterFailCount": 7, "highlightObjectId": "continue-text" }
+  ],
+  "passFeedback": {
+    "texts": ["骗你的！", "永不言弃"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["真的结束了", "...还是没有？"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@nicetap/game-core",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@nicetap/shared": "workspace:*",
+    "phaser": "^3.80.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

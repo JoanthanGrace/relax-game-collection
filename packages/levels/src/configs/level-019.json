@@ -1,0 +1,84 @@
+{
+  "id": "level-019",
+  "chapter": 2,
+  "order": 9,
+  "title": "系统崩溃",
+  "instruction": "⚠ 系统错误 0x8007045D",
+  "tags": ["system-meta", "fake-fail"],
+  "background": { "type": "color", "value": "#0d47a1" },
+  "objects": [
+    {
+      "id": "bsod-icon",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.2 },
+      "content": ":(  ",
+      "style": { "fontSize": 64, "color": "#ffffff" }
+    },
+    {
+      "id": "error-title",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "你的游戏遇到问题需要重启",
+      "style": { "fontSize": 18, "color": "#ffffff" }
+    },
+    {
+      "id": "error-detail",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.45 },
+      "content": "错误代码：LEVEL_NOT_FOUND",
+      "style": { "fontSize": 12, "color": "#90caf9" }
+    },
+    {
+      "id": "progress-fake",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.58 },
+      "content": "收集错误信息中... 87%",
+      "style": { "fontSize": 14, "color": "#bbdefb" }
+    },
+    {
+      "id": "restart-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.72 },
+      "content": "重启游戏",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#1565C0",
+        "borderRadius": 8,
+        "padding": 14
+      },
+      "interactions": [
+        { "type": "click", "emits": "restart-clicked" }
+      ]
+    },
+    {
+      "id": "dismiss-text",
+      "type": "text",
+      "position": { "x": 0.85, "y": 0.92 },
+      "content": "dismiss",
+      "style": { "fontSize": 10, "color": "#1565C0" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "dismiss-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "dismiss-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "这真的是系统错误吗？", "showAfterFailCount": 2 },
+    { "level": "medium", "text": "仔细找找有没有别的可以点", "showAfterFailCount": 4 },
+    { "level": "strong", "text": "右下角有个小字", "showAfterFailCount": 7, "highlightObjectId": "dismiss-text" }
+  ],
+  "passFeedback": {
+    "texts": ["系统恢复正常！", "假蓝屏看多了吧"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["系统正在重启...", "别真信了啊"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

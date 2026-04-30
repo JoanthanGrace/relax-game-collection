@@ -1,0 +1,66 @@
+{
+  "id": "level-002",
+  "chapter": 1,
+  "order": 2,
+  "title": "找到按钮",
+  "instruction": "点击下面的「按钮」过关",
+  "tags": ["text-trick"],
+  "background": { "type": "color", "value": "#fce4ec" },
+  "objects": [
+    {
+      "id": "hint-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "仔细看题目哦~",
+      "style": { "fontSize": 18, "color": "#999999" }
+    },
+    {
+      "id": "clickable-word",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.45 },
+      "content": "按钮",
+      "style": { "fontSize": 28, "color": "#e91e63", "bold": true },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "word-clicked" }
+      ]
+    },
+    {
+      "id": "decoy-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.65 },
+      "content": "点我过关",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#9e9e9e",
+        "borderRadius": 10,
+        "padding": 18
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400 }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "word-clicked" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "decoy-clicked", "count": 5 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "认真看看题目", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "文字也能点哦", "showAfterFailCount": 4, "highlightObjectId": "clickable-word" }
+  ],
+  "passFeedback": {
+    "texts": ["识字就是不一样", "文字的力量！"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["不是那个按钮啦", "再看看题目"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

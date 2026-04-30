@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@nicetap/shared": ["../../packages/shared/src/index.ts"],
+      "@nicetap/game-core": ["../../packages/game-core/src/index.ts"],
+      "@nicetap/levels": ["../../packages/levels/src/index.ts"]
+    },
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["src/**/*", "src/**/*.vue", "env.d.ts", "../../packages/shared/src/**/*", "../../packages/game-core/src/**/*", "../../packages/levels/src/**/*"]
+}

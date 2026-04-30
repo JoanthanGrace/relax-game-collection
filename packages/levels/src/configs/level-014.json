@@ -1,0 +1,59 @@
+{
+  "id": "level-014",
+  "chapter": 2,
+  "order": 4,
+  "title": "数到十",
+  "instruction": "连击按钮10次过关！",
+  "tags": ["multi-step"],
+  "background": { "type": "gradient", "value": ["#e1f5fe", "#b3e5fc"] },
+  "objects": [
+    {
+      "id": "counter-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "0/10",
+      "style": { "fontSize": 36, "color": "#0277BD", "bold": true }
+    },
+    {
+      "id": "smash-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "👊 锤它！",
+      "style": {
+        "fontSize": 28,
+        "color": "#ffffff",
+        "backgroundColor": "#0288D1",
+        "borderRadius": 50,
+        "padding": 28
+      },
+      "interactions": [
+        { "type": "multi-click", "emits": "smash-done", "clickCount": 10, "clickInterval": 2000 }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400 }
+    },
+    {
+      "id": "encourage-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.78 },
+      "content": "使劲！不限速！",
+      "style": { "fontSize": 14, "color": "#757575" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "smash-done" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "就是使劲点！", "showAfterFailCount": 3 },
+    { "level": "strong", "text": "别停下来，一直点！", "showAfterFailCount": 6 }
+  ],
+  "passFeedback": {
+    "texts": ["手速惊人！", "暴力美学！", "解压成功"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["太慢了，中间断了", "要连续点哦"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

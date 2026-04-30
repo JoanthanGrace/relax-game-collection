@@ -1,0 +1,80 @@
+{
+  "id": "level-005",
+  "chapter": 1,
+  "order": 5,
+  "title": "别动！",
+  "instruction": "在倒计时结束前千万别碰！",
+  "tags": ["wait"],
+  "background": { "type": "color", "value": "#fff3e0" },
+  "objects": [
+    {
+      "id": "countdown-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "3",
+      "style": { "fontSize": 72, "color": "#f44336", "bold": true },
+      "behaviors": [
+        {
+          "type": "countdown",
+          "params": { "seconds": 3, "displayObjectId": "countdown-text" }
+        }
+      ]
+    },
+    {
+      "id": "rush-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.55 },
+      "content": "快按按钮！！！",
+      "style": { "fontSize": 24, "color": "#d32f2f", "bold": true },
+      "behaviors": [
+        { "type": "shake", "params": { "intensity": 2, "duration": 99999 } }
+      ]
+    },
+    {
+      "id": "trap-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.75 },
+      "content": "快按我！",
+      "style": {
+        "fontSize": 20,
+        "color": "#ffffff",
+        "backgroundColor": "#f44336",
+        "borderRadius": 8
+      },
+      "interactions": [
+        { "type": "click", "emits": "trap-clicked" }
+      ]
+    },
+    {
+      "id": "idle-detector",
+      "type": "shape",
+      "position": { "x": 0, "y": 0 },
+      "size": { "x": 1, "y": 1 },
+      "visible": false,
+      "interactive": false,
+      "interactions": [
+        { "type": "wait", "waitDuration": 3500, "emits": "player-waited" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "player-waited" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "trap-clicked", "count": 3 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "什么都别做", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "忍住！别碰！", "showAfterFailCount": 4 }
+  ],
+  "passFeedback": {
+    "texts": ["淡定从容", "禅意大师"],
+    "animation": "confetti",
+    "sfx": "pass-gentle"
+  },
+  "failFeedback": {
+    "texts": ["说了别碰啊", "管不住手？"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

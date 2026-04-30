@@ -1,0 +1,65 @@
+{
+  "id": "level-023",
+  "chapter": 3,
+  "order": 3,
+  "title": "角落里",
+  "instruction": "通关按钮藏在某个角落",
+  "tags": ["hidden-target"],
+  "background": { "type": "color", "value": "#e8eaf6" },
+  "objects": [
+    {
+      "id": "arrow-1",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "👆 往上看",
+      "style": { "fontSize": 20, "color": "#5c6bc0" }
+    },
+    {
+      "id": "arrow-2",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "👇 往下看",
+      "style": { "fontSize": 20, "color": "#5c6bc0" }
+    },
+    {
+      "id": "arrow-3",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.7 },
+      "content": "👈 往左看",
+      "style": { "fontSize": 20, "color": "#5c6bc0" }
+    },
+    {
+      "id": "corner-btn",
+      "type": "button",
+      "position": { "x": 0.92, "y": 0.92 },
+      "content": "✓",
+      "style": {
+        "fontSize": 16,
+        "color": "#ffffff",
+        "backgroundColor": "#3f51b5",
+        "borderRadius": 50,
+        "padding": 10
+      },
+      "interactions": [
+        { "type": "click", "emits": "corner-found" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "corner-found" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "那些箭头都在误导你", "showAfterFailCount": 3 },
+    { "level": "strong", "text": "右下角！", "showAfterFailCount": 5, "highlightObjectId": "corner-btn" }
+  ],
+  "passFeedback": {
+    "texts": ["眼神真好！", "角落探险家"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["不在那个方向"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "level-004",
+  "chapter": 1,
+  "order": 4,
+  "title": "关掉它",
+  "instruction": "关掉这一关",
+  "tags": ["ui-trick", "fake-button"],
+  "background": { "type": "color", "value": "#e8eaf6" },
+  "objects": [
+    {
+      "id": "decoy-btn-1",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.35 },
+      "content": "通关",
+      "style": {
+        "fontSize": 24,
+        "color": "#ffffff",
+        "backgroundColor": "#4CAF50",
+        "borderRadius": 12,
+        "padding": 20
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-1-clicked" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400 }
+    },
+    {
+      "id": "decoy-btn-2",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "过关",
+      "style": {
+        "fontSize": 20,
+        "color": "#ffffff",
+        "backgroundColor": "#2196F3",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-2-clicked" }
+      ]
+    },
+    {
+      "id": "decoy-btn-3",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.65 },
+      "content": "我才是答案",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#FF9800",
+        "borderRadius": 8,
+        "padding": 14
+      },
+      "interactions": [
+        { "type": "click", "emits": "decoy-3-clicked" }
+      ]
+    },
+    {
+      "id": "close-btn",
+      "type": "text",
+      "position": { "x": 0.93, "y": 0.05 },
+      "content": "✕",
+      "style": { "fontSize": 18, "color": "#bdbdbd" },
+      "interactive": true,
+      "interactions": [
+        { "type": "click", "emits": "close-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "close-clicked" }
+  ],
+  "hints": [
+    { "level": "weak", "text": "不是那些大按钮哦", "showAfterFailCount": 3 },
+    { "level": "medium", "text": "想想怎么「关掉」", "showAfterFailCount": 5 },
+    { "level": "strong", "text": "看看右上角", "showAfterFailCount": 8, "highlightObjectId": "close-btn" }
+  ],
+  "passFeedback": {
+    "texts": ["关门大吉！", "UI看得真仔细"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["不是这个", "再读读题目"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

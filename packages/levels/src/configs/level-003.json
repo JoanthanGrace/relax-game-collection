@@ -1,0 +1,65 @@
+{
+  "id": "level-003",
+  "chapter": 1,
+  "order": 3,
+  "title": "疯狂连击",
+  "instruction": "快速连击按钮5次！",
+  "tags": ["text-trick"],
+  "background": { "type": "color", "value": "#e3f2fd" },
+  "objects": [
+    {
+      "id": "click-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "使劲点！",
+      "style": {
+        "fontSize": 24,
+        "color": "#ffffff",
+        "backgroundColor": "#2196F3",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        {
+          "type": "multi-click",
+          "emits": "btn-multi-clicked",
+          "clickCount": 5,
+          "clickInterval": 800
+        }
+      ]
+    },
+    {
+      "id": "counter-display",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.7 },
+      "content": "手速就是正义",
+      "style": { "fontSize": 16, "color": "#757575" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "btn-multi-clicked" }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "快快快！",
+      "showAfterFailCount": 3
+    },
+    {
+      "level": "strong",
+      "text": "连续快速点击5下！",
+      "showAfterFailCount": 5,
+      "highlightObjectId": "click-btn"
+    }
+  ],
+  "passFeedback": {
+    "texts": ["手速之王！", "键盘侠认证"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["太慢了", "再快一点！"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

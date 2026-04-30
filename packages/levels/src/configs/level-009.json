@@ -1,0 +1,79 @@
+{
+  "id": "level-009",
+  "chapter": 1,
+  "order": 9,
+  "title": "按顺序来",
+  "instruction": "从小到大点击数字",
+  "tags": ["sequence-trick"],
+  "background": { "type": "color", "value": "#f3e5f5" },
+  "objects": [
+    {
+      "id": "num-3",
+      "type": "button",
+      "position": { "x": 0.3, "y": 0.35 },
+      "content": "3",
+      "style": {
+        "fontSize": 36,
+        "color": "#ffffff",
+        "backgroundColor": "#9C27B0",
+        "borderRadius": 50,
+        "padding": 24
+      },
+      "interactions": [
+        { "type": "click", "emits": "click-3" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400 }
+    },
+    {
+      "id": "num-1",
+      "type": "button",
+      "position": { "x": 0.7, "y": 0.5 },
+      "content": "1",
+      "style": {
+        "fontSize": 36,
+        "color": "#ffffff",
+        "backgroundColor": "#E91E63",
+        "borderRadius": 50,
+        "padding": 24
+      },
+      "interactions": [
+        { "type": "click", "emits": "click-1" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400, "delay": 200 }
+    },
+    {
+      "id": "num-2",
+      "type": "button",
+      "position": { "x": 0.4, "y": 0.65 },
+      "content": "2",
+      "style": {
+        "fontSize": 36,
+        "color": "#ffffff",
+        "backgroundColor": "#673AB7",
+        "borderRadius": 50,
+        "padding": 24
+      },
+      "interactions": [
+        { "type": "click", "emits": "click-2" }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 400, "delay": 400 }
+    }
+  ],
+  "winConditions": [
+    { "type": "sequence", "eventSequence": ["click-1", "click-2", "click-3"] }
+  ],
+  "hints": [
+    { "level": "weak", "text": "注意数字的大小顺序", "showAfterFailCount": 2 },
+    { "level": "strong", "text": "1→2→3，别被位置骗了", "showAfterFailCount": 5 }
+  ],
+  "passFeedback": {
+    "texts": ["顺序达人！", "条理清晰"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["顺序不对哦", "再想想从小到大"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "level-007",
+  "chapter": 1,
+  "order": 7,
+  "title": "按住别放",
+  "instruction": "长按按钮过关",
+  "tags": ["long-press"],
+  "background": { "type": "color", "value": "#e8f5e9" },
+  "objects": [
+    {
+      "id": "hold-btn",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.5 },
+      "content": "按住我",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#388E3C",
+        "borderRadius": 50,
+        "padding": 24
+      },
+      "interactions": [
+        { "type": "click", "emits": "btn-tapped" },
+        { "type": "long-press", "emits": "btn-held", "duration": 2000 }
+      ],
+      "enterAnimation": { "type": "bounce-in", "duration": 500 }
+    },
+    {
+      "id": "progress-hint",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.7 },
+      "content": "继续按着...",
+      "style": { "fontSize": 14, "color": "#9e9e9e" },
+      "visible": false
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "btn-held" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "btn-tapped", "count": 10 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "不是点一下哦", "showAfterFailCount": 3 },
+    { "level": "medium", "text": "按久一点试试", "showAfterFailCount": 5 },
+    { "level": "strong", "text": "按住2秒不放！", "showAfterFailCount": 8, "highlightObjectId": "hold-btn" }
+  ],
+  "passFeedback": {
+    "texts": ["稳如老狗", "按得好！"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["太急了", "冷静一下"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

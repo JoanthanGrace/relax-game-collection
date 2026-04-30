@@ -1,0 +1,77 @@
+{
+  "id": "level-012",
+  "chapter": 2,
+  "order": 2,
+  "title": "选取消",
+  "instruction": "确认删除所有数据？",
+  "tags": ["text-trick", "fake-button"],
+  "background": { "type": "color", "value": "#ffebee" },
+  "objects": [
+    {
+      "id": "warning-icon",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.25 },
+      "content": "⚠️",
+      "style": { "fontSize": 56 }
+    },
+    {
+      "id": "warning-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.4 },
+      "content": "此操作不可恢复！",
+      "style": { "fontSize": 18, "color": "#d32f2f", "bold": true }
+    },
+    {
+      "id": "confirm-btn",
+      "type": "button",
+      "position": { "x": 0.35, "y": 0.6 },
+      "content": "确认删除",
+      "style": {
+        "fontSize": 18,
+        "color": "#ffffff",
+        "backgroundColor": "#f44336",
+        "borderRadius": 8,
+        "padding": 14
+      },
+      "interactions": [
+        { "type": "click", "emits": "confirm-clicked" }
+      ]
+    },
+    {
+      "id": "cancel-btn",
+      "type": "button",
+      "position": { "x": 0.65, "y": 0.6 },
+      "content": "取消",
+      "style": {
+        "fontSize": 18,
+        "color": "#757575",
+        "backgroundColor": "#eeeeee",
+        "borderRadius": 8,
+        "padding": 14
+      },
+      "interactions": [
+        { "type": "click", "emits": "cancel-clicked" }
+      ]
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "cancel-clicked" }
+  ],
+  "failConditions": [
+    { "type": "event-count", "eventId": "confirm-clicked", "count": 3 }
+  ],
+  "hints": [
+    { "level": "weak", "text": "你真的要删除数据吗？", "showAfterFailCount": 1 },
+    { "level": "strong", "text": "试试另一个按钮", "showAfterFailCount": 3 }
+  ],
+  "passFeedback": {
+    "texts": ["数据保住了！", "理性消费，理性点击"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["你真删啊？！", "三思而后行"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

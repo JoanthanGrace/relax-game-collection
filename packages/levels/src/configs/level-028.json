@@ -1,0 +1,79 @@
+{
+  "id": "level-028",
+  "chapter": 3,
+  "order": 8,
+  "title": "选水果",
+  "instruction": "以下哪个是水果？",
+  "tags": ["fake-button"],
+  "background": { "type": "color", "value": "#f1f8e9" },
+  "objects": [
+    {
+      "id": "option-a",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.3 },
+      "content": "🍎 苹果",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#66bb6a",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        { "type": "click", "emits": "fruit-clicked" }
+      ]
+    },
+    {
+      "id": "option-b",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.48 },
+      "content": "🍌 香蕉",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#fdd835",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        { "type": "click", "emits": "fruit-clicked" }
+      ]
+    },
+    {
+      "id": "option-c",
+      "type": "button",
+      "position": { "x": 0.5, "y": 0.66 },
+      "content": "🍇 葡萄",
+      "style": {
+        "fontSize": 22,
+        "color": "#ffffff",
+        "backgroundColor": "#7b1fa2",
+        "borderRadius": 10,
+        "padding": 16
+      },
+      "interactions": [
+        { "type": "click", "emits": "fruit-clicked" }
+      ]
+    },
+    {
+      "id": "confused-text",
+      "type": "text",
+      "position": { "x": 0.5, "y": 0.84 },
+      "content": "选哪个都一样…吧？",
+      "style": { "fontSize": 12, "color": "#bdbdbd" }
+    }
+  ],
+  "winConditions": [
+    { "type": "event-fired", "eventId": "fruit-clicked" }
+  ],
+  "passFeedback": {
+    "texts": ["都是水果啊！", "你纠结了多久？", "没有错误答案"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["想太多了"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}
