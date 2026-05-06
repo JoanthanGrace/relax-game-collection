@@ -13,5 +13,10 @@ export const router = createRouter({
       name: 'game',
       component: () => import('@/pages/GamePage.vue'),
     },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('@/pages/SettingsPage.vue'),
+    },
   ],
 })

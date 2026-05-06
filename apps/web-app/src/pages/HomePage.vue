@@ -25,6 +25,10 @@ function playFromStart() {
   router.push('/game')
 }
 
+function openSettings() {
+  router.push('/settings')
+}
+
 function continueGame() {
   if (game.continueLevelId) {
     router.push(`/game/${game.continueLevelId}`)
@@ -48,6 +52,9 @@ onMounted(() => {
 <template>
   <div class="home-page">
     <header class="header">
+      <button class="settings-btn" aria-label="打开设置" @click="openSettings">
+        设置
+      </button>
       <h1 class="title">NiceTap</h1>
       <p class="subtitle">无厘头反套路关卡小游戏</p>
       <div class="progress-summary">
@@ -103,11 +110,27 @@ onMounted(() => {
 }
 
 .header {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem 1rem 1.5rem;
   gap: 0.5rem;
+}
+
+.settings-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  height: 34px;
+  padding: 0 0.85rem;
+  border: 1px solid #e0e0ea;
+  border-radius: 8px;
+  background: white;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .title {

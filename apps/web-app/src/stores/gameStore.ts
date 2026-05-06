@@ -85,6 +85,13 @@ export const useGameStore = defineStore('game', () => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
   }
 
+  function clearProgress() {
+    completedLevelIds.value = []
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(STORAGE_KEY)
+    }
+  }
+
   function init() {
     if (initialized.value) return
 
@@ -215,6 +222,7 @@ export const useGameStore = defineStore('game', () => {
     markFail,
     showHint,
     dismissHint,
+    clearProgress,
     isLevelCompleted,
     isLevelCurrent,
     isLevelLocked,

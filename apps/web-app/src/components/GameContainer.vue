@@ -10,6 +10,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   win: []
   fail: []
+  event: [eventId: string]
   hint: [text: string, highlightObjectId?: string]
   'dismiss-hint': []
 }>()
@@ -29,6 +30,9 @@ onMounted(() => {
     },
     onFail() {
       emit('fail')
+    },
+    onEvent(eventId: string) {
+      emit('event', eventId)
     },
     onHint(text: string, highlightObjectId?: string) {
       emit('hint', text, highlightObjectId)

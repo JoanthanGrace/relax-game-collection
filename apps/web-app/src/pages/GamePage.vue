@@ -2,13 +2,17 @@
 import { onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { playSfx } from '@/audio/sfx'
 import GameContainer from '@/components/GameContainer.vue'
 
 const router = useRouter()
 const route = useRoute()
 const game = useGameStore()
+const settings = useSettingsStore()
 
 onMounted(async () => {
+  settings.load()
   const levelId = route.params.levelId as string | undefined
   if (levelId) {
     await game.startLevel(levelId)
@@ -18,11 +22,17 @@ onMounted(async () => {
 })
 
 function handleWin() {
+  playSfx('pass', settings.soundEnabled)
   game.markWin()
 }
 
 function handleFail() {
+  playSfx('fail', settings.soundEnabled)
   game.markFail()
+}
+
+function handleEvent() {
+  playSfx('tap', settings.soundEnabled)
 }
 
 function handleHint(text: string) {
@@ -34,6 +44,7 @@ function handleDismissHint() {
 }
 
 async function handleNext() {
+  playSfx('unlock', settings.soundEnabled)
   const next = await game.nextLevel()
   if (!next) {
     router.push('/')
@@ -41,11 +52,13 @@ async function handleNext() {
 }
 
 async function handleRetry() {
+  playSfx('tap', settings.soundEnabled)
   game.dismissHint()
   await game.retryLevel()
 }
 
 function handleHome() {
+  playSfx('tap', settings.soundEnabled)
   router.push('/')
 }
 
@@ -74,6 +87,7 @@ function getRandomFeedback(texts?: string[]): string {
         :level="game.currentLevel"
         @win="handleWin"
         @fail="handleFail"
+        @event="handleEvent"
         @hint="handleHint"
         @dismiss-hint="handleDismissHint"
       />

@@ -23,8 +23,7 @@ test.describe('App smoke tests', () => {
     await page.goto('/')
     const app = page.locator('#app')
     await expect(app).toBeAttached()
-    const children = await app.locator('> *').count()
-    expect(children).toBeGreaterThan(0)
+    await expect(app.locator('> *').first()).toBeVisible()
   })
 
   test('should not have console errors on load', async ({ page }) => {
