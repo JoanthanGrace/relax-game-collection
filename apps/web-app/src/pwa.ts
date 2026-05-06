@@ -13,7 +13,7 @@ export function initPWA() {
     onOfflineReady() {
       console.log('[PWA] 离线缓存就绪')
     },
-    onRegisteredSW(swUrl, registration) {
+    onRegisteredSW(_swUrl, registration) {
       if (!registration) return
       setInterval(
         () => {
