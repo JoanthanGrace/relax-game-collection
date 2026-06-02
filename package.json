@@ -6,6 +6,7 @@
     "dev:web": "turbo run dev --filter=@nicetap/web-app",
     "dev:server": "turbo run dev --filter=@nicetap/server",
     "build": "turbo run build",
+    "build:pages": "VITE_APP_BASE=/relax-game-collection/ pnpm --filter @nicetap/web-app build",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "test": "vitest run --exclude 'e2e/**'",
