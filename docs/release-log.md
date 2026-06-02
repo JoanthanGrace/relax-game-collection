@@ -30,6 +30,7 @@ MVP static web release.
 
 - `pnpm --filter @nicetap/web-app build`
 - `pnpm build:pages`
+- Audio files should be loaded with the configured app base path on GitHub Pages.
 - Production manifest should reference:
   - `icon-192.png`
   - `icon-512.png`
