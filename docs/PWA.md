@@ -4,9 +4,9 @@
 
 | 文件 | 用途 |
 |------|------|
-| `apps/web-app/public/icon-192.svg` | PWA 图标 192x192 |
-| `apps/web-app/public/icon-512.svg` | PWA 图标 512x512 |
-| `apps/web-app/public/apple-touch-icon.svg` | iOS 桌面图标 |
+| `apps/web-app/public/icon-192.png` | PWA 图标 192x192 |
+| `apps/web-app/public/icon-512.png` | PWA 图标 512x512 |
+| `apps/web-app/public/apple-touch-icon.png` | iOS 桌面图标 |
 | `apps/web-app/env.d.ts` | TS 类型声明（PWA virtual module） |
 | `apps/web-app/src/pwa.ts` | SW 注册 + 版本更新提示逻辑 |
 
