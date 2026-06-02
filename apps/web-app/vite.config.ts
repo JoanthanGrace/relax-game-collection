@@ -8,7 +8,7 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['apple-touch-icon.svg'],
+      includeAssets: ['apple-touch-icon.png'],
       manifest: {
         name: 'NiceTap - 无厘头关卡小游戏',
         short_name: 'NiceTap',
@@ -21,25 +21,26 @@ export default defineConfig({
         scope: '/',
         icons: [
           {
-            src: 'icon-192.svg',
+            src: 'icon-192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
           },
           {
-            src: 'icon-512.svg',
+            src: 'icon-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
           },
           {
-            src: 'icon-512.svg',
+            src: 'icon-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'maskable',
           },
         ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globIgnores: ['**/icon-concepts/**'],
         navigateFallback: 'index.html',
         navigateFallbackAllowlist: [/^\/(?!api)/],
         runtimeCaching: [
