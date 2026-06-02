@@ -15,6 +15,7 @@ MVP static web release.
 - Build command: `pnpm build:pages`
 - Build output: `apps/web-app/dist`
 - Deployment branch: `gh-pages`
+- SPA fallback: `404.html` is copied from `index.html` for GitHub Pages history routing.
 
 ### Highlights
 
@@ -33,6 +34,7 @@ MVP static web release.
   - `icon-192.png`
   - `icon-512.png`
   - `apple-touch-icon.png`
+- `apps/web-app/dist/404.html` should exist after `pnpm build:pages`.
 
 ### Known risks
 
