@@ -1,5 +1,7 @@
 # Level Production Rules
 
+Version: v0.2
+
 This document defines the production rules for creating new NiceTap levels. Every new level proposal, JSON config, custom script, and visual update must follow these rules before it can be merged.
 
 ## 1. Core Product Direction
@@ -50,15 +52,16 @@ The app shell and the level canvas must stay visually and functionally separate.
 
 ## 4. Visual Style Rules
 
-NiceTap should feel simple, meme-able, and slightly wrong in a deliberate way.
+NiceTap should feel meme-able, expressive, and slightly wrong in a deliberate way. The early game may keep a clean white absurd UI, but later chapters are allowed to become richer, toy-like, 2.5D, or 3D when that improves the joke.
 
 - App shell: clean, stable, readable, system UI style.
-- Level content: allowed to be silly, hand-drawn, exaggerated, fake, or toy-like.
+- Level content: allowed to be silly, hand-drawn, exaggerated, fake, toy-like, 2.5D, or 3D.
 - Use high saturation only for one main visual focus per level.
 - Do not make the entire level one color family.
 - Do not rely on tiny visual differences as the solution.
 - Important visual states must be readable at small phone sizes.
 - If a level uses 2.5D or 3D, the extra depth must support the puzzle, not just decorate it.
+- Rich visuals are encouraged for themed chapters, but they must not reduce readability, speed, or touch accuracy.
 
 ## 5. Supported Level Presentation Types
 
@@ -109,7 +112,9 @@ Expandable interactions, only after review:
 
 - simple 2D physics
 - simple 3D rotation
-- accelerometer-like fake interaction
+- accelerometer or fake accelerometer interaction
+- vibration
+- orientation or tilt
 - sound-related interaction
 - camera-like fake UI
 - typing or keypad input
@@ -123,6 +128,13 @@ Not allowed for normal levels:
 - payments
 - clipboard dependence
 - real system settings dependence
+
+Real device capabilities are allowed in later levels only when:
+
+- The level asks for them clearly.
+- The browser/platform supports them safely.
+- A graceful fallback exists for unsupported devices.
+- No required system permission blocks the core game loop.
 
 ## 7. Difficulty Rules
 
@@ -142,7 +154,7 @@ Difficulty should vary, but frustration must stay low.
 
 ### Hard
 
-- Expected solve time: 25-45 seconds.
+- Expected solve time: 25-60 seconds.
 - Multi-step or meta reasoning allowed.
 - Must include stronger hints.
 - Do not place two hard levels back to back unless the second is visually very different.
@@ -150,8 +162,11 @@ Difficulty should vary, but frustration must stay low.
 ### Very Hard / Special
 
 - Reserved for chapter finales, events, or special shareable levels.
+- Expected solve time may exceed 60 seconds only with explicit approval.
 - Must have a strong payoff and clear post-solve feeling of "this was fair".
 - Requires manual mobile testing before release.
+
+Difficulty does not need to increase strictly. Prefer rhythm over a straight difficulty ramp, for example: easy, easy, medium, hard, easy. After a hard or special level, add a lower-pressure level to restore momentum.
 
 ## 8. Content Variety Rules
 
@@ -166,6 +181,17 @@ Avoid repeating the same trick too often.
   - 1 low-pressure easy level
   - 1 higher-share-potential level
 - If a new level resembles an existing one, its solution path, emotional beat, or visual metaphor must be meaningfully different.
+
+Themed chapters are encouraged. Candidate chapter themes include:
+
+- fake UI and system tricks
+- dog mascot mischief
+- office slacking
+- physics nonsense
+- 3D toy box
+- relationship/crush jokes
+- fake ads and popups
+- meta browser/PWA jokes
 
 ## 9. Fairness Rules
 
@@ -190,11 +216,97 @@ Every non-tutorial level should define:
 Failure copy should:
 
 - tease the action, not the player personally.
-- avoid insults, shame, or hostility.
+- allow light sarcasm, cute teasing, and current internet meme phrasing.
+- avoid harsh insults, shame, or hostility.
 - be short enough to read instantly.
 - preferably be screenshot-worthy.
 
-## 11. Technical Implementation Rules
+Hints are player-triggered by default. Do not auto-show hints just because time has passed or the player has failed. A level may highlight that a hint exists, but the player should choose to tap it.
+
+Hints should use this escalation:
+
+- Hint 1: playful nudge.
+- Hint 2: clearer direction.
+- Hint 3: near-answer, only for hard or special levels.
+
+## 11. Mascot Rules
+
+The dog mascot is allowed and encouraged inside levels, not only in branding.
+
+Approved roles:
+
+- trickster guide
+- fake helper
+- visual punchline
+- button guardian
+- emotional reaction character
+- chapter host
+
+Rules:
+
+- The mascot should not explain every answer directly.
+- The mascot may mislead the player, but the misdirection must be funny and fair.
+- The mascot should not overcrowd every level; use it when it improves the joke or screenshot value.
+- Mascot levels should preserve the brown-and-white border collie identity: white blaze, white muzzle/chest, brown fur, expressive ears, clever or mischievous face.
+
+## 12. Skip and Monetization-Ready Rules
+
+Skipping is allowed, but limited.
+
+- Players may skip levels after repeated failure or by choosing a skip action.
+- Skips should have a daily limit.
+- The exact daily free skip count is TBD.
+- Once the daily limit is reached, the UI may later offer ad-unlocked skips.
+- MVP builds must not require ads; the design should only reserve the future flow.
+- A skipped level should remain visible as skipped, not completed, unless product rules later decide otherwise.
+- Skipping must not break linear unlock, progress storage, or chapter completion logic.
+
+Ad-prep rules:
+
+- Do not hard-code ad platform logic into level configs.
+- Keep skip/ad decisions in app-level state, not individual level scripts.
+- Avoid designing levels that are intentionally unfair just to force ad skips.
+
+## 13. Share Moment Rules
+
+Some levels should be designed for sharing, not every level.
+
+Share-oriented levels should include at least one of:
+
+- a funny final screen
+- a dog mascot reaction
+- a ridiculous fake UI state
+- a punchline text that is readable in a screenshot
+- a surprising before/after transformation
+- a clean "what is happening here?" visual composition
+
+Every 10-level block should include at least one screenshot-worthy level. Do not make every level visually loud; contrast helps the standout moments land.
+
+## 14. Internet Meme Copy Rules
+
+Internet meme phrasing is allowed.
+
+Rules:
+
+- Use current meme language when it improves the joke.
+- Avoid making the core solution depend on knowing a meme.
+- Prefer short phrases that still work after the meme ages.
+- Mix light sarcasm and cute absurdity.
+- Avoid overusing any one catchphrase.
+
+## 15. Fake Ads and Popups
+
+Fake ads, fake popups, fake close buttons, and fake system prompts are allowed, but should not dominate the game.
+
+Rules:
+
+- Use them as occasional high-impact jokes.
+- Do not make them feel like real ad harassment.
+- Do not use real brand names or real ad network UI.
+- Make the fake nature clear after interaction.
+- Keep close/escape behavior fair.
+
+## 16. Technical Implementation Rules
 
 Prefer config-only levels. Write custom code only when the existing config system cannot express the idea cleanly.
 
@@ -227,7 +339,7 @@ Custom scripts must:
 - provide a fallback path if an interaction fails.
 - not access browser APIs directly from core packages.
 
-## 12. Asset Rules
+## 17. Asset Rules
 
 - Public runtime assets must only include files needed by the shipped app.
 - Concept art, source images, and discarded variants belong under `docs/assets`.
@@ -236,7 +348,7 @@ Custom scripts must:
 - New images must be readable at the final displayed size.
 - 3D assets must be optimized before shipping.
 
-## 13. Performance Rules
+## 18. Performance Rules
 
 Every level must feel instant.
 
@@ -247,7 +359,7 @@ Every level must feel instant.
 - If adding 3D, test on mobile before release.
 - A level may be visually rich, but it must not slow down the next-level loop.
 
-## 14. Accessibility and Comfort Rules
+## 19. Accessibility and Comfort Rules
 
 - Do not rely only on color to distinguish correct and wrong objects.
 - Avoid flashing effects faster than 3 times per second.
@@ -256,7 +368,7 @@ Every level must feel instant.
 - Do not require reading dense paragraphs.
 - Avoid jokes that target real people, protected groups, illness, disasters, or private information.
 
-## 15. New Level Proposal Template
+## 20. New Level Proposal Template
 
 Every new level idea should start with this template:
 
@@ -270,6 +382,8 @@ Every new level idea should start with this template:
 - Presentation: 2D / 2.5D / 3D
 - Primary interaction:
 - Primary joke type:
+- Share moment: Yes / No
+- Mascot role: None / guide / trickster / reaction / obstacle / host
 - Player first instinct:
 - Correct solution:
 - Wrong solution feedback:
@@ -280,11 +394,13 @@ Every new level idea should start with this template:
 - Config-only or custom script:
 - Layout risk:
 - Mobile risk:
+- Skip behavior:
+- Device capability required:
 - Similar existing level:
 - Why this level is worth adding:
 ```
 
-## 16. Pre-Merge Checklist
+## 21. Pre-Merge Checklist
 
 Before a level is merged:
 
@@ -295,28 +411,23 @@ Before a level is merged:
 - [ ] It has one clear primary joke.
 - [ ] It does not repeat the previous two levels' joke type.
 - [ ] It has fail text and hints.
+- [ ] Hints are player-triggered unless explicitly approved otherwise.
+- [ ] Skip behavior is defined for hard or special levels.
+- [ ] Device capability usage has a fallback.
+- [ ] If it is share-oriented, the screenshot moment is readable.
 - [ ] It passes level validation.
 - [ ] It works in local preview.
 - [ ] It works after `pnpm build:pages`.
 - [ ] It does not add unnecessary public assets.
 - [ ] It has been recorded in the relevant planning or release notes when included in a release.
 
-## 17. Open Questions for Product Decisions
+## 22. Remaining Open Decisions
 
-Please answer these before the next major batch of levels. The answers will become v0.2 of this rule document.
+These decisions are still open and should be finalized before implementing the next major level batch:
 
-1. Should NiceTap remain mostly "clean white absurd UI", or can later chapters become more visually rich and toy-like?
-2. What is the maximum acceptable solve time for a hard level: 45 seconds, 60 seconds, or longer?
-3. Should hints appear automatically after failed attempts, after time passes, or only when the player taps a hint button?
-4. Should levels be allowed to use real device APIs later, such as accelerometer, vibration, or orientation, if graceful fallback exists?
-5. Do you want the dog mascot to appear only in branding, or also as a recurring in-level guide/trickster?
-6. Should the game include deliberately "annoying" fake ads/popups, or should we avoid anything that feels too close to real ad harassment?
-7. Are internet meme phrases allowed to be current and sharp, or should copy stay evergreen so levels do not age quickly?
-8. What content boundaries do you want for humor: can it be mildly sarcastic, dark, romantic, office-worker related, or purely cute/absurd?
-9. Should difficulty be strictly linear, or can we use a rhythm like easy-easy-medium-hard-easy?
-10. Should a level ever be skippable after several failures?
-11. Should we add a share-oriented "best screenshot moment" requirement for selected levels?
-12. Should new chapters have themes, such as fake UI, dog tricks, office slacking, physics nonsense, 3D toy box, or relationship/crush jokes?
-13. Should 3D be rare for special levels, or become a normal production style once the engine supports it?
-14. Should every level support both portrait phone and desktop, or is portrait mobile the only hard requirement?
-15. What is the maximum asset budget per level for MVP-scale releases?
+- Exact daily free skip count.
+- Whether skipped levels count toward chapter completion.
+- Whether 3D becomes a normal production style or remains mostly for special/theme levels.
+- Whether portrait mobile is the only hard requirement, or desktop parity is required for all levels.
+- Maximum runtime asset budget per level.
+- Whether relationship/crush jokes are allowed as a full chapter theme or only occasional one-off levels.
