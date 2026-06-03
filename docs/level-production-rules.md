@@ -49,6 +49,7 @@ The app shell and the level canvas must stay visually and functionally separate.
 - If a level uses page UI as a puzzle element, it must still be understandable after screen scaling.
 - A level must never require users to use browser navigation, OS gestures, browser address bar, browser refresh, or external device settings.
 - PWA/home-screen mode and normal browser mode must both remain playable.
+- Portrait mobile is the primary target. Desktop should remain usable when practical, but desktop parity is not required for every level.
 
 ## 4. Visual Style Rules
 
@@ -62,6 +63,7 @@ NiceTap should feel meme-able, expressive, and slightly wrong in a deliberate wa
 - Important visual states must be readable at small phone sizes.
 - If a level uses 2.5D or 3D, the extra depth must support the puzzle, not just decorate it.
 - Rich visuals are encouraged for themed chapters, but they must not reduce readability, speed, or touch accuracy.
+- 3D is a selective style for specific levels, themes, or share moments. Do not convert every level into 3D by default.
 
 ## 5. Supported Level Presentation Types
 
@@ -193,6 +195,8 @@ Themed chapters are encouraged. Candidate chapter themes include:
 - fake ads and popups
 - meta browser/PWA jokes
 
+Relationship/crush jokes should appear occasionally as one-off levels or light chapter flavor. Do not make them a full chapter theme unless explicitly approved later.
+
 ## 9. Fairness Rules
 
 A level can lie, but the game must not feel broken.
@@ -254,11 +258,11 @@ Rules:
 Skipping is allowed, but limited.
 
 - Players may skip levels after repeated failure or by choosing a skip action.
-- Skips should have a daily limit.
-- The exact daily free skip count is TBD.
+- Players get 3 free skips per day.
 - Once the daily limit is reached, the UI may later offer ad-unlocked skips.
 - MVP builds must not require ads; the design should only reserve the future flow.
-- A skipped level should remain visible as skipped, not completed, unless product rules later decide otherwise.
+- A skipped level counts as the current level being completed for progression and chapter completion. It does not complete the entire chapter by itself.
+- A skipped level should remain marked as skipped in player history if the UI later exposes detailed completion state.
 - Skipping must not break linear unlock, progress storage, or chapter completion logic.
 
 Ad-prep rules:
@@ -344,9 +348,22 @@ Custom scripts must:
 - Public runtime assets must only include files needed by the shipped app.
 - Concept art, source images, and discarded variants belong under `docs/assets`.
 - Large assets must be justified before being added to `public`.
+- Default new runtime asset budget per normal level: up to 300 KB after compression.
+- Soft limit for visually rich or 3D special levels: up to 1 MB after compression.
+- Anything above 1 MB per level requires explicit approval and a performance reason.
+- Total release asset growth should be reviewed before every public release.
 - New audio must be short, compressed, and tested on mobile.
 - New images must be readable at the final displayed size.
 - 3D assets must be optimized before shipping.
+
+Compression rules:
+
+- Prefer SVG or code-native shapes for simple UI-like graphics.
+- Prefer WebP/AVIF for large raster images when browser support is acceptable.
+- PNG is acceptable for PWA icons and images requiring crisp alpha.
+- Use TinyPNG/Tinify API as an optional compression step when image assets are large.
+- TinyPNG/Tinify usage requires an API key and should stay outside committed source files.
+- Do not rely on compression to justify unnecessary assets; remove or simplify first.
 
 ## 18. Performance Rules
 
@@ -425,9 +442,7 @@ Before a level is merged:
 
 These decisions are still open and should be finalized before implementing the next major level batch:
 
-- Exact daily free skip count.
-- Whether skipped levels count toward chapter completion.
-- Whether 3D becomes a normal production style or remains mostly for special/theme levels.
-- Whether portrait mobile is the only hard requirement, or desktop parity is required for all levels.
-- Maximum runtime asset budget per level.
-- Whether relationship/crush jokes are allowed as a full chapter theme or only occasional one-off levels.
+- Whether skipped levels should be visually distinguished from manually completed levels in the level-selection UI.
+- Whether ad-unlocked skips should be one skip per ad or a timed skip bundle.
+- Whether to add an automated image compression script using the TinyPNG/Tinify API.
+- Whether to add a hard CI check for per-level runtime asset budget.
