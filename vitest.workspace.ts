@@ -1,4 +1,5 @@
 import { defineWorkspace } from 'vitest/config'
+import { resolve } from 'path'
 
 export default defineWorkspace([
   {
@@ -11,6 +12,12 @@ export default defineWorkspace([
   },
   {
     extends: 'packages/game-core/vitest.config.ts',
+    resolve: {
+      alias: {
+        '@nicetap/shared': resolve(__dirname, 'packages/shared/src/index.ts'),
+        '@nicetap/levels': resolve(__dirname, 'packages/levels/src/index.ts'),
+      },
+    },
     test: {
       name: 'game-core',
       root: 'packages/game-core',
@@ -19,6 +26,11 @@ export default defineWorkspace([
   },
   {
     extends: 'packages/levels/vitest.config.ts',
+    resolve: {
+      alias: {
+        '@nicetap/shared': resolve(__dirname, 'packages/shared/src/index.ts'),
+      },
+    },
     test: {
       name: 'levels',
       root: 'packages/levels',

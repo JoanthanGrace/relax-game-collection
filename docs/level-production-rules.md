@@ -262,13 +262,14 @@ Skipping is allowed, but limited.
 - Once the daily limit is reached, the UI may later offer ad-unlocked skips.
 - MVP builds must not require ads; the design should only reserve the future flow.
 - A skipped level counts as the current level being completed for progression and chapter completion. It does not complete the entire chapter by itself.
-- A skipped level should remain marked as skipped in player history if the UI later exposes detailed completion state.
+- A skipped level must be visually distinguished from a manually completed level in the level-selection UI.
 - Skipping must not break linear unlock, progress storage, or chapter completion logic.
 
 Ad-prep rules:
 
 - Do not hard-code ad platform logic into level configs.
 - Keep skip/ad decisions in app-level state, not individual level scripts.
+- Ad-unlocked skips should use one rewarded ad per one additional skip.
 - Avoid designing levels that are intentionally unfair just to force ad skips.
 
 ## 13. Share Moment Rules
@@ -363,6 +364,8 @@ Compression rules:
 - PNG is acceptable for PWA icons and images requiring crisp alpha.
 - Use TinyPNG/Tinify API as an optional compression step when image assets are large.
 - TinyPNG/Tinify usage requires an API key and should stay outside committed source files.
+- Use `pnpm compress:tinypng -- <file-or-dir> --in-place` after setting `TINIFY_API_KEY`.
+- Tinify currently offers a limited free monthly API quota; check the official pricing before heavy use.
 - Do not rely on compression to justify unnecessary assets; remove or simplify first.
 
 ## 18. Performance Rules
@@ -375,6 +378,7 @@ Every level must feel instant.
 - Avoid unnecessary runtime network requests.
 - If adding 3D, test on mobile before release.
 - A level may be visually rich, but it must not slow down the next-level loop.
+- `pnpm check:assets` must pass before public release.
 
 ## 19. Accessibility and Comfort Rules
 
@@ -433,6 +437,7 @@ Before a level is merged:
 - [ ] Device capability usage has a fallback.
 - [ ] If it is share-oriented, the screenshot moment is readable.
 - [ ] It passes level validation.
+- [ ] It passes asset budget checks.
 - [ ] It works in local preview.
 - [ ] It works after `pnpm build:pages`.
 - [ ] It does not add unnecessary public assets.
@@ -442,7 +447,4 @@ Before a level is merged:
 
 These decisions are still open and should be finalized before implementing the next major level batch:
 
-- Whether skipped levels should be visually distinguished from manually completed levels in the level-selection UI.
-- Whether ad-unlocked skips should be one skip per ad or a timed skip bundle.
-- Whether to add an automated image compression script using the TinyPNG/Tinify API.
-- Whether to add a hard CI check for per-level runtime asset budget.
+- Whether to add a stricter per-level asset manifest so CI can enforce budgets by level, not only by public runtime assets.

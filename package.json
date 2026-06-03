@@ -13,7 +13,9 @@
     "test:watch": "vitest --exclude 'e2e/**'",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
     "check:levels": "tsx scripts/check-levels.ts",
-    "ci": "pnpm check:levels && pnpm test && pnpm typecheck",
+    "check:assets": "node scripts/check-assets.mjs",
+    "compress:tinypng": "node scripts/compress-images-tinypng.mjs",
+    "ci": "pnpm check:levels && pnpm check:assets && pnpm test && pnpm typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "turbo run clean && rm -rf node_modules"
