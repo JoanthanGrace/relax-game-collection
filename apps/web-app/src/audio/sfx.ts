@@ -1,10 +1,12 @@
 export type SfxKey = 'tap' | 'pass' | 'fail' | 'unlock'
 
+const baseUrl = import.meta.env.BASE_URL
+
 const SOURCES: Record<SfxKey, string> = {
-  tap: '/audio/tap.wav',
-  pass: '/audio/pass.wav',
-  fail: '/audio/fail.wav',
-  unlock: '/audio/unlock.wav',
+  tap: `${baseUrl}audio/tap.wav`,
+  pass: `${baseUrl}audio/pass.wav`,
+  fail: `${baseUrl}audio/fail.wav`,
+  unlock: `${baseUrl}audio/unlock.wav`,
 }
 
 const pool = new Map<SfxKey, HTMLAudioElement>()

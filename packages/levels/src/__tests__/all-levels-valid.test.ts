@@ -6,7 +6,7 @@
  * 这是"新增一关不会把旧关搞坏"的第一道防线。
  */
 import { describe, it, expect } from 'vitest'
-import { LevelValidator } from '@nicetap/shared'
+import { LevelValidator } from '../../../shared/src/validation/LevelValidator'
 import { ALL_CONFIGS, getAllLevelIds, getLevelsByChapter, getLevelCount } from '../index'
 
 const validator = new LevelValidator()
