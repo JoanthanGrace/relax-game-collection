@@ -1,62 +1,171 @@
-# NiceTap - 无厘头反套路关卡小游戏
+# NiceTap
 
-轻量级、关卡制、解压小游戏。Web App + PWA 优先，保留小程序迁移能力。
+NiceTap is an open-source, mobile-first, absurd puzzle game collection.
 
-## 技术栈
+The game is built around short anti-routine levels: the instruction looks simple, the obvious answer is often wrong, and the real solution should make the player think "this is ridiculous, but fair."
 
-- **前端**: Vue 3 + Vite + TypeScript + Phaser + Pinia
-- **后端**: NestJS + TypeORM + PostgreSQL
-- **测试**: Vitest + Playwright
-- **工程**: pnpm workspace + Turborepo
+## Play
 
-## 项目结构
+MVP web build:
 
+https://joanthangrace.github.io/relax-game-collection/
+
+NiceTap is a PWA. On mobile, open the link in Safari or Chrome and add it to the home screen for an app-like experience.
+
+## Status
+
+Current release: `v0.1.0-mvp`
+
+The MVP includes:
+
+- 30 playable levels
+- local progress storage
+- PWA install support
+- mobile-first web UI
+- 3D dog mascot app icon
+- static GitHub Pages deployment
+- CI checks for levels, tests, typecheck, and runtime asset budget
+
+See [docs/release-log.md](docs/release-log.md) for release history.
+
+## Design Direction
+
+NiceTap focuses on:
+
+- short levels, usually 3-60 seconds
+- simple inputs: tap, drag, swipe, wait, long-press, pinch, toggle
+- funny failure copy
+- fair but surprising solutions
+- no pixel hunting, pure luck, or external knowledge
+- strong screenshot/share moments
+
+New levels must follow [docs/level-production-rules.md](docs/level-production-rules.md).
+
+Puzzle-game inspiration is collected in [docs/puzzle-game-reference.md](docs/puzzle-game-reference.md).
+
+## Tech Stack
+
+- Frontend: Vue 3, Vite, TypeScript, Phaser, Pinia
+- Game logic: config-first level system
+- Backend placeholder: NestJS
+- Testing: Vitest, Playwright
+- Workspace: pnpm workspace, Turborepo
+- Deployment: GitHub Pages
+
+## Repository Structure
+
+```text
+apps/
+  web-app/       Vue 3 PWA shell and Phaser canvas container
+  server/        NestJS backend placeholder
+packages/
+  shared/        shared types and validation
+  game-core/     Phaser game engine core
+  levels/        level configs and registry
+docs/            product, architecture, release, and level-design docs
+scripts/         validation, asset checks, and helper scripts
 ```
-├── apps/
-│   ├── web-app/       # Vue 3 前端应用壳
-│   └── server/        # NestJS 后端服务
-├── packages/
-│   ├── shared/        # 跨端共享类型、常量
-│   ├── game-core/     # Phaser 游戏引擎核心
-│   └── levels/        # 关卡配置与脚本
-└── docs/              # 项目设计文档
-```
 
-## 快速开始
+## Quick Start
+
+Prerequisites:
+
+- Node.js 18+
+- pnpm 9.x
+
+Install dependencies:
 
 ```bash
-# 安装依赖
 pnpm install
-
-# 启动前端开发服务
-pnpm dev:web
-
-# 启动后端开发服务
-pnpm dev:server
-
-# 全量构建
-pnpm build
-
-# 类型检查
-pnpm typecheck
-
-# 代码格式化
-pnpm format
 ```
 
-## 开发规范
+Start the web app:
 
-- 包间依赖方向: `shared` ← `game-core` ← `levels`，`shared` ← `platform-*` ← `web-app`
-- `game-core` 和 `levels` 禁止直接使用浏览器 API（window/document/localStorage 等）
-- 关卡配置优先使用 JSON 声明式，复杂逻辑才使用 TypeScript 脚本
-- 所有坐标使用归一化值 (0~1)
+```bash
+pnpm dev:web -- --host 0.0.0.0
+```
 
-## TODO
+Build the web app:
 
-- [ ] Phaser 场景实现
-- [ ] 关卡交互系统
-- [ ] 30 关配置
-- [ ] PWA 支持
-- [ ] 后端业务接口
-- [ ] 埋点系统
-- [ ] E2E 测试
+```bash
+pnpm --filter @nicetap/web-app build
+```
+
+Build for GitHub Pages:
+
+```bash
+pnpm build:pages
+```
+
+Run all CI checks locally:
+
+```bash
+pnpm run ci
+```
+
+## Useful Commands
+
+```bash
+pnpm check:levels      # validate all level configs
+pnpm check:assets      # check runtime asset budget
+pnpm test              # run Vitest tests
+pnpm typecheck         # run TypeScript checks
+pnpm build:pages       # build static GitHub Pages output
+```
+
+TinyPNG/Tinify compression helper:
+
+```bash
+TINIFY_API_KEY=<key> pnpm compress:tinypng -- apps/web-app/public/icon-512.png --in-place
+```
+
+The API key must stay local and must not be committed.
+
+## Adding Levels
+
+Before proposing or implementing a new level, read:
+
+- [docs/level-production-rules.md](docs/level-production-rules.md)
+- [docs/level-design-30.md](docs/level-design-30.md)
+- [docs/puzzle-game-reference.md](docs/puzzle-game-reference.md)
+
+New level proposals should include:
+
+- surface instruction
+- first wrong instinct
+- correct solution
+- fail copy
+- hints
+- interaction type
+- difficulty
+- layout risk
+- asset budget
+- whether it has a share moment
+
+Config-only levels are preferred. Custom scripts should be used only when the declarative level system cannot express the mechanic cleanly.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Good first contributions include:
+
+- level ideas following the proposal template
+- bug reports with device/browser details
+- copywriting improvements for failure text and hints
+- accessibility improvements
+- mobile layout fixes
+- asset-size reductions
+
+## Release Process
+
+1. Update [docs/release-log.md](docs/release-log.md).
+2. Run `pnpm run ci`.
+3. Run `pnpm build:pages`.
+4. Deploy `apps/web-app/dist` to `gh-pages`.
+5. Create a git tag such as `v0.1.0-mvp`.
+6. Create a GitHub Release from the tag with release notes.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
