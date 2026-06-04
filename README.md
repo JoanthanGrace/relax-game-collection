@@ -1,8 +1,10 @@
 # NiceTap
 
-NiceTap is an open-source, mobile-first, absurd puzzle game collection.
+NiceTap is an open-source, mobile-first puzzle game project for building short, rule-bending, shareable web levels.
 
-The game is built around short anti-routine levels: the instruction looks simple, the obvious answer is often wrong, and the real solution should make the player think "this is ridiculous, but fair."
+The project combines a Vue/PWA application shell, a Phaser-based game runtime, and a config-driven level system. Its goal is to explore lightweight puzzle design where each level is fast to understand, surprising to solve, and practical to maintain as open-source content.
+
+Gameplay is intentionally playful: instructions may mislead, UI elements may become puzzle objects, and failure feedback is part of the experience. The design standard is not randomness or frustration, but "unexpected, fair, and worth sharing."
 
 ## Play
 

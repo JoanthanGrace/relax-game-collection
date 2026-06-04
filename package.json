@@ -1,6 +1,13 @@
 {
   "name": "relax-game-collection",
+  "description": "Open-source mobile-first puzzle game project for building short, rule-bending, shareable web levels.",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://joanthangrace.github.io/relax-game-collection/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoanthanGrace/relax-game-collection.git"
+  },
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev:web": "turbo run dev --filter=@nicetap/web-app",
