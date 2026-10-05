@@ -121,9 +121,15 @@ importers:
 
   packages/game-core:
     dependencies:
+      '@dagrejs/graphlib':
+        specifier: ^4.0.5
+        version: 4.0.5
       '@nicetap/shared':
         specifier: workspace:*
         version: link:../shared
+      miaoda-game-sokoban-core:
+        specifier: 0.1.1
+        version: 0.1.1
       phaser:
         specifier: ^3.80.0
         version: 3.90.0
@@ -685,6 +691,9 @@ packages:
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
+
+  '@dagrejs/graphlib@4.0.5':
+    resolution: {integrity: sha512-7xrBTqIts3o+PMUZX97wSc+7TUbW+/rULzGNCTP6yooNVDXbzw4Wutg/H/xOutTB/c/k0YqOAavgPh4/Zk9PFA==}
 
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
@@ -2763,6 +2772,18 @@ packages:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
 
+  miaoda-game-grid-core@0.3.2:
+    resolution: {integrity: sha512-QmIkIRhWXcOXT9UXhwFx9nxK6qXeAA+9i9AIh9ogFh/KclHV13hplwjqZZxOF6jxiFECP6zqePU6+tB2EEizQw==}
+
+  miaoda-game-random-core@0.1.0:
+    resolution: {integrity: sha512-gyD+w5UaKZMvDdHIyTSRwTfAKMysAmjLWRnly802BpFqoNvquyckRSXV6sJ+R+ZQtjoJZ6mgBD7y13FcbHRnog==}
+
+  miaoda-game-serialization-core@0.1.0:
+    resolution: {integrity: sha512-GdjqMm7dvRoiCHwgVsAxKWVXbHSioGDe8Fp0fxQDt5ic2GUrEitKzhOQ4zeQrocZ8Qae/927RwbanE33W08D6g==}
+
+  miaoda-game-sokoban-core@0.1.1:
+    resolution: {integrity: sha512-3pTUfB5ZvomBHRzIjPPaXtb/g7/RiHfoaxqKrTGOWy99XPaeJvkiivCLu7IWIxaws2EBR7EWETXQfI5W5Bm/rw==}
+
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -4570,6 +4591,8 @@ snapshots:
 
   '@colors/colors@1.5.0':
     optional: true
+
+  '@dagrejs/graphlib@4.0.5': {}
 
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
@@ -6723,6 +6746,18 @@ snapshots:
   merge-stream@2.0.0: {}
 
   methods@1.1.2: {}
+
+  miaoda-game-grid-core@0.3.2: {}
+
+  miaoda-game-random-core@0.1.0: {}
+
+  miaoda-game-serialization-core@0.1.0: {}
+
+  miaoda-game-sokoban-core@0.1.1:
+    dependencies:
+      miaoda-game-grid-core: 0.3.2
+      miaoda-game-random-core: 0.1.0
+      miaoda-game-serialization-core: 0.1.0
 
   mime-db@1.52.0: {}
 

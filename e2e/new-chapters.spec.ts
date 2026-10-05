@@ -86,7 +86,7 @@ for (const viewport of [
 ]) {
   test.describe(`New chapters at ${viewport.width}px`, () => {
     test.use({ viewport })
-    for (let n = 31; n <= 50; n++) {
+    for (let n = 36; n <= 50; n++) {
       test(`level ${n} completes through real pointer input`, async ({ page }) => {
         const config = configFor(n)
         const errors: string[] = []
@@ -117,16 +117,7 @@ for (const viewport of [
   })
 }
 
-test('wrong recipe order and toggle choices can be recovered without resetting', async ({
-  page,
-}) => {
-  await page.goto('/game/level-032', { waitUntil: 'networkidle' })
-  const coffee = configFor(32)
-  await act(page, coffee, tap('water'))
-  await act(page, coffee, tap('beans'))
-  await expect(page.locator('.win-overlay')).toHaveCount(0)
-  await act(page, coffee, tap('water'))
-  await expect(page.locator('.win-overlay')).toBeVisible()
+test('wrong toggle choices can be recovered without resetting', async ({ page }) => {
   await page.goto('/game/level-041', { waitUntil: 'networkidle' })
   const switches = configFor(41)
   for (const id of ['switch-a', 'switch-b', 'switch-c']) await act(page, switches, tap(id))

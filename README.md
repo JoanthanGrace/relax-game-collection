@@ -32,6 +32,8 @@ See [docs/release-log.md](docs/release-log.md) for release history.
 
 The `feat/50-levels` development branch contains 50 levels; the public demo remains the previously deployed 30-level MVP until the new version is reviewed and released. New chapter designs are recorded in [docs/level-design-31-50.md](docs/level-design-31-50.md).
 
+The `feat/puzzle-rework` branch replaces levels 031-035 with reasoning prototypes (rule manipulation, Sokoban, pipe connectivity, route planning, and district reconnection), adds undo/reset, and removes repeated mascot filler. See [the redesign notes](docs/puzzle-rework-31-35.md). A direct playtest entry is available in local development; this is not a new public release.
+
 ## Design Direction
 
 NiceTap focuses on:

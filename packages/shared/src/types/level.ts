@@ -107,6 +107,8 @@ export interface GameObjectConfig {
   size?: Vec2
   /** 文案 i18n key 或 asset key */
   content?: string
+  /** Optional power dependency for a physical lamp prop. */
+  powerSourceId?: string
   style?: ObjectStyle
   /** 绑定的交互列表 */
   interactions?: InteractionConfig[]

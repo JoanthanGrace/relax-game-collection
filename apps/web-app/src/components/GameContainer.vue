@@ -20,7 +20,12 @@ const emit = defineEmits<{
 const containerRef = ref<HTMLDivElement>()
 let engine: GameEngine | null = null
 let resizeObserver: ResizeObserver | null = null
-defineExpose({ requestHint: () => engine?.requestHint(), pause: () => engine?.pauseLevel() })
+defineExpose({
+  requestHint: () => engine?.requestHint(),
+  pause: () => engine?.pauseLevel(),
+  undoPuzzle: () => engine?.undoPuzzle(),
+  resetPuzzle: () => engine?.resetPuzzle(),
+})
 
 const GAME_WIDTH = 400
 const GAME_HEIGHT = 600

@@ -106,6 +106,16 @@ export class GameEngine {
     this.game?.scene.pause('LevelScene')
   }
 
+  undoPuzzle(): void {
+    const scene = this.game?.scene.getScene('LevelScene') as LevelScene | undefined
+    if (scene?.scene.isActive()) scene.undoPuzzle()
+  }
+
+  resetPuzzle(): void {
+    const scene = this.game?.scene.getScene('LevelScene') as LevelScene | undefined
+    if (scene?.scene.isActive()) scene.resetPuzzle()
+  }
+
   refreshSize(): void {
     if (this.ready) this.game?.scale.refresh()
   }

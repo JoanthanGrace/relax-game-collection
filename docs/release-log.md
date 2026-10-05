@@ -2,6 +2,23 @@
 
 This file records public releases, deployment notes, verification results, and follow-up risks for NiceTap.
 
+## Unreleased - Reasoning puzzles and physical props - 2026-10-06
+
+- Branch: `feat/puzzle-rework`, based on `feat/50-levels`. Not merged or deployed; the public MVP is unchanged.
+- Responded to owner feedback that the previous levels were gesture exercises, mascot-heavy, and visually just renamed buttons. Stop expanding level count until a small batch is approved for fun.
+- Replaced levels 031-035 with original rule manipulation, Sokoban planning, reciprocal pipe connectivity, parcel-route planning, and city-panel reconnection. Total level count stays 50; these scenes use concrete drawn props and visibly changing state.
+- Added undo/reset without consuming skips or clearing progress. Reject invalid movement/routes and show specific feedback. Pipe and panel success is based on actual connectivity, not a hard-coded click sequence; equivalent solutions are accepted.
+- Use `miaoda-game-sokoban-core@0.1.1` for pushing rules and bounded offline solvability/deadlock tests, and `@dagrejs/graphlib@4.0.5` for graph connectivity. Both packages declare MIT licenses. No runtime auto-solver, paid provider, account, or permission request added.
+- Updated production rules to v0.3: require a thinking challenge, goal-only instructions, tangible props, purposeful mascot appearances, and mechanism variety rather than gesture variety. Corrected the old reference library's over-simplification advice.
+- Removed decorative Amei images and recurring dialogue from ordinary new levels except level 036, where the mascot is the actual interaction. Home branding and the existing level-008 cameo remain. Hidden/bonus-level discovery is not implemented in this batch.
+- Added physical props for lamps, switches, plugs, sockets, screws, a paper airplane, a laptop/bag, mirror, volume knob, shape slots, and battery where appropriate. The lamp can declare `powerSourceId` so it only illuminates when its own switch and its power source are on.
+- Chapter four is renamed to an independent experiment chapter. The development-only home playtest entry goes directly to level 031, without clearing saves or requiring 30 prior clears.
+- `pnpm run ci`: passed; 50 configs with zero validation warnings, asset budgets, 299 source unit tests, and all workspace type checks.
+- `pnpm test:e2e`: 65 passed, including the five new mechanisms at 320px and 390px, wrong moves/undo/reset, direct playtest entry, and Chromium touch simulations for rule-paper drag and pipe taps. Regression tests retain all twenty chapter-four/five solutions and original progress/skip flows.
+- `pnpm build:pages`: passed; PWA precache contains 21 entries. Main game/store chunk is approximately 1,621 KB minified / 381 KB gzip; its pre-existing large-bundle warning remains. Runtime picture/audio files remain 924.7 KB, with no new image downloads; code growth is separately visible in the build output.
+- Inspected local preview at 320 x 740, 390 x 844, and 1280 x 800. Fixed an offset hit area on rule-paper dragging and retained stable interactive regions when repainting scenes. Narrow-phone tools fit in one row.
+- Pending: owner play feedback on whether these five puzzles are enjoyable, real-device Safari/WeChat/audio checks, review of remaining levels under v0.3, then explicit merge/deployment approval. Technical test success is not evidence that all fifty levels now meet the new quality bar.
+
 ## Unreleased - 50-level expansion - 2026-10-06
 
 - Branch: `feat/50-levels`, based on `feat/amei-toybox`. Not merged or deployed; the public 30-level MVP is unchanged.

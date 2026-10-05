@@ -30,16 +30,16 @@
     },
     {
       "id": "round",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.5,
         "y": 0.32
       },
       "size": {
-        "x": 0.2,
-        "y": 0.13
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "圆",
+      "content": "prop:round",
       "style": {
         "fontSize": 24,
         "color": "#263b43",
@@ -65,16 +65,16 @@
     },
     {
       "id": "square-home",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.25,
         "y": 0.65
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "方的家",
+      "content": "prop:square-slot",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -91,16 +91,16 @@
     },
     {
       "id": "round-home",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.75,
         "y": 0.65
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "圆的家",
+      "content": "prop:round-slot",
       "style": {
         "fontSize": 20,
         "color": "#263b43",

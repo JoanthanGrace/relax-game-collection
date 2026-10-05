@@ -2,6 +2,12 @@
 
 This document collects reference games and design patterns for future NiceTap levels. It is for inspiration only: do not clone level layouts, art, names, or exact mechanics. Extract the underlying puzzle design idea, then translate it into NiceTap's short, absurd, mobile-first format.
 
+## 2026-10-06 Correction
+
+The earlier "one mobile gesture" and "one rule change" constraints below were over-restrictive. They led to shallow button/drag exercises. They are historical brainstorming, not a quality target. Preserve the reference's reasoning structure and visible consequences; simplify controls, not thinking. Version v0.3 of the production rules supersedes those simplification constraints.
+
+The first redesigned batch replaces levels 031-035 with rule manipulation, Sokoban planning, pipe connectivity, parcel-route planning, and district-panel reconnection. See `puzzle-rework-31-35.md`. They use original layouts and drawings; none copies a reference game's level or asset.
+
 ## Research Notes
 
 - "Baby It's You" is likely **Baba Is You**, the Steam indie puzzle game about manipulating rule blocks.

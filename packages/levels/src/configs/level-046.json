@@ -46,16 +46,16 @@
     },
     {
       "id": "knob",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.75,
         "y": 0.48
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "音量",
+      "content": "prop:knob",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -140,20 +140,6 @@
       }
     },
     {
-      "id": "amei",
-      "type": "image",
-      "position": {
-        "x": 0.82,
-        "y": 0.925
-      },
-      "size": {
-        "x": 0.19,
-        "y": 0.126
-      },
-      "content": "art/amei-teammate-v1.png",
-      "interactive": false
-    },
-    {
       "id": "feedback",
       "type": "text",
       "position": {
@@ -181,7 +167,7 @@
   "hints": [
     {
       "level": "weak",
-      "text": "阿妹听得见就行，不用震醒隔壁。",
+      "text": "听得见就行，不用震醒隔壁。",
       "showAfterFailCount": 1
     },
     {
@@ -191,7 +177,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["阿妹：这个音量，耳朵批准。"],
+    "texts": ["这个音量，耳朵批准。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },

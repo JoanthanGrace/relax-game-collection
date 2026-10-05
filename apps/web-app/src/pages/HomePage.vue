@@ -20,12 +20,13 @@ import { useGameStore } from '@/stores/gameStore'
 const router = useRouter()
 const game = useGameStore()
 const amei = `${import.meta.env.BASE_URL}art/amei-teammate-v1.png`
+const isDevelopment = import.meta.env.DEV
 const themes = [
   { name: '脑洞热身', note: '先别急着相信眼前的一切', icon: PawPrint, color: 'coral' },
   { name: '反套路实验', note: '阿妹说，试试也不会怎样', icon: FlaskConical, color: 'blue' },
   { name: '离谱进行时', note: '认真你就输了，但也不一定', icon: Zap, color: 'mint' },
-  { name: '阿妹的摸鱼工坊', note: '工作可以等，队友不能丢', icon: Coffee, color: 'gold' },
-  { name: '离谱维修站', note: '工具阿妹带，靠谱靠咱俩', icon: Wrench, color: 'blue' },
+  { name: '不太正经的实验室', note: '规则、仓库、管道和街区', icon: Coffee, color: 'gold' },
+  { name: '离谱维修站', note: '工具齐了，思路得自己找', icon: Wrench, color: 'blue' },
 ]
 const chapters = computed(() =>
   Array.from({ length: getChapterCount() }, (_, i) => ({
@@ -118,6 +119,10 @@ onMounted(() => game.init())
         >
           <RotateCcw :size="19" />
         </button>
+      </div>
+      <div v-if="isDevelopment" class="playtest-entry">
+        <span>五关重做试玩</span>
+        <button class="icon-btn" aria-label="试玩重做关卡" title="试玩重做关卡" @click="router.push('/game/level-031')"><ArrowRight :size="20" /></button>
       </div>
       <nav class="chapter-nav" aria-label="章节导航">
         <button v-for="ch in chapters" :key="ch.chapter" @click="jumpToChapter(ch.chapter)">
@@ -347,6 +352,17 @@ onMounted(() => game.init())
   gap: 10px;
   padding: 0 22px 20px;
   border-bottom: 1px solid #e0e8ea;
+}
+.playtest-entry {
+  margin: 0 22px 18px;
+  padding: 10px 0;
+  border-top: 1px solid #d9e2e6;
+  border-bottom: 1px solid #d9e2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
 }
 .chapter-nav button {
   display: flex;

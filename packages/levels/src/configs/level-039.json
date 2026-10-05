@@ -21,7 +21,7 @@
         "x": 0.86,
         "y": 0.1
       },
-      "content": "阿妹的摸鱼工坊",
+      "content": "不太正经的实验室",
       "interactive": false,
       "style": {
         "fontSize": 14,
@@ -30,16 +30,16 @@
     },
     {
       "id": "plane",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.5,
         "y": 0.45
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "纸飞机 ↑",
+      "content": "prop:plane",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -59,20 +59,6 @@
           "minDistance": 0.13
         }
       ]
-    },
-    {
-      "id": "amei",
-      "type": "image",
-      "position": {
-        "x": 0.82,
-        "y": 0.925
-      },
-      "size": {
-        "x": 0.19,
-        "y": 0.126
-      },
-      "content": "art/amei-teammate-v1.png",
-      "interactive": false
     },
     {
       "id": "feedback",
@@ -112,7 +98,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["周一飞走了，阿妹先替你开心。"],
+    "texts": ["周一飞走了，先替你开心。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },

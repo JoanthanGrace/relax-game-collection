@@ -30,16 +30,16 @@
     },
     {
       "id": "screw",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.5,
         "y": 0.39
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "螺丝",
+      "content": "prop:screw",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -127,7 +127,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["阿妹：温柔维修，锤子先放假。"],
+    "texts": ["温柔维修，锤子先放假。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },
@@ -144,7 +144,7 @@
         {
           "type": "set-text",
           "objectId": "feedback",
-          "value": "锤子被阿妹收起来了。试试按稳螺丝。"
+          "value": "这颗螺丝不吃锤子那套。"
         }
       ]
     }

@@ -20,7 +20,9 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@dagrejs/graphlib": "^4.0.5",
     "@nicetap/shared": "workspace:*",
+    "miaoda-game-sokoban-core": "0.1.1",
     "phaser": "^3.80.0"
   },
   "devDependencies": {

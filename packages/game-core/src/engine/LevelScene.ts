@@ -10,6 +10,9 @@ import { HintSystem, type HintCallbacks } from '../level/HintSystem'
 import { constrainDrag } from './dragBounds'
 import { AMEI_TEXTURE, createToyCloudScene } from './toyCloudScene'
 import { matchesSwipe } from './swipe'
+import { createPuzzleScene } from '../puzzles/PuzzleScene'
+import type { PuzzleKind } from '../puzzles/models'
+import { createProp, type PropKind } from '../puzzles/props'
 
 export interface LevelSceneCallbacks {
   onWin(): void
@@ -44,6 +47,7 @@ export class LevelScene extends Phaser.Scene {
   private behaviorTimers: Phaser.Time.TimerEvent[] = []
   private assetBaseUrl = '/'
   private celebrateToyScene: (() => void) | null = null
+  private puzzle: ReturnType<typeof createPuzzleScene> | null = null
 
   constructor() {
     super({ key: 'LevelScene', active: false })
@@ -56,6 +60,7 @@ export class LevelScene extends Phaser.Scene {
     this.callbacks = data.callbacks
     this.assetBaseUrl = data.assetBaseUrl ?? '/'
     this.celebrateToyScene = null
+    this.puzzle = null
     this.objects.clear()
     this.resolved = false
     this.waitTimers = []
@@ -83,7 +88,9 @@ export class LevelScene extends Phaser.Scene {
 
     const { width, height } = this.scale
 
-    if (this.levelConfig.scriptId === 'amei-clouds' && this.textures.exists(AMEI_TEXTURE)) {
+    if (this.levelConfig.scriptId?.startsWith('puzzle-')) {
+      this.puzzle = createPuzzleScene(this, this.levelConfig.scriptId.slice(7) as PuzzleKind, (event) => this.emitGameEvent(event))
+    } else if (this.levelConfig.scriptId === 'amei-clouds' && this.textures.exists(AMEI_TEXTURE)) {
       const toy = createToyCloudScene(this)
       this.celebrateToyScene = toy.celebrate
       for (const config of this.levelConfig.objects) {
@@ -138,6 +145,9 @@ export class LevelScene extends Phaser.Scene {
   requestHint() {
     if (!this.resolved) this.hintSystem?.requestHint()
   }
+
+  undoPuzzle() { if (!this.resolved) this.puzzle?.undo() }
+  resetPuzzle() { if (!this.resolved) this.puzzle?.reset() }
 
   private highlightGameObject(objectId: string) {
     const entry = this.objects.get(objectId)
@@ -200,6 +210,13 @@ export class LevelScene extends Phaser.Scene {
       case 'image':
       case 'sprite': {
         const key = config.content ?? ''
+        if (key.startsWith('prop:')) {
+          const prop = createProp(this, key.slice(5) as PropKind, x, y, (config.size?.x ?? 0.2) * sceneW, (config.size?.y ?? 0.1333) * sceneH)
+          if (config.interactive === false) prop.disableInteractive()
+          this.bindInteractions(prop, config)
+          gameObject = prop
+          break
+        }
         const image = this.add.image(x, y, this.textures.exists(key) ? key : '__MISSING')
         image.setDisplaySize((config.size?.x ?? 0.2) * sceneW, (config.size?.y ?? 0.1333) * sceneH)
         if (config.interactive !== false && config.interactions?.length) {
@@ -557,6 +574,12 @@ export class LevelScene extends Phaser.Scene {
           obj.on('pointerdown', () => {
             const active = !obj.getData('toggleState')
             obj.setData('toggleState', active)
+            obj.getData('paintActive')?.(active)
+            for (const entry of this.objects.values()) {
+              if (!entry.config.powerSourceId) continue
+              const powered = this.objects.get(entry.config.powerSourceId)?.gameObject.getData('toggleState')
+              entry.gameObject.getData('paintActive')?.(!!powered && !!entry.gameObject.getData('toggleState'))
+            }
             let label: Phaser.GameObjects.Text | undefined
             if (obj instanceof Phaser.GameObjects.Text) label = obj
             else if (obj instanceof Phaser.GameObjects.Container) {

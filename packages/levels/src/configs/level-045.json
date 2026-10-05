@@ -30,16 +30,16 @@
     },
     {
       "id": "power",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.3,
         "y": 0.43
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "电源 · 关",
+      "content": "prop:switch",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -60,16 +60,17 @@
     },
     {
       "id": "lamp",
-      "type": "button",
+      "powerSourceId": "power",
+      "type": "image",
       "position": {
         "x": 0.7,
         "y": 0.43
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "台灯 · 关",
+      "content": "prop:lamp",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -99,7 +100,7 @@
         "x": 0.86,
         "y": 0.1
       },
-      "content": "阿妹：我有两个开关，都挺重要。",
+      "content": "我有两个开关，都挺重要。",
       "interactive": false,
       "style": {
         "fontSize": 16,
@@ -138,7 +139,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["终于亮了，阿妹不用靠想象照明了。"],
+    "texts": ["终于亮了，不用靠想象照明了。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },

@@ -30,16 +30,16 @@
     },
     {
       "id": "mirror",
-      "type": "button",
+      "type": "image",
       "position": {
         "x": 0.5,
         "y": 0.45
       },
       "size": {
-        "x": 0.29,
-        "y": 0.11
+        "x": 0.24,
+        "y": 0.16
       },
-      "content": "镜中的 →",
+      "content": "prop:mirror",
       "style": {
         "fontSize": 20,
         "color": "#263b43",
@@ -116,7 +116,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["阿妹：镜子懂了，我也差点懂了。"],
+    "texts": ["镜子懂了，我也差点懂了。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },

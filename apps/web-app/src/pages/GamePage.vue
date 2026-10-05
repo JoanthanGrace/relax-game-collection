@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import { Lightbulb, SkipForward } from '@lucide/vue'
+import { Lightbulb, SkipForward, Undo2, RotateCcw } from '@lucide/vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -166,7 +166,11 @@ function getRandomFeedback(texts?: string[]): string {
         </div>
       </Transition>
     </main>
-    <footer v-if="game.status === 'playing' || game.status === 'fail'" class="game-tools">
+    <footer v-if="game.status === 'playing' || game.status === 'fail'" class="game-tools" :class="{ 'game-tools--puzzle': game.currentLevel?.scriptId?.startsWith('puzzle-') }">
+      <template v-if="game.status === 'playing' && game.currentLevel?.scriptId?.startsWith('puzzle-')">
+        <button class="puzzle-tool" aria-label="撤销一步" title="撤销一步" @click="gameContainer?.undoPuzzle()"><Undo2 :size="18" /></button>
+        <button class="puzzle-tool" aria-label="重置关卡" title="重置关卡" @click="gameContainer?.resetPuzzle()"><RotateCcw :size="18" /></button>
+      </template>
       <button v-if="game.status === 'playing'" :disabled="winPending || !game.currentLevel?.hints?.length" title="给我一点提示" @click="gameContainer?.requestHint()">
         <Lightbulb :size="18" /> 提示
       </button>
@@ -203,6 +207,9 @@ function getRandomFeedback(texts?: string[]): string {
   cursor: pointer;
 }
 .game-tools button:disabled { opacity: 0.45; cursor: default; }
+.game-tools--puzzle { gap: 6px; padding-left: 6px; padding-right: 6px; }
+.game-tools--puzzle button { padding: 0 10px; font-size: 14px; }
+.game-tools--puzzle .puzzle-tool { width: 44px; padding: 0; }
 .game-tools p { width: 100%; margin: 0; text-align: center; font-size: 12px; color: #666; }
 .game-page {
   width: 100%;

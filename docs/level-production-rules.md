@@ -1,18 +1,30 @@
 # Level Production Rules
 
-Version: v0.2
+Version: v0.3 - 2026-10-06
 
 This document defines the production rules for creating new NiceTap levels. Every new level proposal, JSON config, custom script, and visual update must follow these rules before it can be merged.
 
 ## 1. Core Product Direction
 
-NiceTap is a short-session, absurd, anti-routine puzzle game. A level is good when the player quickly understands the surface task, tries a normal solution, gets lightly tricked, then laughs at the actual solution.
+NiceTap is a short-session puzzle game with occasional absurdity and rule reversals. Players should observe, reason, plan, or experiment with a visible world. A joke is a payoff, not a replacement for a puzzle.
+
+### Puzzle Quality Gate
+
+- Every non-tutorial level must require observation, reasoning, planning, or causal experimentation. Record exactly what the player must discover or decide.
+- A click, hold, drag, or swipe is an input, not a core mechanic. Changing input types or renaming objects does not make two levels meaningfully different.
+- Instructions state the goal and necessary constraints, not the answer sequence. Explicit solutions belong only in requested strong hints.
+- More prescribed steps do not automatically mean higher difficulty. Difficulty comes from choices, constraints, interactions, and consequences.
+- Props must look like props: lamps, plugs, sockets, crates, vehicles, and pipes must have recognizable silhouettes and visible state changes. A text button named after an object is not acceptable finished art. Text blocks are valid when text itself is the mechanic.
+- A planning puzzle must allow undo and reset. Wrong moves should reveal a constraint; they must not force a progress reset or consume a skip.
+- Each proposal records an independent solution, a plausible wrong approach, how feedback helps, and why the puzzle is not a reskin of another level.
+- Automated tests prove technical correctness and solvability, not fun. Validate a small representative batch with owner play feedback before expanding a mechanic into many levels.
+- A solvable but trivial filler level may be rejected. Do not make levels unfair or needlessly long to compensate.
 
 Every level must satisfy these five baseline goals:
 
-- The player can understand the surface objective within 3 seconds.
+- The player can understand the surface objective quickly, without being handed the solution.
 - The correct solution is surprising but fair after the reveal.
-- The level has one primary joke or twist, not several unrelated tricks.
+- The level has one coherent core mechanic; the joke or twist supports it rather than obscuring it.
 - Failure feels funny, not punishing.
 - The level can be completed without external knowledge, random guessing, or pixel hunting.
 
@@ -157,7 +169,7 @@ Difficulty should vary, but frustration must stay low.
 ### Hard
 
 - Expected solve time: 25-60 seconds.
-- Multi-step or meta reasoning allowed.
+- Multi-step planning or meta reasoning allowed; a sequence already spelled out in the instruction does not qualify.
 - Must include stronger hints.
 - Do not place two hard levels back to back unless the second is visually very different.
 
@@ -183,6 +195,7 @@ Avoid repeating the same trick too often.
   - 1 low-pressure easy level
   - 1 higher-share-potential level
 - If a new level resembles an existing one, its solution path, emotional beat, or visual metaphor must be meaningfully different.
+- Count core mechanisms, not gestures: rule manipulation, constrained pushing, network connectivity, route planning, panel reconnection, sorting constraints, and perspective/gravity are distinct examples. Each ten-level block should have at least three distinct mechanisms; a different caption does not count.
 
 Themed chapters are encouraged. Candidate chapter themes include:
 
@@ -235,7 +248,7 @@ Hints should use this escalation:
 
 ## 11. Mascot Rules
 
-The dog mascot is allowed and encouraged inside levels, not only in branding.
+Wang Amei is the brand mascot and an occasional chaotic teammate. She is not the mandatory protagonist of every chapter or level.
 
 Approved roles:
 
@@ -250,7 +263,9 @@ Rules:
 
 - The mascot should not explain every answer directly.
 - The mascot may mislead the player, but the misdirection must be funny and fair.
-- The mascot should not overcrowd every level; use it when it improves the joke or screenshot value.
+- Keep most ordinary puzzles independent of Amei. Use her in a selected chapter, an occasional cameo, or a future hidden/bonus level when her behavior matters to the mechanic.
+- Do not add a dog image or an "Amei says" line just to fill empty space. Home-screen branding does not justify repeated mascot decorations inside levels.
+- Hidden/bonus levels must be a separate, deliberately designed path; do not call an ordinary numbered level hidden. This revision does not itself implement hidden-level unlocks.
 - Mascot levels should preserve the brown-and-white border collie identity: white blaze, white muzzle/chest, brown fur, expressive ears, clever or mischievous face.
 
 ## 12. Skip and Monetization-Ready Rules
@@ -313,7 +328,7 @@ Rules:
 
 ## 16. Technical Implementation Rules
 
-Prefer config-only levels. Write custom code only when the existing config system cannot express the idea cleanly.
+Choose the puzzle mechanism first, then choose its implementation. Prefer existing libraries for established domains such as Sokoban and graph connectivity. Use config-only levels when suitable, but never simplify a good puzzle into a button exercise just to avoid a dedicated scene.
 
 ### Config-First
 
@@ -407,6 +422,10 @@ Every new level idea should start with this template:
 - Mascot role: None / guide / trickster / reaction / obstacle / host
 - Player first instinct:
 - Correct solution:
+- Player reasoning or planning required:
+- Meaningful choice and consequence:
+- Observable state changes:
+- Undo/reset behavior:
 - Wrong solution feedback:
 - Hint 1:
 - Hint 2:
@@ -430,6 +449,12 @@ Before a level is merged:
 - [ ] Touch targets are large enough.
 - [ ] Text is readable on mobile.
 - [ ] It has one clear primary joke.
+- [ ] It contains an actual reasoning/planning/observation challenge, not only prescribed gestures.
+- [ ] The instruction does not reveal the solution.
+- [ ] Props are recognizable objects, not renamed text buttons.
+- [ ] Core-mechanism variety is checked separately from input variety.
+- [ ] Wrong approaches and recovery paths have been tested.
+- [ ] Amei appears only with a specific purpose.
 - [ ] It does not repeat the previous two levels' joke type.
 - [ ] It has fail text and hints.
 - [ ] Hints are player-triggered unless explicitly approved otherwise.

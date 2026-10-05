@@ -4,6 +4,8 @@ Status: first home-screen and level-008 prototype implemented on `feat/amei-toyb
 
 The approved direction is extended on `feat/50-levels` with two additional ten-level chapters: Amei's Slacking Workshop and Absurd Repair Station. These use tactile 2D controls and the shared mascot, not real-time 3D. The chapter strip scrolls horizontally on narrow phones; all 50 levels remain available through the map. Detailed production notes live in `level-design-31-50.md`.
 
+2026-10-06 revision (`feat/puzzle-rework`): the workshop is renamed to an independent experiment chapter. Levels 031-035 are concrete puzzle scenes with rule paper, office walls, wooden crates, pipe joints and a cup, a delivery route, and illustrated city panels. Generic physical objects in later levels are drawn as props, not named buttons. Amei is removed from ordinary new-level decorations and dialogue except level 036, where she is the actual interactive character. Branding and the existing level-008 cameo remain; bonus/hidden levels are only a future option. This supersedes the earlier suggestion that every theme be dog-led.
+
 ## Confirmed character
 
 The dog is named Wang Amei (王阿妹). Amei is a chaotic, affectionate teammate, not a sarcastic judge. Jokes should share the player's misfortune and celebrate joint success. Amei can cause small accidents, volunteer questionable help, and take a comically oversized share of the credit, but should never humiliate the player.

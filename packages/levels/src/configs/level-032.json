@@ -2,179 +2,53 @@
   "id": "level-032",
   "chapter": 4,
   "order": 2,
-  "title": "咖啡不是白开水",
-  "instruction": "给阿妹冲一杯提神咖啡",
-  "tags": ["sequence-trick", "multi-step"],
+  "title": "仓库不支持倒车",
+  "instruction": "把两只木箱送到绿色入库位",
+  "tags": ["multi-step"],
+  "scriptId": "puzzle-boxes",
   "background": {
     "type": "color",
-    "value": "#f1f6f8"
+    "value": "#edf3f5"
   },
   "objects": [
     {
-      "id": "chapter",
+      "id": "scene-anchor",
       "type": "text",
       "position": {
         "x": 0.5,
-        "y": 0.1
+        "y": 0.5
       },
-      "size": {
-        "x": 0.86,
-        "y": 0.1
-      },
-      "content": "阿妹的摸鱼工坊",
-      "interactive": false,
-      "style": {
-        "fontSize": 14,
-        "color": "#425a64"
-      }
-    },
-    {
-      "id": "recipe",
-      "type": "text",
-      "position": {
-        "x": 0.5,
-        "y": 0.24
-      },
-      "size": {
-        "x": 0.86,
-        "y": 0.1
-      },
-      "content": "配方：先放豆，再加水",
-      "interactive": false,
-      "style": {
-        "fontSize": 18,
-        "color": "#425a64"
-      }
-    },
-    {
-      "id": "beans",
-      "type": "button",
-      "position": {
-        "x": 0.3,
-        "y": 0.46
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "放咖啡豆",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#efc565",
-        "borderColor": "#b69640",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [
-        {
-          "type": "click",
-          "emits": "beans"
-        }
-      ]
-    },
-    {
-      "id": "water",
-      "type": "button",
-      "position": {
-        "x": 0.7,
-        "y": 0.46
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "加水",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#5495b4",
-        "borderColor": "#3a728b",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [
-        {
-          "type": "click",
-          "emits": "water"
-        }
-      ]
-    },
-    {
-      "id": "feedback",
-      "type": "text",
-      "position": {
-        "x": 0.5,
-        "y": 0.82
-      },
-      "size": {
-        "x": 0.86,
-        "y": 0.1
-      },
-      "content": "阿妹盯着杯子，等它自己变咖啡。",
-      "interactive": false,
-      "style": {
-        "fontSize": 16,
-        "color": "#425a64"
-      }
+      "content": "",
+      "visible": false,
+      "interactive": false
     }
   ],
   "winConditions": [
     {
-      "type": "sequence",
-      "eventSequence": ["beans", "water"]
+      "type": "event-fired",
+      "eventId": "puzzle-solved"
     }
   ],
   "hints": [
     {
       "level": "weak",
-      "text": "桌上的配方没写反。",
+      "text": "箱子只能推，不能拉。贴上边缘前，先想下一步。",
       "showAfterFailCount": 1
     },
     {
-      "level": "medium",
-      "text": "先点咖啡豆，再点加水；顺序错了可以重新来。",
+      "level": "strong",
+      "text": "右边箱子先往右推，再从下面推上去。不要先把它顶到最上边。",
       "showAfterFailCount": 3
     }
   ],
   "passFeedback": {
-    "texts": ["阿妹：喝完这杯，继续躺平。"],
+    "texts": ["两件入库，仓库主管暂时找不到你。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },
   "failFeedback": {
-    "texts": ["先加水就变成了一杯有梦想的水。"],
+    "texts": ["先撤一步，再观察一下。"],
     "animation": "shake",
     "sfx": "fail-buzz"
-  },
-  "reactions": [
-    {
-      "trigger": "beans",
-      "once": false,
-      "actions": [
-        {
-          "type": "set-text",
-          "objectId": "feedback",
-          "value": "豆子到位了，现在加水。"
-        }
-      ]
-    },
-    {
-      "trigger": "water",
-      "once": false,
-      "actions": [
-        {
-          "type": "set-text",
-          "objectId": "feedback",
-          "value": "顺序不对的话，重新放豆再加水。"
-        }
-      ]
-    }
-  ]
+  }
 }

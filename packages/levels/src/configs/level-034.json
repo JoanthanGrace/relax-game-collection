@@ -2,312 +2,53 @@
   "id": "level-034",
   "chapter": 4,
   "order": 4,
-  "title": "抽屉各回各家",
-  "instruction": "把钥匙、饼干和笔放回对应抽屉",
-  "tags": ["multi-step", "drag-reveal"],
+  "title": "午夜送件",
+  "instruction": "取齐两件包裹，再抵达收件人门口",
+  "tags": ["multi-step"],
+  "scriptId": "puzzle-route",
   "background": {
     "type": "color",
-    "value": "#f1f6f8"
+    "value": "#edf3f5"
   },
   "objects": [
     {
-      "id": "chapter",
+      "id": "scene-anchor",
       "type": "text",
       "position": {
         "x": 0.5,
-        "y": 0.1
+        "y": 0.5
       },
-      "size": {
-        "x": 0.86,
-        "y": 0.1
-      },
-      "content": "阿妹的摸鱼工坊",
-      "interactive": false,
-      "style": {
-        "fontSize": 14,
-        "color": "#425a64"
-      }
-    },
-    {
-      "id": "key",
-      "type": "button",
-      "position": {
-        "x": 0.2,
-        "y": 0.34
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "钥匙",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#efc565",
-        "borderColor": "#b69640",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [
-        {
-          "type": "drag",
-          "emits": "key-home",
-          "dragBounds": "screen",
-          "dragTarget": {
-            "position": {
-              "x": 0.2,
-              "y": 0.65
-            },
-            "radius": 0.09
-          }
-        }
-      ]
-    },
-    {
-      "id": "snack",
-      "type": "button",
-      "position": {
-        "x": 0.5,
-        "y": 0.34
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "饼干",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#e9705c",
-        "borderColor": "#bf5749",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [
-        {
-          "type": "drag",
-          "emits": "snack-home",
-          "dragBounds": "screen",
-          "dragTarget": {
-            "position": {
-              "x": 0.5,
-              "y": 0.65
-            },
-            "radius": 0.09
-          }
-        }
-      ]
-    },
-    {
-      "id": "pen",
-      "type": "button",
-      "position": {
-        "x": 0.8,
-        "y": 0.34
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "笔",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#5495b4",
-        "borderColor": "#3a728b",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [
-        {
-          "type": "drag",
-          "emits": "pen-home",
-          "dragBounds": "screen",
-          "dragTarget": {
-            "position": {
-              "x": 0.8,
-              "y": 0.65
-            },
-            "radius": 0.09
-          }
-        }
-      ]
-    },
-    {
-      "id": "key-box",
-      "type": "button",
-      "position": {
-        "x": 0.2,
-        "y": 0.65
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "钥匙盒",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#5495b4",
-        "borderColor": "#3a728b",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [],
+      "content": "",
+      "visible": false,
       "interactive": false
-    },
-    {
-      "id": "snack-box",
-      "type": "button",
-      "position": {
-        "x": 0.5,
-        "y": 0.65
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "零食盒",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#61a78e",
-        "borderColor": "#407b68",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [],
-      "interactive": false
-    },
-    {
-      "id": "pen-box",
-      "type": "button",
-      "position": {
-        "x": 0.8,
-        "y": 0.65
-      },
-      "size": {
-        "x": 0.29,
-        "y": 0.11
-      },
-      "content": "笔筒",
-      "style": {
-        "fontSize": 20,
-        "color": "#263b43",
-        "backgroundColor": "#efc565",
-        "borderColor": "#b69640",
-        "borderWidth": 2,
-        "borderRadius": 8,
-        "padding": 10,
-        "shadow": true,
-        "bold": true
-      },
-      "interactions": [],
-      "interactive": false
-    },
-    {
-      "id": "feedback",
-      "type": "text",
-      "position": {
-        "x": 0.5,
-        "y": 0.82
-      },
-      "size": {
-        "x": 0.86,
-        "y": 0.1
-      },
-      "content": "阿妹保证，只吃已经放好的饼干。",
-      "interactive": false,
-      "style": {
-        "fontSize": 16,
-        "color": "#425a64"
-      }
     }
   ],
   "winConditions": [
     {
       "type": "event-fired",
-      "eventId": "key-home"
-    },
-    {
-      "type": "event-fired",
-      "eventId": "snack-home"
-    },
-    {
-      "type": "event-fired",
-      "eventId": "pen-home"
+      "eventId": "puzzle-solved"
     }
   ],
   "hints": [
     {
       "level": "weak",
-      "text": "每个抽屉都写了自己的名字。",
+      "text": "路线不能交叉；先看两件包裹在哪一侧。",
       "showAfterFailCount": 1
     },
     {
-      "level": "medium",
-      "text": "把三件东西分别拖到正下方对应的盒子。",
+      "level": "strong",
+      "text": "先从上方绕过水坑，再取右下角包裹，最后回到右侧门口。",
       "showAfterFailCount": 3
     }
   ],
   "passFeedback": {
-    "texts": ["桌子整齐了，阿妹开始弄乱下一张。"],
+    "texts": ["件都齐了，客户说：辛苦，五星。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },
   "failFeedback": {
-    "texts": ["乱放也算收纳，但这次先按名字来。"],
+    "texts": ["先撤一步，再观察一下。"],
     "animation": "shake",
     "sfx": "fail-buzz"
-  },
-  "reactions": [
-    {
-      "trigger": "key-home",
-      "once": false,
-      "actions": [
-        {
-          "type": "set-text",
-          "objectId": "feedback",
-          "value": "钥匙回家了，还剩两件。"
-        }
-      ]
-    },
-    {
-      "trigger": "snack-home",
-      "once": false,
-      "actions": [
-        {
-          "type": "set-text",
-          "objectId": "feedback",
-          "value": "饼干进盒子了，阿妹别偷吃。"
-        }
-      ]
-    },
-    {
-      "trigger": "pen-home",
-      "once": false,
-      "actions": [
-        {
-          "type": "set-text",
-          "objectId": "feedback",
-          "value": "笔也得进自己的家。"
-        }
-      ]
-    }
-  ]
+  }
 }

@@ -174,7 +174,7 @@
     }
   ],
   "passFeedback": {
-    "texts": ["阿妹：倒数成功，今天不倒霉。"],
+    "texts": ["倒数成功，今天不倒霉。"],
     "animation": "confetti",
     "sfx": "pass-cheerful"
   },
