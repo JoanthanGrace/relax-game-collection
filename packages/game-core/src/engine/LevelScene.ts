@@ -7,6 +7,7 @@ import type {
 } from '@nicetap/shared'
 import { ConditionEvaluator } from '../level/ConditionEvaluator'
 import { HintSystem, type HintCallbacks } from '../level/HintSystem'
+import { constrainDrag } from './dragBounds'
 
 export interface LevelSceneCallbacks {
   onWin(): void
@@ -59,6 +60,7 @@ export class LevelScene extends Phaser.Scene {
 
   create() {
     if (!this.levelConfig) return
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.hintSystem?.reset())
 
     const { width, height } = this.scale
 
@@ -79,6 +81,7 @@ export class LevelScene extends Phaser.Scene {
   // ═══════════════════════════════════════════
 
   private initHintSystem(hints?: HintConfig[]) {
+    this.hintSystem?.reset()
     if (!hints || hints.length === 0) {
       this.hintSystem = null
       return
@@ -101,6 +104,10 @@ export class LevelScene extends Phaser.Scene {
     }
 
     this.hintSystem = new HintSystem(hints, hintCallbacks)
+  }
+
+  requestHint() {
+    if (!this.resolved) this.hintSystem?.requestHint()
   }
 
   private highlightGameObject(objectId: string) {
@@ -476,9 +483,12 @@ export class LevelScene extends Phaser.Scene {
             const { width, height } = this.scale
             if (interaction.dragTarget?.offScreen) {
               const threshold = 40
+              const bounds = draggable.getBounds()
               if (
                 draggable.x < threshold || draggable.x > width - threshold ||
-                draggable.y < threshold || draggable.y > height - threshold
+                draggable.y < threshold || draggable.y > height - threshold ||
+                bounds.left <= 0.5 || bounds.right >= width - 0.5 ||
+                bounds.top <= 0.5 || bounds.bottom >= height - 0.5
               ) {
                 this.emitGameEvent(interaction.emits)
               }
@@ -494,14 +504,12 @@ export class LevelScene extends Phaser.Scene {
           }
 
           draggable.on('drag', (_p: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-            if (constraint === 'x') {
-              draggable.x = dragX
-            } else if (constraint === 'y') {
-              draggable.y = dragY
-            } else {
-              draggable.x = dragX
-              draggable.y = dragY
-            }
+            const position = constrainDrag(
+              { x: draggable.x, y: draggable.y }, draggable.getBounds(),
+              { x: constraint === 'y' ? draggable.x : dragX, y: constraint === 'x' ? draggable.y : dragY },
+              this.scale.width, this.scale.height,
+            )
+            draggable.setPosition(position.x, position.y)
             checkDragTarget()
           })
 

@@ -62,7 +62,7 @@ function previewSound() {
         <div class="setting-row">
           <div class="setting-copy">
             <span class="setting-title">通关进度</span>
-            <span class="setting-desc">已通关 {{ game.completedCount }} / {{ game.totalLevels }} 关。</span>
+            <span class="setting-desc">已通关 {{ game.manualCount }} / {{ game.totalLevels }} 关。<template v-if="game.skippedCount">另有 {{ game.skippedCount }} 关已跳过。</template></span>
           </div>
           <button class="danger-btn" :disabled="!game.hasProgress" @click="handleClearProgress">
             清除

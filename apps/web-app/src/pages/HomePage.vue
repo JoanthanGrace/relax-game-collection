@@ -38,6 +38,7 @@ function continueGame() {
 }
 
 function getLevelState(levelId: string): 'completed' | 'current' | 'locked' | 'open' {
+  if (game.isLevelSkipped(levelId)) return 'open'
   if (game.isLevelCompleted(levelId)) return 'completed'
   if (game.isLevelCurrent(levelId)) return 'current'
   if (game.isLevelLocked(levelId)) return 'locked'
@@ -58,7 +59,8 @@ onMounted(() => {
       <h1 class="title">NiceTap</h1>
       <p class="subtitle">无厘头反套路关卡小游戏</p>
       <div class="progress-summary">
-        已通关 {{ game.completedCount }} / {{ game.totalLevels }}
+        已通关 {{ game.manualCount }} / {{ game.totalLevels }}
+        <span v-if="game.skippedCount"> · 已跳过 {{ game.skippedCount }}</span>
       </div>
       <div class="hero-actions">
         <button class="start-btn" @click="continueGame">
@@ -86,7 +88,8 @@ onMounted(() => {
             <span class="level-content">
               <span class="level-title">{{ level.title }}</span>
               <span class="level-state">
-                <template v-if="game.isLevelCompleted(level.id)">已通关</template>
+                <template v-if="game.isLevelSkipped(level.id)">已跳过 · 可补通关</template>
+                <template v-else-if="game.isLevelCompleted(level.id)">已通关</template>
                 <template v-else-if="game.isLevelCurrent(level.id)">当前关</template>
                 <template v-else-if="game.isLevelLocked(level.id)">未解锁</template>
                 <template v-else>可挑战</template>

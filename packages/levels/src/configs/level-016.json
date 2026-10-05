@@ -23,7 +23,7 @@
         {
           "type": "drag",
           "emits": "loading-removed",
-          "dragBounds": "none",
+          "dragBounds": "screen",
           "dragTarget": { "offScreen": true }
         }
       ],

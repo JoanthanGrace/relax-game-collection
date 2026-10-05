@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, statSync } from 'node:fs'
-import { basename, dirname, extname, join, resolve } from 'node:path'
+import { createReadStream, existsSync, readdirSync, statSync } from 'node:fs'
+import { basename, extname, join, resolve } from 'node:path'
 import { request } from 'node:https'
-import { pipeline } from 'node:stream/promises'
+import { downloadImage } from './tinify-download.mjs'
 
 const apiKey = process.env.TINIFY_API_KEY
 const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif'])
@@ -35,6 +35,7 @@ const inputs = []
 
 for (let i = 0; i < args.length; i += 1) {
   const arg = args[i]
+  if (arg === '--') continue
   if (arg === '--out-dir') {
     outDir = args[i + 1] ?? ''
     i += 1
@@ -101,21 +102,10 @@ function shrink(filePath) {
     )
 
     req.on('error', rejectPromise)
-    createReadStream(filePath).pipe(req)
-  })
-}
-
-function download(url, outputPath) {
-  return new Promise((resolvePromise, rejectPromise) => {
-    request(url, (res) => {
-      if (res.statusCode !== 200) {
-        rejectPromise(new Error(`Download failed for ${url}: HTTP ${res.statusCode}`))
-        return
-      }
-
-      mkdirSync(dirname(outputPath), { recursive: true })
-      pipeline(res, createWriteStream(outputPath)).then(resolvePromise, rejectPromise)
-    }).on('error', rejectPromise)
+    req.setTimeout(30000, () => req.destroy(new Error('Tinify upload timed out')))
+    const source = createReadStream(filePath)
+    source.on('error', (error) => req.destroy(error))
+    source.pipe(req)
   })
 }
 
@@ -128,11 +118,15 @@ if (!files.length) {
 
 console.log(`Compressing ${files.length} image(s) with Tinify...`)
 
+if (!inPlace && new Set(files.map((file) => basename(file))).size !== files.length) {
+  throw new Error('Duplicate filenames: use separate output directories to avoid overwriting images.')
+}
+
 for (const file of files) {
   const before = statSync(file).size
   const target = inPlace ? file : resolve(outDir, basename(file))
   const { outputUrl, compressionCount } = await shrink(file)
-  await download(outputUrl, target)
+  await downloadImage(outputUrl, target)
   const after = statSync(target).size
   const saved = before - after
   const pct = before > 0 ? ((saved / before) * 100).toFixed(1) : '0.0'

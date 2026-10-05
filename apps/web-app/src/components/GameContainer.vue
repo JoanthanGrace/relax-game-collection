@@ -5,6 +5,7 @@ import { GameEngine, type GameEngineCallbacks } from '@nicetap/game-core'
 
 const props = defineProps<{
   level: LevelConfig | null
+  revision: number
 }>()
 
 const emit = defineEmits<{
@@ -17,6 +18,8 @@ const emit = defineEmits<{
 
 const containerRef = ref<HTMLDivElement>()
 let engine: GameEngine | null = null
+let resizeObserver: ResizeObserver | null = null
+defineExpose({ requestHint: () => engine?.requestHint(), pause: () => engine?.pauseLevel() })
 
 const GAME_WIDTH = 400
 const GAME_HEIGHT = 600
@@ -48,6 +51,8 @@ onMounted(() => {
     height: GAME_HEIGHT,
   })
   engine.start(callbacks)
+  resizeObserver = new ResizeObserver(() => engine?.refreshSize())
+  resizeObserver.observe(containerRef.value)
 
   if (props.level) {
     engine.loadLevel(props.level)
@@ -55,8 +60,8 @@ onMounted(() => {
 })
 
 watch(
-  () => props.level,
-  (newLevel) => {
+  () => [props.level, props.revision] as const,
+  ([newLevel]) => {
     if (newLevel && engine) {
       engine.loadLevel(newLevel)
     }
@@ -64,6 +69,7 @@ watch(
 )
 
 onUnmounted(() => {
+  resizeObserver?.disconnect()
   engine?.destroy()
   engine = null
 })
@@ -77,12 +83,11 @@ onUnmounted(() => {
 .game-canvas-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 .game-canvas-container :deep(canvas) {
+  display: block;
   border-radius: 8px;
 }
 </style>

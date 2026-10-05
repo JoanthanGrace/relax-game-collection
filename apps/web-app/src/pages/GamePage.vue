@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { Lightbulb, SkipForward } from '@lucide/vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -10,6 +11,18 @@ const router = useRouter()
 const route = useRoute()
 const game = useGameStore()
 const settings = useSettingsStore()
+const gameContainer = ref<InstanceType<typeof GameContainer>>()
+const skipNotice = ref('')
+let quotaTimer: ReturnType<typeof setInterval> | undefined
+onMounted(() => { quotaTimer = setInterval(game.refreshSkipQuota, 30000) })
+onUnmounted(() => clearInterval(quotaTimer))
+
+function handleSkip() {
+  skipNotice.value = ''
+  if (!window.confirm('跳过当前关卡？会消耗今天 1 次免费机会，之后仍可回来挑战。')) return
+  if (game.skipLevel()) gameContainer.value?.pause()
+  else skipNotice.value = '无法跳关：免费机会已用完或浏览器无法保存记录。广告解锁暂未开放。'
+}
 
 onMounted(async () => {
   settings.load()
@@ -18,20 +31,24 @@ onMounted(async () => {
     await game.startLevel(levelId)
   } else {
     await game.startFirstLevel()
+    if (game.currentLevel) await router.replace(`/game/${game.currentLevel.id}`)
   }
 })
 
 function handleWin() {
+  if (game.status !== 'playing') return
   playSfx('pass', settings.soundEnabled)
   game.markWin()
 }
 
 function handleFail() {
+  if (game.status !== 'playing') return
   playSfx('fail', settings.soundEnabled)
   game.markFail()
 }
 
 function handleEvent() {
+  if (game.status !== 'playing') return
   playSfx('tap', settings.soundEnabled)
 }
 
@@ -48,6 +65,8 @@ async function handleNext() {
   const next = await game.nextLevel()
   if (!next) {
     router.push('/')
+  } else {
+    await router.replace(`/game/${next.id}`)
   }
 }
 
@@ -84,7 +103,9 @@ function getRandomFeedback(texts?: string[]): string {
 
     <main class="game-area">
       <GameContainer
+        ref="gameContainer"
         :level="game.currentLevel"
+        :revision="game.levelRevision"
         @win="handleWin"
         @fail="handleFail"
         @event="handleEvent"
@@ -107,7 +128,7 @@ function getRandomFeedback(texts?: string[]): string {
           <div class="result-card">
             <div class="result-icon">✅</div>
             <p class="result-text">
-              {{ getRandomFeedback(game.currentLevel?.passFeedback?.texts) || 'Pass!' }}
+              {{ game.currentLevel && game.isLevelSkipped(game.currentLevel.id) ? '本关已跳过，回头再来收拾它' : getRandomFeedback(game.currentLevel?.passFeedback?.texts) || 'Pass!' }}
             </p>
             <div class="result-actions">
               <button v-if="game.hasNext" class="btn btn-primary" @click="handleNext">
@@ -141,10 +162,44 @@ function getRandomFeedback(texts?: string[]): string {
         </div>
       </Transition>
     </main>
+    <footer v-if="game.status === 'playing' || game.status === 'fail'" class="game-tools">
+      <button v-if="game.status === 'playing'" :disabled="!game.currentLevel?.hints?.length" title="给我一点提示" @click="gameContainer?.requestHint()">
+        <Lightbulb :size="18" /> 提示
+      </button>
+      <button :disabled="!game.remainingSkips || !!(game.currentLevel && game.isLevelCompleted(game.currentLevel.id))" :title="game.remainingSkips ? '跳过当前关卡' : '今日免费次数已用完，广告解锁暂未开放'" @click="handleSkip">
+        <SkipForward :size="18" /> 跳过 · {{ game.remainingSkips }}/3
+      </button>
+      <p v-if="!game.remainingSkips || skipNotice" role="status">{{ skipNotice || '今日免费次数已用完，广告解锁暂未开放' }}</p>
+    </footer>
   </div>
 </template>
 
 <style scoped>
+.game-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  background: white;
+  border-top: 1px solid #eee;
+}
+.game-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+.game-tools button:disabled { opacity: 0.45; cursor: default; }
+.game-tools p { width: 100%; margin: 0; text-align: center; font-size: 12px; color: #666; }
 .game-page {
   width: 100%;
   height: 100%;

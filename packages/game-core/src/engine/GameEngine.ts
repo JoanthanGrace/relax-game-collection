@@ -94,6 +94,19 @@ export class GameEngine {
     }
   }
 
+  requestHint(): void {
+    const scene = this.game?.scene.getScene('LevelScene') as LevelScene | undefined
+    if (scene?.scene.isActive()) scene.requestHint()
+  }
+
+  pauseLevel(): void {
+    this.game?.scene.pause('LevelScene')
+  }
+
+  refreshSize(): void {
+    if (this.ready) this.game?.scale.refresh()
+  }
+
   getGame(): Phaser.Game | null {
     return this.game
   }

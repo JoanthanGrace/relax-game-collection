@@ -34,7 +34,7 @@ describe('HintSystem', () => {
     vi.useRealTimers()
   })
 
-  it('should show hint when fail count reaches threshold', () => {
+  it('only shows a hint when explicitly requested', () => {
     const hints: HintConfig[] = [
       { level: 'weak', text: '提示1', showAfterFailCount: 2 },
     ]
@@ -45,6 +45,8 @@ describe('HintSystem', () => {
     expect(cb.showCalls).toHaveLength(0)
 
     sys.onFail()
+    expect(cb.showCalls).toHaveLength(0)
+    sys.requestHint()
     expect(cb.showCalls).toEqual(['提示1'])
   })
 
@@ -57,30 +59,29 @@ describe('HintSystem', () => {
     const cb = makeCallbacks()
     const sys = new HintSystem(hints, cb)
 
-    sys.onFail() // count=1, show 弱提示
+    sys.requestHint()
     expect(cb.showCalls).toEqual(['弱提示'])
 
-    sys.onFail() // count=2, show 中提示
+    sys.requestHint()
     expect(cb.showCalls).toEqual(['弱提示', '中提示'])
 
     sys.onFail() // count=3, nothing new
     expect(cb.showCalls).toHaveLength(2)
 
-    sys.onFail() // count=4, show 强提示
+    sys.requestHint()
     expect(cb.showCalls).toEqual(['弱提示', '中提示', '强提示'])
   })
 
-  it('should not repeat the same hint', () => {
+  it('allows reopening the last hint after dismissal', () => {
     const hints: HintConfig[] = [
       { level: 'weak', text: '提示1', showAfterFailCount: 1 },
     ]
     const cb = makeCallbacks()
     const sys = new HintSystem(hints, cb)
 
-    sys.onFail()
-    sys.onFail()
-    sys.onFail()
-    expect(cb.showCalls).toEqual(['提示1'])
+    sys.requestHint()
+    sys.requestHint()
+    expect(cb.showCalls).toEqual(['提示1', '提示1'])
   })
 
   it('should highlight object when highlightObjectId is set', () => {
@@ -90,7 +91,7 @@ describe('HintSystem', () => {
     const cb = makeCallbacks()
     const sys = new HintSystem(hints, cb)
 
-    sys.onFail()
+    sys.requestHint()
     expect(cb.highlightCalls).toEqual(['btn-1'])
   })
 
@@ -101,7 +102,7 @@ describe('HintSystem', () => {
     const cb = makeCallbacks()
     const sys = new HintSystem(hints, cb)
 
-    sys.onFail()
+    sys.requestHint()
     expect(cb.dismissCalls).toBe(0)
 
     vi.advanceTimersByTime(3000)
@@ -116,6 +117,7 @@ describe('HintSystem', () => {
     const sys = new HintSystem(hints, cb)
 
     sys.onFail()
+    sys.requestHint()
     expect(cb.showCalls).toHaveLength(1)
     expect(sys.getFailCount()).toBe(1)
 
@@ -123,6 +125,7 @@ describe('HintSystem', () => {
     expect(sys.getFailCount()).toBe(0)
 
     sys.onFail()
+    sys.requestHint()
     expect(cb.showCalls).toHaveLength(2) // hint can be shown again
   })
 

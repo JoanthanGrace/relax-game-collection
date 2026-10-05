@@ -1,5 +1,7 @@
 # 《别点错》视觉系统规范 v1.0
 
+> This document describes the historical MVP style. The proposed richer direction is in [visual-v2-direction.md](visual-v2-direction.md); its guidance supersedes the plain-white-only restrictions below for the next redesign.
+
 > **核心定位**：极简骨架 + 高饱和点缀 + 手绘表情灵魂。
 > 用最低美术成本做出"看一眼就想截图发朋友"的效果。
 

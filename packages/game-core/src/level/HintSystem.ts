@@ -28,7 +28,12 @@ export class HintSystem {
 
   onFail(): void {
     this.failCount++
-    this.tryShowNextHint()
+  }
+
+  requestHint(): void {
+    const next = this.hints.findIndex((_, index) => !this.shownHintIndices.has(index))
+    if (next >= 0) this.showHint(next)
+    else if (this.hints.length) this.showHint(this.hints.length - 1)
   }
 
   getFailCount(): number {
@@ -41,16 +46,6 @@ export class HintSystem {
     if (this.dismissTimer) {
       clearTimeout(this.dismissTimer)
       this.dismissTimer = null
-    }
-  }
-
-  private tryShowNextHint(): void {
-    for (let i = 0; i < this.hints.length; i++) {
-      if (this.shownHintIndices.has(i)) continue
-      if (this.failCount >= this.hints[i].showAfterFailCount) {
-        this.showHint(i)
-        return
-      }
     }
   }
 

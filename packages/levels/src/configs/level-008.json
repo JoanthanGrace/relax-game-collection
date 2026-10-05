@@ -23,7 +23,7 @@
         {
           "type": "drag",
           "emits": "cloud-removed",
-          "dragBounds": "none",
+          "dragBounds": "screen",
           "dragTarget": { "offScreen": true }
         }
       ]
