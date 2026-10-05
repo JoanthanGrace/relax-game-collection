@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 30_000,
   retries: 1,
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://127.0.0.1:3100',
     headless: true,
     screenshot: 'only-on-failure',
   },
@@ -16,9 +16,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev:web',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    command: 'pnpm --filter @nicetap/web-app dev --host 127.0.0.1 --port 3100 --strictPort',
+    url: 'http://127.0.0.1:3100',
+    reuseExistingServer: false,
     timeout: 30_000,
     cwd: '..',
   },

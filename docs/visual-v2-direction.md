@@ -2,6 +2,8 @@
 
 Status: first home-screen and level-008 prototype implemented on `feat/amei-toybox`; not yet deployed.
 
+The approved direction is extended on `feat/50-levels` with two additional ten-level chapters: Amei's Slacking Workshop and Absurd Repair Station. These use tactile 2D controls and the shared mascot, not real-time 3D. The chapter strip scrolls horizontally on narrow phones; all 50 levels remain available through the map. Detailed production notes live in `level-design-31-50.md`.
+
 ## Confirmed character
 
 The dog is named Wang Amei (王阿妹). Amei is a chaotic, affectionate teammate, not a sarcastic judge. Jokes should share the player's misfortune and celebrate joint success. Amei can cause small accidents, volunteer questionable help, and take a comically oversized share of the credit, but should never humiliate the player.

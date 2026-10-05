@@ -20,7 +20,7 @@ Current release: `v0.1.0-mvp`
 
 The MVP includes:
 
-- 30 playable levels
+- 50 playable levels in the development branch, across five chapters
 - local progress storage
 - PWA install support
 - mobile-first web UI
@@ -29,6 +29,8 @@ The MVP includes:
 - CI checks for levels, tests, typecheck, and runtime asset budget
 
 See [docs/release-log.md](docs/release-log.md) for release history.
+
+The `feat/50-levels` development branch contains 50 levels; the public demo remains the previously deployed 30-level MVP until the new version is reviewed and released. New chapter designs are recorded in [docs/level-design-31-50.md](docs/level-design-31-50.md).
 
 ## Design Direction
 
@@ -129,6 +131,7 @@ Before proposing or implementing a new level, read:
 
 - [docs/level-production-rules.md](docs/level-production-rules.md)
 - [docs/level-design-30.md](docs/level-design-30.md)
+- [docs/level-design-31-50.md](docs/level-design-31-50.md)
 - [docs/puzzle-game-reference.md](docs/puzzle-game-reference.md)
 
 New level proposals should include:

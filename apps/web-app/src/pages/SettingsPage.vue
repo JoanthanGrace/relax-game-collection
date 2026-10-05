@@ -75,7 +75,7 @@ function previewSound() {
         <div class="about-box">
           <span>NiceTap</span>
           <span>无厘头反套路关卡小游戏</span>
-          <span>当前版本：MVP</span>
+          <span>当前版本：50 关开发版</span>
         </div>
       </section>
     </main>

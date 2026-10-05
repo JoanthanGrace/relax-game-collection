@@ -10,6 +10,8 @@ import {
   PawPrint,
   FlaskConical,
   Zap,
+  Coffee,
+  Wrench,
 } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 import { getAllLevels, getLevelsByChapter, getChapterCount } from '@nicetap/levels'
@@ -22,6 +24,8 @@ const themes = [
   { name: '脑洞热身', note: '先别急着相信眼前的一切', icon: PawPrint, color: 'coral' },
   { name: '反套路实验', note: '阿妹说，试试也不会怎样', icon: FlaskConical, color: 'blue' },
   { name: '离谱进行时', note: '认真你就输了，但也不一定', icon: Zap, color: 'mint' },
+  { name: '阿妹的摸鱼工坊', note: '工作可以等，队友不能丢', icon: Coffee, color: 'gold' },
+  { name: '离谱维修站', note: '工具阿妹带，靠谱靠咱俩', icon: Wrench, color: 'blue' },
 ]
 const chapters = computed(() =>
   Array.from({ length: getChapterCount() }, (_, i) => ({
@@ -338,6 +342,7 @@ onMounted(() => game.init())
   box-shadow: 0 1px 0 #c44b3c;
 }
 .chapter-nav {
+  overflow-x: auto;
   display: flex;
   gap: 10px;
   padding: 0 22px 20px;
@@ -345,7 +350,8 @@ onMounted(() => game.init())
 }
 .chapter-nav button {
   display: flex;
-  flex: 1;
+  flex: 0 0 auto;
+  min-width: 94px;
   align-items: center;
   justify-content: center;
   gap: 6px;
@@ -375,6 +381,7 @@ onMounted(() => game.init())
   --accent: #368b75;
   --tint: #e3f2e9;
 }
+.gold { --accent: #a98932; --tint: #f6edcf; }
 .chapter-heading {
   display: flex;
   gap: 12px;

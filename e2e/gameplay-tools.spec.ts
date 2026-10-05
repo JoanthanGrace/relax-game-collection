@@ -23,7 +23,7 @@ test('three daily skips persist and unlock only the next level', async ({ page }
   await page.getByRole('button', { name: '←' }).click()
   await expect(page.getByRole('button', { name: /点一下就行/ })).toContainText('已跳过')
   await expect(page.getByRole('button', { name: /找到按钮/ })).toContainText('已跳过')
-  await expect(page.locator('.level-card:disabled')).toHaveCount(26)
+  await expect(page.locator('.level-card:disabled')).toHaveCount(46)
   await page.getByRole('button', { name: /点一下就行/ }).click()
   const canvas = page.locator('canvas')
   await expect(canvas).toBeVisible()
@@ -68,7 +68,7 @@ test('daily quota resets on a new date but not on progress deletion', async ({ p
 })
 
 test('skipping the last level offers home rather than a nonexistent next level', async ({ page }) => {
-  await page.goto('/game/level-030')
+  await page.goto('/game/level-050')
   page.on('dialog', (dialog) => dialog.accept())
   await page.getByRole('button', { name: '跳过 · 3/3', exact: true }).click()
   await expect(page.getByRole('button', { name: '返回首页', exact: true })).toBeVisible()

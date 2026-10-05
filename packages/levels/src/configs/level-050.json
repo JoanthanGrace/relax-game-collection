@@ -1,0 +1,266 @@
+{
+  "id": "level-050",
+  "chapter": 5,
+  "order": 10,
+  "title": "阿妹的修理包",
+  "instruction": "先拧紧螺丝，再接插头，最后开机",
+  "tags": ["multi-step", "long-press", "drag-reveal"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "screw",
+      "type": "button",
+      "position": {
+        "x": 0.25,
+        "y": 0.3
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "按住拧紧",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "long-press",
+          "emits": "tight",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "id": "plug",
+      "type": "button",
+      "position": {
+        "x": 0.75,
+        "y": 0.3
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "插头",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderColor": "#b69640",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "plugged",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.75,
+              "y": 0.61
+            },
+            "radius": 0.09
+          }
+        }
+      ],
+      "interactive": false
+    },
+    {
+      "id": "socket",
+      "type": "button",
+      "position": {
+        "x": 0.75,
+        "y": 0.61
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "插座",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "power",
+      "type": "button",
+      "position": {
+        "x": 0.25,
+        "y": 0.61
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "开机",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "boot"
+        }
+      ],
+      "interactive": false
+    },
+    {
+      "id": "amei",
+      "type": "image",
+      "position": {
+        "x": 0.82,
+        "y": 0.925
+      },
+      "size": {
+        "x": 0.19,
+        "y": 0.126
+      },
+      "content": "art/amei-teammate-v1.png",
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹：工具我带了，靠谱就靠你了。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "tight"
+    },
+    {
+      "type": "event-fired",
+      "eventId": "plugged"
+    },
+    {
+      "type": "event-fired",
+      "eventId": "boot"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "修理包里的东西得按顺序上岗。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "先按住左上螺丝约一秒半，然后拖插头到右下插座。",
+      "showAfterFailCount": 3
+    },
+    {
+      "level": "strong",
+      "text": "接好后再点左下开机；阿妹会等你。",
+      "showAfterFailCount": 5
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：修好了！咱俩多少有点手艺。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["先拧紧，再接电，最后开机。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  },
+  "reactions": [
+    {
+      "trigger": "tight",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "螺丝拧好了，现在把插头接到插座。"
+        },
+        {
+          "type": "set-interactive",
+          "objectId": "plug",
+          "value": true
+        }
+      ]
+    },
+    {
+      "trigger": "plugged",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "插头接好了，最后点左下开机。"
+        },
+        {
+          "type": "set-interactive",
+          "objectId": "power",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

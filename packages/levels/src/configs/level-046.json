@@ -1,0 +1,203 @@
+{
+  "id": "level-046",
+  "chapter": 5,
+  "order": 6,
+  "title": "耳朵友好音量",
+  "instruction": "把音量调到「舒服」，不是静音",
+  "tags": ["drag-reveal"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "track",
+      "type": "shape",
+      "position": {
+        "x": 0.15,
+        "y": 0.47
+      },
+      "size": {
+        "x": 0.7,
+        "y": 0.02
+      },
+      "interactive": false,
+      "style": {
+        "fill": "#bccfd6"
+      }
+    },
+    {
+      "id": "knob",
+      "type": "button",
+      "position": {
+        "x": 0.75,
+        "y": 0.48
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "音量",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderColor": "#b69640",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "comfortable",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.3,
+              "y": 0.48
+            },
+            "radius": 0.09
+          },
+          "dragConstraint": {
+            "axis": "x"
+          }
+        }
+      ]
+    },
+    {
+      "id": "silent",
+      "type": "text",
+      "position": {
+        "x": 0.15,
+        "y": 0.6
+      },
+      "size": {
+        "x": 0.2,
+        "y": 0.1
+      },
+      "content": "静音",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "comfortable",
+      "type": "text",
+      "position": {
+        "x": 0.3,
+        "y": 0.6
+      },
+      "size": {
+        "x": 0.2,
+        "y": 0.1
+      },
+      "content": "舒服",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "loud",
+      "type": "text",
+      "position": {
+        "x": 0.85,
+        "y": 0.6
+      },
+      "size": {
+        "x": 0.2,
+        "y": 0.1
+      },
+      "content": "太吵",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "amei",
+      "type": "image",
+      "position": {
+        "x": 0.82,
+        "y": 0.925
+      },
+      "size": {
+        "x": 0.19,
+        "y": 0.126
+      },
+      "content": "art/amei-teammate-v1.png",
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "这关不用真的听声音，看刻度就行。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "comfortable"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "阿妹听得见就行，不用震醒隔壁。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "把音量按钮向左拖到「舒服」上方，别拖到最左边。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：这个音量，耳朵批准。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["最左边没声音，最右边有点过于热情。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

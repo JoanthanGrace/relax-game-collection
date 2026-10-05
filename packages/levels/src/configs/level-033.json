@@ -1,0 +1,141 @@
+{
+  "id": "level-033",
+  "chapter": 4,
+  "order": 3,
+  "title": "爪印也是签名",
+  "instruction": "替阿妹签收今天的零食",
+  "tags": ["long-press", "text-trick"],
+  "background": {
+    "type": "color",
+    "value": "#f1f6f8"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹的摸鱼工坊",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "form",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.23
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "签收人：王阿妹",
+      "interactive": false,
+      "style": {
+        "fontSize": 18,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "stamp",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.46
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "按爪签收",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#e9705c",
+        "borderColor": "#bf5749",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "long-press",
+          "emits": "signed",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "id": "amei",
+      "type": "image",
+      "position": {
+        "x": 0.82,
+        "y": 0.925
+      },
+      "size": {
+        "x": 0.19,
+        "y": 0.126
+      },
+      "content": "art/amei-teammate-v1.png",
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "本人不识字，但本人会按爪。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "signed"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "爪印要按稳，不能一碰就走。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "按住「按爪签收」约一秒半。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：法律我不懂，零食我认领。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["这张签收单需要一个稳稳的爪印。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

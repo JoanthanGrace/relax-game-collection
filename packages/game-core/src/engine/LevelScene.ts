@@ -9,6 +9,7 @@ import { ConditionEvaluator } from '../level/ConditionEvaluator'
 import { HintSystem, type HintCallbacks } from '../level/HintSystem'
 import { constrainDrag } from './dragBounds'
 import { AMEI_TEXTURE, createToyCloudScene } from './toyCloudScene'
+import { matchesSwipe } from './swipe'
 
 export interface LevelSceneCallbacks {
   onWin(): void
@@ -23,6 +24,7 @@ type SceneGameObject =
   | Phaser.GameObjects.Container
   | Phaser.GameObjects.Text
   | Phaser.GameObjects.Rectangle
+  | Phaser.GameObjects.Image
 
 interface GameObjectEntry {
   config: GameObjectConfig
@@ -67,6 +69,11 @@ export class LevelScene extends Phaser.Scene {
   preload() {
     if (this.levelConfig?.scriptId === 'amei-clouds' && !this.textures.exists(AMEI_TEXTURE)) {
       this.load.image(AMEI_TEXTURE, `${this.assetBaseUrl}art/amei-teammate-v1.png`)
+    }
+    for (const obj of this.levelConfig?.objects ?? []) {
+      if ((obj.type === 'image' || obj.type === 'sprite') && obj.content?.startsWith('art/') && !this.textures.exists(obj.content)) {
+        this.load.image(obj.content, `${this.assetBaseUrl}${obj.content}`)
+      }
     }
   }
 
@@ -190,6 +197,18 @@ export class LevelScene extends Phaser.Scene {
       case 'shape':
         gameObject = this.createShape(config, x, y, sceneW, sceneH)
         break
+      case 'image':
+      case 'sprite': {
+        const key = config.content ?? ''
+        const image = this.add.image(x, y, this.textures.exists(key) ? key : '__MISSING')
+        image.setDisplaySize((config.size?.x ?? 0.2) * sceneW, (config.size?.y ?? 0.1333) * sceneH)
+        if (config.interactive !== false && config.interactions?.length) {
+          image.setInteractive()
+          this.bindInteractions(image, config)
+        }
+        gameObject = image
+        break
+      }
       default:
         gameObject = this.createText(config, x, y)
     }
@@ -227,18 +246,29 @@ export class LevelScene extends Phaser.Scene {
       color: textColor,
       fontFamily: style.fontFamily ?? 'sans-serif',
       fontStyle: style.bold ? 'bold' : 'normal',
+      align: 'center',
+      wordWrap: config.size ? { width: Math.max(20, config.size.x * this.scale.width - padding * 2) } : undefined,
     })
     text.setOrigin(0.5)
 
-    const w = text.width + padding * 2
-    const h = text.height + padding * 2
+    const w = config.size ? config.size.x * this.scale.width : text.width + padding * 2
+    const h = Math.max((config.size?.y ?? 0) * this.scale.height, text.height + padding * 2)
 
     const bg = this.add.graphics()
+    if (style.shadow) {
+      bg.fillStyle(0x34454c, 0.16)
+      bg.fillRoundedRect(-w / 2, -h / 2 + 5, w, h, radius)
+    }
     const colorNum = Phaser.Display.Color.HexStringToColor(bgColor).color
     bg.fillStyle(colorNum)
     bg.fillRoundedRect(-w / 2, -h / 2, w, h, radius)
+    if (style.borderColor) {
+      bg.lineStyle(style.borderWidth ?? 2, Phaser.Display.Color.HexStringToColor(style.borderColor).color)
+      bg.strokeRoundedRect(-w / 2, -h / 2, w, h, radius)
+    }
 
-    const container = this.add.container(x, y, [bg, text])
+    const bounds = this.add.rectangle(0, style.shadow ? 2.5 : 0, w, h + (style.shadow ? 5 : 0)).setAlpha(0)
+    const container = this.add.container(x, y, [bounds, bg, text])
     container.setInteractive(
       new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h),
       Phaser.Geom.Rectangle.Contains,
@@ -249,6 +279,12 @@ export class LevelScene extends Phaser.Scene {
     }
 
     this.bindInteractions(container, config)
+    if (style.shadow && !config.interactions?.some((interaction) => interaction.type === 'drag')) {
+      container.on('pointerdown', () => { bg.y = 2; text.y = 2 })
+      const release = () => { bg.y = 0; text.y = 0 }
+      container.on('pointerup', release)
+      container.on('pointerout', release)
+    }
     return container
   }
 
@@ -260,6 +296,7 @@ export class LevelScene extends Phaser.Scene {
       fontFamily: style.fontFamily ?? 'sans-serif',
       fontStyle: style.bold ? 'bold' : 'normal',
       align: style.textAlign ?? 'center',
+      wordWrap: config.size ? { width: config.size.x * this.scale.width } : undefined,
     })
     text.setOrigin(0.5)
 
@@ -280,8 +317,10 @@ export class LevelScene extends Phaser.Scene {
   ) {
     const w = (config.size?.x ?? 0.1) * sceneW
     const h = (config.size?.y ?? 0.1) * sceneH
-    const rect = this.add.rectangle(x + w / 2, y + h / 2, w, h)
-    rect.setAlpha(0)
+    const fill = config.style?.fill
+    const rect = this.add.rectangle(x + w / 2, y + h / 2, w, h, fill ? Phaser.Display.Color.HexStringToColor(fill).color : 0)
+    if (!fill) rect.setAlpha(0)
+    if (config.style?.borderColor) rect.setStrokeStyle(config.style.borderWidth ?? 2, Phaser.Display.Color.HexStringToColor(config.style.borderColor).color)
     if (config.interactive !== false) {
       rect.setInteractive()
     }
@@ -473,24 +512,58 @@ export class LevelScene extends Phaser.Scene {
 
         case 'long-press': {
           const duration = interaction.duration ?? 1000
-          let pressTimer: ReturnType<typeof setTimeout> | null = null
+          let pressTimer: Phaser.Time.TimerEvent | null = null
           obj.on('pointerdown', () => {
-            pressTimer = setTimeout(() => {
+            pressTimer?.remove()
+            pressTimer = this.time.delayedCall(duration, () => {
               this.emitGameEvent(interaction.emits)
               pressTimer = null
-            }, duration)
+            })
           })
           obj.on('pointerup', () => {
             if (pressTimer) {
-              clearTimeout(pressTimer)
+              pressTimer.remove()
               pressTimer = null
             }
           })
           obj.on('pointerout', () => {
             if (pressTimer) {
-              clearTimeout(pressTimer)
+              pressTimer.remove()
               pressTimer = null
             }
+          })
+          break
+        }
+
+        case 'swipe': {
+          let start: { x: number; y: number; id: number } | null = null
+          obj.on('pointerdown', (pointer: Phaser.Input.Pointer) => { start = { x: pointer.x, y: pointer.y, id: pointer.id } })
+          const finish = (pointer: Phaser.Input.Pointer) => {
+            if (!start || pointer.id !== start.id) return
+            const dx = pointer.x - start.x
+            const dy = pointer.y - start.y
+            start = null
+            if (matchesSwipe(dx, dy, interaction.direction ?? 'any', (interaction.minDistance ?? 0.1) * Math.min(this.scale.width, this.scale.height))) {
+              this.emitGameEvent(interaction.emits)
+            }
+          }
+          this.input.on('pointerup', finish)
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.input.off('pointerup', finish))
+          break
+        }
+
+        case 'toggle': {
+          obj.setData('toggleState', false)
+          obj.on('pointerdown', () => {
+            const active = !obj.getData('toggleState')
+            obj.setData('toggleState', active)
+            let label: Phaser.GameObjects.Text | undefined
+            if (obj instanceof Phaser.GameObjects.Text) label = obj
+            else if (obj instanceof Phaser.GameObjects.Container) {
+              label = obj.list.find((child) => child instanceof Phaser.GameObjects.Text) as Phaser.GameObjects.Text | undefined
+            }
+            if (label) label.setText((config.content ?? '').replace(/关$/, active ? '开' : '关'))
+            this.emitGameEvent(interaction.emits)
           })
           break
         }
@@ -500,8 +573,11 @@ export class LevelScene extends Phaser.Scene {
           this.input.setDraggable(draggable)
 
           const constraint = interaction.dragConstraint?.axis
+          let targetReached = false
+          draggable.on('dragstart', () => { targetReached = false })
 
           const checkDragTarget = () => {
+            if (targetReached) return
             const { width, height } = this.scale
             if (interaction.dragTarget?.offScreen) {
               const threshold = 40
@@ -512,6 +588,7 @@ export class LevelScene extends Phaser.Scene {
                 bounds.left <= 0.5 || bounds.right >= width - 0.5 ||
                 bounds.top <= 0.5 || bounds.bottom >= height - 0.5
               ) {
+                targetReached = true
                 this.emitGameEvent(interaction.emits)
               }
             } else if (interaction.dragTarget?.position) {
@@ -520,6 +597,7 @@ export class LevelScene extends Phaser.Scene {
               const dx = draggable.x - tp.x * width
               const dy = draggable.y - tp.y * height
               if (Math.sqrt(dx * dx + dy * dy) <= radius) {
+                targetReached = true
                 this.emitGameEvent(interaction.emits)
               }
             }
@@ -818,6 +896,8 @@ export class LevelScene extends Phaser.Scene {
         return obj.alpha
       case 'rotation':
         return obj.rotation
+      case 'toggleState':
+        return obj.getData('toggleState') ?? false
       default:
         return undefined
     }

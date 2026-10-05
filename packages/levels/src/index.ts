@@ -37,6 +37,26 @@ import level027 from './configs/level-027.json'
 import level028 from './configs/level-028.json'
 import level029 from './configs/level-029.json'
 import level030 from './configs/level-030.json'
+import level031 from './configs/level-031.json'
+import level032 from './configs/level-032.json'
+import level033 from './configs/level-033.json'
+import level034 from './configs/level-034.json'
+import level035 from './configs/level-035.json'
+import level036 from './configs/level-036.json'
+import level037 from './configs/level-037.json'
+import level038 from './configs/level-038.json'
+import level039 from './configs/level-039.json'
+import level040 from './configs/level-040.json'
+import level041 from './configs/level-041.json'
+import level042 from './configs/level-042.json'
+import level043 from './configs/level-043.json'
+import level044 from './configs/level-044.json'
+import level045 from './configs/level-045.json'
+import level046 from './configs/level-046.json'
+import level047 from './configs/level-047.json'
+import level048 from './configs/level-048.json'
+import level049 from './configs/level-049.json'
+import level050 from './configs/level-050.json'
 
 const levelRegistry: Map<string, LevelConfig> = new Map()
 
@@ -75,6 +95,26 @@ const ALL_CONFIGS: LevelConfig[] = [
   level028 as unknown as LevelConfig,
   level029 as unknown as LevelConfig,
   level030 as unknown as LevelConfig,
+  level031 as unknown as LevelConfig,
+  level032 as unknown as LevelConfig,
+  level033 as unknown as LevelConfig,
+  level034 as unknown as LevelConfig,
+  level035 as unknown as LevelConfig,
+  level036 as unknown as LevelConfig,
+  level037 as unknown as LevelConfig,
+  level038 as unknown as LevelConfig,
+  level039 as unknown as LevelConfig,
+  level040 as unknown as LevelConfig,
+  level041 as unknown as LevelConfig,
+  level042 as unknown as LevelConfig,
+  level043 as unknown as LevelConfig,
+  level044 as unknown as LevelConfig,
+  level045 as unknown as LevelConfig,
+  level046 as unknown as LevelConfig,
+  level047 as unknown as LevelConfig,
+  level048 as unknown as LevelConfig,
+  level049 as unknown as LevelConfig,
+  level050 as unknown as LevelConfig,
 ]
 
 for (const config of ALL_CONFIGS) {

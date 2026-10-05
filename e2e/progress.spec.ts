@@ -28,7 +28,7 @@ test.describe('Progress and settings flows', () => {
   test('shows the initial locked progression state', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByText('已通关 0 / 30')).toBeVisible()
+    await expect(page.getByText('已通关 0 / 50')).toBeVisible()
 
     const firstLevel = page.getByRole('button', { name: /点一下就行/ })
     await expect(firstLevel).toBeEnabled()
@@ -65,7 +65,7 @@ test.describe('Progress and settings flows', () => {
     await seedProgress(page, ['level-001'])
     await page.goto('/')
 
-    await expect(page.getByText('已通关 1 / 30')).toBeVisible()
+    await expect(page.getByText('已通关 1 / 50')).toBeVisible()
     await expect(page.getByRole('button', { name: /点一下就行/ })).toContainText('已通关')
 
     const secondLevel = page.getByRole('button', { name: /找到按钮/ })
@@ -77,7 +77,7 @@ test.describe('Progress and settings flows', () => {
 
     await page.goto('/')
     await page.reload()
-    await expect(page.getByText('已通关 1 / 30')).toBeVisible()
+    await expect(page.getByText('已通关 1 / 50')).toBeVisible()
     await expect(page.getByRole('button', { name: /找到按钮/ })).toContainText('当前关')
   })
 
@@ -85,17 +85,17 @@ test.describe('Progress and settings flows', () => {
     await seedProgress(page, ['level-001', 'level-002'])
     await page.goto('/settings')
 
-    await expect(page.getByText('已通关 2 / 30 关。')).toBeVisible()
+    await expect(page.getByText('已通关 2 / 50 关。')).toBeVisible()
 
     page.once('dialog', async (dialog) => {
       await dialog.accept()
     })
     await page.getByRole('button', { name: '清除' }).click()
 
-    await expect(page.getByText('已通关 0 / 30 关。')).toBeVisible()
+    await expect(page.getByText('已通关 0 / 50 关。')).toBeVisible()
 
     await page.getByRole('button', { name: '←' }).click()
-    await expect(page.getByText('已通关 0 / 30')).toBeVisible()
+    await expect(page.getByText('已通关 0 / 50')).toBeVisible()
     await expect(page.getByRole('button', { name: /点一下就行/ })).toContainText('当前关')
   })
 })

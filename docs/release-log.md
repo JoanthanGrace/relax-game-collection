@@ -2,6 +2,23 @@
 
 This file records public releases, deployment notes, verification results, and follow-up risks for NiceTap.
 
+## Unreleased - 50-level expansion - 2026-10-06
+
+- Branch: `feat/50-levels`, based on `feat/amei-toybox`. Not merged or deployed; the public 30-level MVP is unchanged.
+- Added levels 031-050: Amei's Slacking Workshop and Absurd Repair Station. Total: 50 levels across five chapters, ten per chapter.
+- Mixed drag targets, sequences, long presses, waiting, directional swipes, toggle states, and rapid clicks. Difficulty alternates rather than strictly increasing; level 050 is a gated three-step repair puzzle.
+- Added deployment-base-aware configuration image loading, fixed-size tactile controls and wrapping, visible toggle states, scene-owned long-press timers, and directional swipe validation.
+- Drag goals emit once per gesture so drag-end does not duplicate sequence events. Existing cloud level and edge-removal regression tests remain passing.
+- Old progress storage remains compatible. A completed 30-level save continues at level 031. Daily skip and solved/skipped distinction are retained; no advertising provider or paid services added.
+- No new runtime artwork downloads: reuse the 203.4 KB mascot. Total public assets remain 924.7 KB. The existing 464.6 KB install-icon advisory and large Phaser bundle warning remain.
+- Added `docs/level-design-31-50.md` with all twenty solutions, estimated difficulty/time, layout limits, asset budget, and remaining visual work. These are playable 2D puzzles, not twenty newly illustrated or real-time 3D scenes.
+- `pnpm run ci`: passed, including 50 configuration checks with zero warnings, asset budgets, 293 source unit tests, and workspace type checks.
+- `pnpm test:e2e`: 59 passed. All 20 new levels complete through actual pointer input at 320px and 390px widths; additional checks cover save migration and recovery from wrong recipe/toggle choices.
+- `pnpm build:pages`: passed; PWA precache includes 21 entries. Build output retains the GitHub Pages fallback file.
+- Inspected homepage screenshots at 320 x 740, 390 x 844 and 1280 x 800, plus representative new levels. Browser checks show no horizontal homepage overflow; automated tests verify canvas containment.
+- Browser tests use a dedicated port 3100, separate from the owner's local preview at 3002. CI now runs the static build and Chromium E2E tests as well as source checks; remote workflow results still require confirmation after push.
+- Pending before public release: owner play feedback, real-device Safari/WeChat/touch and audible-sound checks, then merge and deployment approval. Daily quota remains browser-local and can be bypassed by storage/device changes.
+
 ## Unreleased - Amei toy-box prototype - 2026-10-05
 
 - Branch: `feat/amei-toybox`, based on the verified `feat/gameplay-polish` changes. Production is unchanged.

@@ -1,0 +1,221 @@
+{
+  "id": "level-049",
+  "chapter": 5,
+  "order": 9,
+  "title": "倒数开机",
+  "instruction": "按三、二、一的顺序启动",
+  "tags": ["sequence-trick"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "one",
+      "type": "button",
+      "position": {
+        "x": 0.2,
+        "y": 0.43
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "一",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "one"
+        }
+      ]
+    },
+    {
+      "id": "two",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.43
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "二",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderColor": "#b69640",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "two"
+        }
+      ]
+    },
+    {
+      "id": "three",
+      "type": "button",
+      "position": {
+        "x": 0.8,
+        "y": 0.43
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "三",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "three"
+        }
+      ]
+    },
+    {
+      "id": "countdown",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.23
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "倒数：三 → 二 → 一",
+      "interactive": false,
+      "style": {
+        "fontSize": 18,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "开机之前，先让数字倒着走。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "sequence",
+      "eventSequence": ["three", "two", "one"]
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "倒数从最大的那个开始。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "先点右边的三，再点中间的二，最后点左边的一。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：倒数成功，今天不倒霉。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["顺序错了就从三重新开始，不用退出。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  },
+  "reactions": [
+    {
+      "trigger": "three",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "三！接着二。"
+        }
+      ]
+    },
+    {
+      "trigger": "two",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "二！顺序错了就重新从三开始。"
+        }
+      ]
+    },
+    {
+      "trigger": "one",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "一！是不是按三、二、一来的？"
+        }
+      ]
+    }
+  ]
+}

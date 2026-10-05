@@ -1,0 +1,165 @@
+{
+  "id": "level-047",
+  "chapter": 5,
+  "order": 7,
+  "title": "圆有圆的家",
+  "instruction": "把圆形零件送回自己的家",
+  "tags": ["drag-reveal"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "round",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.32
+      },
+      "size": {
+        "x": 0.2,
+        "y": 0.13
+      },
+      "content": "圆",
+      "style": {
+        "fontSize": 24,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderRadius": 39,
+        "padding": 10,
+        "shadow": true
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "round-home",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.75,
+              "y": 0.65
+            },
+            "radius": 0.09
+          }
+        }
+      ]
+    },
+    {
+      "id": "square-home",
+      "type": "button",
+      "position": {
+        "x": 0.25,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "方的家",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "round-home",
+      "type": "button",
+      "position": {
+        "x": 0.75,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "圆的家",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "这是收纳，不是削足适履。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "round-home"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "看标签，不用和方框较劲。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "把上面的圆拖进右侧「圆的家」。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["圆回家了，方框也松了一口气。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["圆今天不想住方的家。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "id": "level-043",
+  "chapter": 5,
+  "order": 3,
+  "title": "螺丝要稳稳地松",
+  "instruction": "按稳螺丝，把它松开",
+  "tags": ["long-press", "fake-button"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "screw",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.39
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "螺丝",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "long-press",
+          "emits": "loose",
+          "duration": 1600
+        }
+      ]
+    },
+    {
+      "id": "hammer",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "用锤子",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#e9705c",
+        "borderColor": "#bf5749",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "hammer"
+        }
+      ]
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "这颗螺丝只接受稳稳的沟通。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "loose"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "锤子看起来厉害，但太粗鲁了。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "按住螺丝约两秒，不用点锤子。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：温柔维修，锤子先放假。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["锤子：这锅我不背。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  },
+  "reactions": [
+    {
+      "trigger": "hammer",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "锤子被阿妹收起来了。试试按稳螺丝。"
+        }
+      ]
+    }
+  ]
+}

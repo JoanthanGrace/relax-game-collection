@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - chore/mobile-test-baseline
+      - feat/50-levels
   pull_request:
 
 jobs:
@@ -30,3 +31,12 @@ jobs:
 
       - name: Run CI checks
         run: pnpm run ci
+
+      - name: Build static release
+        run: pnpm build:pages
+
+      - name: Install test browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run browser regression tests
+        run: pnpm test:e2e

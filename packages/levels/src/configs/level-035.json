@@ -1,0 +1,136 @@
+{
+  "id": "level-035",
+  "chapter": 4,
+  "order": 5,
+  "title": "别叫醒摸鱼搭子",
+  "instruction": "让阿妹安静眯三秒",
+  "tags": ["wait", "fake-button"],
+  "background": {
+    "type": "color",
+    "value": "#f1f6f8"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹的摸鱼工坊",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "sleeping",
+      "type": "image",
+      "position": {
+        "x": 0.5,
+        "y": 0.39
+      },
+      "size": {
+        "x": 0.35,
+        "y": 0.233
+      },
+      "content": "art/amei-teammate-v1.png",
+      "interactive": false,
+      "interactions": [
+        {
+          "type": "wait",
+          "emits": "rest-done",
+          "waitDuration": 3000
+        }
+      ]
+    },
+    {
+      "id": "wake",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.64
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "叫醒阿妹",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#e9705c",
+        "borderColor": "#bf5749",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "wake"
+        }
+      ]
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "三秒钟，什么也不用做。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "rest-done"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "按钮不一定非得按。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "三秒内什么都不点，让阿妹自己醒来。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：没睡，只是在加载精神。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["这位队友刚闭眼，就被你喊上线了。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  },
+  "failConditions": [
+    {
+      "type": "event-count",
+      "eventId": "wake",
+      "count": 1
+    }
+  ]
+}

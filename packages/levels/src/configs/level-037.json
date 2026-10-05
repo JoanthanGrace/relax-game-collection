@@ -1,0 +1,210 @@
+{
+  "id": "level-037",
+  "chapter": 4,
+  "order": 7,
+  "title": "四舍五入现场版",
+  "instruction": "把四送出门，把五送进门",
+  "tags": ["text-trick", "drag-reveal"],
+  "background": {
+    "type": "color",
+    "value": "#f1f6f8"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹的摸鱼工坊",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "four",
+      "type": "button",
+      "position": {
+        "x": 0.32,
+        "y": 0.34
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "4",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "four-out",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.2,
+              "y": 0.65
+            },
+            "radius": 0.09
+          }
+        }
+      ]
+    },
+    {
+      "id": "five",
+      "type": "button",
+      "position": {
+        "x": 0.68,
+        "y": 0.34
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "5",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderColor": "#b69640",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "five-in",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.8,
+              "y": 0.65
+            },
+            "radius": 0.09
+          }
+        }
+      ]
+    },
+    {
+      "id": "out",
+      "type": "button",
+      "position": {
+        "x": 0.2,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "出口",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#e9705c",
+        "borderColor": "#bf5749",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "in",
+      "type": "button",
+      "position": {
+        "x": 0.8,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "入口",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹：我只负责看门，不负责算账。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "four-out"
+    },
+    {
+      "type": "event-fired",
+      "eventId": "five-in"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "这次不算数，是搬家。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "把4拖到左侧出口，把5拖到右侧入口。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["数学老师没想到还能这么演。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["四舍五入，先看清是哪扇门。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

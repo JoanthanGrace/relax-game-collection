@@ -1,0 +1,201 @@
+{
+  "id": "level-038",
+  "chapter": 4,
+  "order": 8,
+  "title": "百分之百不靠谱",
+  "instruction": "找到真正的完成按钮",
+  "tags": ["wait", "hidden-target"],
+  "background": {
+    "type": "color",
+    "value": "#f1f6f8"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹的摸鱼工坊",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "progress",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.32
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "100%",
+      "interactive": false,
+      "style": {
+        "fontSize": 44,
+        "color": "#425a64"
+      },
+      "interactions": [
+        {
+          "type": "wait",
+          "emits": "ready",
+          "waitDuration": 2200
+        }
+      ]
+    },
+    {
+      "id": "fake",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.58
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "立即完成",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#c5d2d8",
+        "borderColor": "#94a6ae",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "fake"
+        }
+      ]
+    },
+    {
+      "id": "real",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.58
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "真的完成",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "click",
+          "emits": "done"
+        }
+      ],
+      "visible": false,
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "它说100%，但它没说哪件事。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "done"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "100%不一定意味着结束。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "等两秒，假的按钮会换成真的按钮。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：这进度条的嘴，比我还硬。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["急着点，只是给假进度条捧场。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  },
+  "reactions": [
+    {
+      "trigger": "fake",
+      "once": false,
+      "actions": [
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "这只是一个很自信的假按钮。"
+        }
+      ]
+    },
+    {
+      "trigger": "ready",
+      "actions": [
+        {
+          "type": "hide",
+          "objectId": "fake"
+        },
+        {
+          "type": "show",
+          "objectId": "real"
+        },
+        {
+          "type": "set-interactive",
+          "objectId": "real",
+          "value": true
+        },
+        {
+          "type": "set-text",
+          "objectId": "feedback",
+          "value": "真按钮来了，这次可以点。"
+        }
+      ]
+    }
+  ]
+}

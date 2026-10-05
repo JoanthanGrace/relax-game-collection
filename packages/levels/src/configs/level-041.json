@@ -1,0 +1,188 @@
+{
+  "id": "level-041",
+  "chapter": 5,
+  "order": 1,
+  "title": "开关也想休息",
+  "instruction": "只打开A和C，让B休息",
+  "tags": ["multi-step", "ui-trick"],
+  "background": {
+    "type": "color",
+    "value": "#f5f7f5"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "离谱维修站",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "switch-a",
+      "type": "button",
+      "position": {
+        "x": 0.2,
+        "y": 0.45
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "A · 关",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "toggle",
+          "emits": "switch-a-changed"
+        }
+      ]
+    },
+    {
+      "id": "switch-b",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "B · 关",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#efc565",
+        "borderColor": "#b69640",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "toggle",
+          "emits": "switch-b-changed"
+        }
+      ]
+    },
+    {
+      "id": "switch-c",
+      "type": "button",
+      "position": {
+        "x": 0.8,
+        "y": 0.45
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "C · 关",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#5495b4",
+        "borderColor": "#3a728b",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [
+        {
+          "type": "toggle",
+          "emits": "switch-c-changed"
+        }
+      ]
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "维修目标：A开，B关，C开。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "object-state",
+      "objectId": "switch-a",
+      "property": {
+        "key": "toggleState",
+        "value": true
+      }
+    },
+    {
+      "type": "object-state",
+      "objectId": "switch-b",
+      "property": {
+        "key": "toggleState",
+        "value": false
+      }
+    },
+    {
+      "type": "object-state",
+      "objectId": "switch-c",
+      "property": {
+        "key": "toggleState",
+        "value": true
+      }
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "不是全开才叫修好。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "让A和C显示「开」，B保持「关」。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：B今天轮休，有排班表的。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["开错了也能再点一次关回去。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "id": "level-036",
+  "chapter": 4,
+  "order": 6,
+  "title": "阿妹替你打卡",
+  "instruction": "请热心队友去打卡机报到",
+  "tags": ["drag-reveal", "ui-trick"],
+  "background": {
+    "type": "color",
+    "value": "#f1f6f8"
+  },
+  "objects": [
+    {
+      "id": "chapter",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.1
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹的摸鱼工坊",
+      "interactive": false,
+      "style": {
+        "fontSize": 14,
+        "color": "#425a64"
+      }
+    },
+    {
+      "id": "helper",
+      "type": "image",
+      "position": {
+        "x": 0.5,
+        "y": 0.36
+      },
+      "size": {
+        "x": 0.3,
+        "y": 0.2
+      },
+      "content": "art/amei-teammate-v1.png",
+      "interactive": true,
+      "interactions": [
+        {
+          "type": "drag",
+          "emits": "checked-in",
+          "dragBounds": "screen",
+          "dragTarget": {
+            "position": {
+              "x": 0.5,
+              "y": 0.65
+            },
+            "radius": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "machine",
+      "type": "button",
+      "position": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "size": {
+        "x": 0.29,
+        "y": 0.11
+      },
+      "content": "打卡机",
+      "style": {
+        "fontSize": 20,
+        "color": "#263b43",
+        "backgroundColor": "#61a78e",
+        "borderColor": "#407b68",
+        "borderWidth": 2,
+        "borderRadius": 8,
+        "padding": 10,
+        "shadow": true,
+        "bold": true
+      },
+      "interactions": [],
+      "interactive": false
+    },
+    {
+      "id": "feedback",
+      "type": "text",
+      "position": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "size": {
+        "x": 0.86,
+        "y": 0.1
+      },
+      "content": "阿妹：这个忙我帮定了。",
+      "interactive": false,
+      "style": {
+        "fontSize": 16,
+        "color": "#425a64"
+      }
+    }
+  ],
+  "winConditions": [
+    {
+      "type": "event-fired",
+      "eventId": "checked-in"
+    }
+  ],
+  "hints": [
+    {
+      "level": "weak",
+      "text": "队友不只是摆在那儿看的。",
+      "showAfterFailCount": 1
+    },
+    {
+      "level": "medium",
+      "text": "把阿妹拖到下面的打卡机上。",
+      "showAfterFailCount": 3
+    }
+  ],
+  "passFeedback": {
+    "texts": ["阿妹：代打卡服务，报酬两块饼干。"],
+    "animation": "confetti",
+    "sfx": "pass-cheerful"
+  },
+  "failFeedback": {
+    "texts": ["机器在等队友，不是在等手指。"],
+    "animation": "shake",
+    "sfx": "fail-buzz"
+  }
+}

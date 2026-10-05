@@ -9,7 +9,7 @@ test('Amei home keeps all levels accessible without horizontal overflow', async 
   expect(
     await mascot.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
   ).toBe(true)
-  await expect(page.locator('.level-card')).toHaveCount(30)
+  await expect(page.locator('.level-card')).toHaveCount(50)
   expect(
     await page.evaluate(
       () =>
