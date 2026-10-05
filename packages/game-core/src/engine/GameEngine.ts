@@ -6,10 +6,12 @@ export interface GameEngineConfig {
   parent: string | HTMLElement
   width: number
   height: number
+  assetBaseUrl?: string
 }
 
 export interface GameEngineCallbacks {
   onWin(): void
+  onWinPending?(): void
   onFail(): void
   onEvent?(eventId: string): void
   onHint?(text: string, highlightObjectId?: string): void
@@ -72,6 +74,7 @@ export class GameEngine {
 
     const sceneCallbacks: LevelSceneCallbacks = {
       onWin: () => this.callbacks!.onWin(),
+      onWinPending: () => this.callbacks!.onWinPending?.(),
       onFail: () => this.callbacks!.onFail(),
       onEvent: (eventId) => this.callbacks!.onEvent?.(eventId),
       onHint: (text, highlightObjectId) => this.callbacks!.onHint?.(text, highlightObjectId),
@@ -80,9 +83,9 @@ export class GameEngine {
 
     const scene = this.game.scene.getScene('LevelScene')
     if (scene && scene.scene.isActive()) {
-      scene.scene.restart({ config, callbacks: sceneCallbacks })
+      scene.scene.restart({ config, callbacks: sceneCallbacks, assetBaseUrl: this.config.assetBaseUrl })
     } else {
-      this.game.scene.start('LevelScene', { config, callbacks: sceneCallbacks })
+      this.game.scene.start('LevelScene', { config, callbacks: sceneCallbacks, assetBaseUrl: this.config.assetBaseUrl })
     }
   }
 

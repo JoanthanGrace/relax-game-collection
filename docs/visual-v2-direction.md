@@ -1,6 +1,10 @@
 # Visual Direction: Dog's Absurd Toy Box
 
-Status: proposed direction, not a shipped visual redesign.
+Status: first home-screen and level-008 prototype implemented on `feat/amei-toybox`; not yet deployed.
+
+## Confirmed character
+
+The dog is named Wang Amei (王阿妹). Amei is a chaotic, affectionate teammate, not a sarcastic judge. Jokes should share the player's misfortune and celebrate joint success. Amei can cause small accidents, volunteer questionable help, and take a comically oversized share of the credit, but should never humiliate the player.
 
 ## Creative ownership
 
@@ -32,8 +36,10 @@ Keep Vue, Pinia, TypeScript, and Phaser for the existing 2D game. Use real bitma
 
 Existing level-production rules continue to govern layout, asset budgets, and progression. This direction supersedes the old visual-system requirement that every background must be plain white. The old document is historical MVP guidance, not the final target.
 
-## Open choices for the owner
+## First prototype
 
-- Does the dog have a name that should be used in the game?
-- Should its personality lean toward a smug referee or a chaotic teammate?
-- Which theme is most exciting for the first redesigned chapter?
+- Home keeps all 30 levels and existing progression, with themed chapter navigation and tactile level tokens.
+- Level 008 keeps its original drag-to-edge win event and adds a toy cloud, sun, and Amei's dialogue and celebration.
+- The mascot is an AI-generated transparent bitmap derived from the established dog icon, prepared as a 384px shared PNG. The icon itself is unchanged.
+- This is a 2D Phaser scene using a 3D-style rendered mascot, not a real-time 3D level.
+- Later chapters currently receive visual labels only. Their existing puzzles are not being misrepresented as new themed content.

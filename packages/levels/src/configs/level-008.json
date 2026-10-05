@@ -3,6 +3,7 @@
   "chapter": 1,
   "order": 8,
   "title": "拨云见日",
+  "scriptId": "amei-clouds",
   "instruction": "让阳光照进来",
   "tags": ["drag-reveal"],
   "background": { "type": "gradient", "value": ["#e3f2fd", "#ffffff"] },
@@ -59,7 +60,7 @@
     { "level": "strong", "text": "把云朵拖走吧", "showAfterFailCount": 5, "highlightObjectId": "cloud" }
   ],
   "passFeedback": {
-    "texts": ["晴空万里！", "阳光普照"],
+    "texts": ["阿妹：我就说咱俩能行！", "阳光归你，功劳咱俩平分！"],
     "animation": "confetti",
     "sfx": "pass-relieved"
   },

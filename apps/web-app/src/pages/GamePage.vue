@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { Lightbulb, SkipForward } from '@lucide/vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useGameStore } from '@/stores/gameStore'
@@ -13,11 +13,14 @@ const game = useGameStore()
 const settings = useSettingsStore()
 const gameContainer = ref<InstanceType<typeof GameContainer>>()
 const skipNotice = ref('')
+const winPending = ref(false)
+watch(() => game.levelRevision, () => { winPending.value = false })
 let quotaTimer: ReturnType<typeof setInterval> | undefined
 onMounted(() => { quotaTimer = setInterval(game.refreshSkipQuota, 30000) })
 onUnmounted(() => clearInterval(quotaTimer))
 
 function handleSkip() {
+  if (winPending.value) return
   skipNotice.value = ''
   if (!window.confirm('跳过当前关卡？会消耗今天 1 次免费机会，之后仍可回来挑战。')) return
   if (game.skipLevel()) gameContainer.value?.pause()
@@ -107,6 +110,7 @@ function getRandomFeedback(texts?: string[]): string {
         :level="game.currentLevel"
         :revision="game.levelRevision"
         @win="handleWin"
+        @win-pending="winPending = true"
         @fail="handleFail"
         @event="handleEvent"
         @hint="handleHint"
@@ -163,10 +167,10 @@ function getRandomFeedback(texts?: string[]): string {
       </Transition>
     </main>
     <footer v-if="game.status === 'playing' || game.status === 'fail'" class="game-tools">
-      <button v-if="game.status === 'playing'" :disabled="!game.currentLevel?.hints?.length" title="给我一点提示" @click="gameContainer?.requestHint()">
+      <button v-if="game.status === 'playing'" :disabled="winPending || !game.currentLevel?.hints?.length" title="给我一点提示" @click="gameContainer?.requestHint()">
         <Lightbulb :size="18" /> 提示
       </button>
-      <button :disabled="!game.remainingSkips || !!(game.currentLevel && game.isLevelCompleted(game.currentLevel.id))" :title="game.remainingSkips ? '跳过当前关卡' : '今日免费次数已用完，广告解锁暂未开放'" @click="handleSkip">
+      <button :disabled="winPending || !game.remainingSkips || !!(game.currentLevel && game.isLevelCompleted(game.currentLevel.id))" :title="game.remainingSkips ? '跳过当前关卡' : '今日免费次数已用完，广告解锁暂未开放'" @click="handleSkip">
         <SkipForward :size="18" /> 跳过 · {{ game.remainingSkips }}/3
       </button>
       <p v-if="!game.remainingSkips || skipNotice" role="status">{{ skipNotice || '今日免费次数已用完，广告解锁暂未开放' }}</p>

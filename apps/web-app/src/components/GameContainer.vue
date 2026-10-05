@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   win: []
+  'win-pending': []
   fail: []
   event: [eventId: string]
   hint: [text: string, highlightObjectId?: string]
@@ -28,6 +29,9 @@ onMounted(() => {
   if (!containerRef.value) return
 
   const callbacks: GameEngineCallbacks = {
+    onWinPending() {
+      emit('win-pending')
+    },
     onWin() {
       emit('win')
     },
@@ -49,6 +53,7 @@ onMounted(() => {
     parent: containerRef.value,
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
+    assetBaseUrl: import.meta.env.BASE_URL,
   })
   engine.start(callbacks)
   resizeObserver = new ResizeObserver(() => engine?.refreshSize())

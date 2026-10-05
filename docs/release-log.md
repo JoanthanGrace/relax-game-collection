@@ -2,6 +2,21 @@
 
 This file records public releases, deployment notes, verification results, and follow-up risks for NiceTap.
 
+## Unreleased - Amei toy-box prototype - 2026-10-05
+
+- Branch: `feat/amei-toybox`, based on the verified `feat/gameplay-polish` changes. Production is unchanged.
+- Confirmed Wang Amei as the player's chaotic teammate.
+- Added an independently generated transparent mascot asset. Existing install icons are unchanged.
+- Replaced the text-list home with a mobile-first chapter map, while retaining every level's saved state, locks, and replay entry.
+- Refined level 008 as a 2D toy-weather scene with a draggable cloud, visible sun, Amei dialogue, and a brief joint celebration.
+- Shared mascot asset is loaded with the deployment base path, supports PWA PNG precaching, and stays within the per-level 300 KB soft budget.
+- Reduced-motion preference disables optional scene motion and home entrance motion.
+- Pending: owner feedback on the visual direction, real-device touch/audio checks, and formal deployment. The other 29 levels are not reskinned in this prototype.
+- `pnpm run ci`: passed; 209 source tests, type checks, 30 level checks, and asset budgets. The new mascot is 203.4 KB and total public assets are 924.7 KB.
+- `pnpm test:e2e`: 17 passed, including 320px mobile layout, loaded mascot image, chapter navigation, toy-scene hints and drag completion, and skip disabled during celebration.
+- `pnpm build:pages`: passed. The existing Phaser bundle-size warning remains; the mascot PNG is included in PWA precaching.
+- Playwright screenshots inspected at 320 x 740, 390 x 844, and 1280 x 800, including the cloud moved to the edge and Amei's celebration. No script errors observed in those runs.
+
 ## Unreleased - Gameplay polish - 2026-10-05
 
 ### Changes

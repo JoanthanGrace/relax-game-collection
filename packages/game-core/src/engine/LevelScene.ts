@@ -8,9 +8,11 @@ import type {
 import { ConditionEvaluator } from '../level/ConditionEvaluator'
 import { HintSystem, type HintCallbacks } from '../level/HintSystem'
 import { constrainDrag } from './dragBounds'
+import { AMEI_TEXTURE, createToyCloudScene } from './toyCloudScene'
 
 export interface LevelSceneCallbacks {
   onWin(): void
+  onWinPending?(): void
   onFail(): void
   onEvent(eventId: string): void
   onHint?(text: string, highlightObjectId?: string): void
@@ -38,16 +40,20 @@ export class LevelScene extends Phaser.Scene {
   private hintSystem: HintSystem | null = null
   private wrongActionCount = 0
   private behaviorTimers: Phaser.Time.TimerEvent[] = []
+  private assetBaseUrl = '/'
+  private celebrateToyScene: (() => void) | null = null
 
   constructor() {
     super({ key: 'LevelScene', active: false })
   }
 
-  init(data?: { config: LevelConfig; callbacks: LevelSceneCallbacks }) {
+  init(data?: { config: LevelConfig; callbacks: LevelSceneCallbacks; assetBaseUrl?: string }) {
     if (!data?.config) return
 
     this.levelConfig = data.config
     this.callbacks = data.callbacks
+    this.assetBaseUrl = data.assetBaseUrl ?? '/'
+    this.celebrateToyScene = null
     this.objects.clear()
     this.resolved = false
     this.waitTimers = []
@@ -58,16 +64,32 @@ export class LevelScene extends Phaser.Scene {
     this.initHintSystem(data.config.hints)
   }
 
+  preload() {
+    if (this.levelConfig?.scriptId === 'amei-clouds' && !this.textures.exists(AMEI_TEXTURE)) {
+      this.load.image(AMEI_TEXTURE, `${this.assetBaseUrl}art/amei-teammate-v1.png`)
+    }
+  }
+
   create() {
     if (!this.levelConfig) return
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.hintSystem?.reset())
 
     const { width, height } = this.scale
 
-    this.applyBackground(width, height)
-
-    for (const objConfig of this.levelConfig.objects) {
-      this.createGameObject(objConfig, width, height)
+    if (this.levelConfig.scriptId === 'amei-clouds' && this.textures.exists(AMEI_TEXTURE)) {
+      const toy = createToyCloudScene(this)
+      this.celebrateToyScene = toy.celebrate
+      for (const config of this.levelConfig.objects) {
+        const obj = toy.objects[config.id as keyof typeof toy.objects]
+        if (!obj) continue
+        this.objects.set(config.id, { config, gameObject: obj })
+        this.bindInteractions(obj, config)
+      }
+    } else {
+      this.applyBackground(width, height)
+      for (const objConfig of this.levelConfig.objects) {
+        this.createGameObject(objConfig, width, height)
+      }
     }
 
     this.applyZIndex()
@@ -755,7 +777,13 @@ export class LevelScene extends Phaser.Scene {
     const winLogic = this.levelConfig.winLogic ?? 'and'
     if (this.evaluator.evaluateAll(winConditions, winLogic)) {
       this.resolved = true
-      this.callbacks.onWin()
+      if (this.celebrateToyScene) {
+        this.callbacks.onWinPending?.()
+        this.celebrateToyScene()
+        this.time.delayedCall(850, () => this.callbacks.onWin())
+      } else {
+        this.callbacks.onWin()
+      }
       return
     }
 
