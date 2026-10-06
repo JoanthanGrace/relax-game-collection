@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import type { LevelConfig } from '@nicetap/shared'
-import { GameEngine, type GameEngineCallbacks } from '@nicetap/game-core'
-
-const props = defineProps<{
-  level: LevelConfig | null
-  revision: number
-}>()
-
-const emit = defineEmits<{
+import PhaserGameContainer from './PhaserGameContainer.vue'
+const ToyWarehouse = defineAsyncComponent(() => import('./ToyWarehouse.vue'))
+defineProps<{ level: LevelConfig | null; revision: number }>()
+defineEmits<{
   win: []
   'win-pending': []
   fail: []
@@ -16,88 +12,27 @@ const emit = defineEmits<{
   hint: [text: string, highlightObjectId?: string]
   'dismiss-hint': []
 }>()
-
-const containerRef = ref<HTMLDivElement>()
-let engine: GameEngine | null = null
-let resizeObserver: ResizeObserver | null = null
+const game = ref<InstanceType<typeof PhaserGameContainer>>()
 defineExpose({
-  requestHint: () => engine?.requestHint(),
-  pause: () => engine?.pauseLevel(),
-  undoPuzzle: () => engine?.undoPuzzle(),
-  resetPuzzle: () => engine?.resetPuzzle(),
-})
-
-const GAME_WIDTH = 400
-const GAME_HEIGHT = 600
-
-onMounted(() => {
-  if (!containerRef.value) return
-
-  const callbacks: GameEngineCallbacks = {
-    onWinPending() {
-      emit('win-pending')
-    },
-    onWin() {
-      emit('win')
-    },
-    onFail() {
-      emit('fail')
-    },
-    onEvent(eventId: string) {
-      emit('event', eventId)
-    },
-    onHint(text: string, highlightObjectId?: string) {
-      emit('hint', text, highlightObjectId)
-    },
-    onDismissHint() {
-      emit('dismiss-hint')
-    },
-  }
-
-  engine = new GameEngine({
-    parent: containerRef.value,
-    width: GAME_WIDTH,
-    height: GAME_HEIGHT,
-    assetBaseUrl: import.meta.env.BASE_URL,
-  })
-  engine.start(callbacks)
-  resizeObserver = new ResizeObserver(() => engine?.refreshSize())
-  resizeObserver.observe(containerRef.value)
-
-  if (props.level) {
-    engine.loadLevel(props.level)
-  }
-})
-
-watch(
-  () => [props.level, props.revision] as const,
-  ([newLevel]) => {
-    if (newLevel && engine) {
-      engine.loadLevel(newLevel)
-    }
-  },
-)
-
-onUnmounted(() => {
-  resizeObserver?.disconnect()
-  engine?.destroy()
-  engine = null
+  requestHint: () => game.value?.requestHint(),
+  pause: () => game.value?.pause(),
+  undoPuzzle: () => game.value?.undoPuzzle(),
+  resetPuzzle: () => game.value?.resetPuzzle(),
 })
 </script>
-
 <template>
-  <div ref="containerRef" class="game-canvas-container" />
+  <component
+    v-if="level"
+    :is="level.id === 'level-032' ? ToyWarehouse : PhaserGameContainer"
+    :key="level?.id + '-' + revision"
+    ref="game"
+    :level="level"
+    :revision="revision"
+    @win="$emit('win')"
+    @win-pending="$emit('win-pending')"
+    @fail="$emit('fail')"
+    @event="$emit('event', $event)"
+    @hint="(text: string, id?: string) => $emit('hint', text, id)"
+    @dismiss-hint="$emit('dismiss-hint')"
+  />
 </template>
-
-<style scoped>
-.game-canvas-container {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.game-canvas-container :deep(canvas) {
-  display: block;
-  border-radius: 8px;
-}
-</style>

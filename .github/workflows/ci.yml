@@ -7,6 +7,7 @@ on:
       - chore/mobile-test-baseline
       - feat/50-levels
       - feat/puzzle-rework
+      - feat/toy-warehouse-3d
   pull_request:
 
 jobs:

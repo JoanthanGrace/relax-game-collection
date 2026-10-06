@@ -1,4 +1,6 @@
 export { GameEngine } from './engine/GameEngine'
+export { createPuzzle, transition, solved } from './puzzles/models'
+export type { PuzzleState, PuzzleAction } from './puzzles/models'
 export type { GameEngineConfig, GameEngineCallbacks } from './engine/GameEngine'
 export { LevelScene } from './engine/LevelScene'
 export type { LevelSceneCallbacks } from './engine/LevelScene'

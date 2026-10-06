@@ -2,6 +2,16 @@
 
 This file records public releases, deployment notes, verification results, and follow-up risks for NiceTap.
 
+## Unreleased - 3D toy warehouse art sample - 2026-10-06
+
+- Branch: `feat/toy-warehouse-3d`, based on `feat/puzzle-rework`. Not merged or publicly deployed; the production MVP remains unchanged.
+- Owner selected refined toy/clay styling. Upgraded only level 032 to a real Three.js miniature warehouse, with rounded crates, a courier robot, delivery pads, matte materials, soft shadows, and animated movement. Home/level selection and the other 49 levels are untouched visually.
+- Reuse the authored Sokoban model and existing progress/hint/skip contracts. Preserve undo/reset, goal counters, and touch controls. Reduced-motion preference disables travel animation. Unsupported WebGL falls back to the playable 2D version without changing saved progress or skip allowance.
+- Load the 3D scene in a separate chunk. Procedural meshes add no downloaded model/texture files. Three.js is MIT licensed. The sample chunk is about 531 KB minified / 135 KB gzip; PWA precache grows to 24 entries, about 3,070 KiB. The existing Phaser chunk remains about 1,621 KB / 381 KB gzip. Both large-chunk warnings are documented, not suppressed.
+- Verification: 299 unit tests, 50 level configuration checks, asset budgets, and workspace type checks passed. Full browser regression run: 70 passed. Three new viewport checks capture screenshots and inspect canvas pixel diversity/movement at 320px, 390px, and 1280px; additional checks cover touch completion and WebGL fallback. Static Pages build passed.
+- Local preview restored on port 3002; direct sample path `/game/level-032`. All game imagery stays inside the level area. No new service, paid dependency, or account requirement.
+- Pending: owner art-direction feedback, real-phone Safari/WeChat performance and audible sound checks. One polished sample does not mean the remaining levels are redesigned. See `docs/toy-warehouse-3d.md` for the scoped rollout direction.
+
 ## Unreleased - Reasoning puzzles and physical props - 2026-10-06
 
 - Branch: `feat/puzzle-rework`, based on `feat/50-levels`. Not merged or deployed; the public MVP is unchanged.

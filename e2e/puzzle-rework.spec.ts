@@ -20,7 +20,12 @@ async function drag(page: Page, x: number, y: number, tx: number, ty: number) {
 }
 const arrows = { up: [200, 472], right: [257, 514], down: [200, 524], left: [143, 514] } as const
 async function moves(page: Page, directions: (keyof typeof arrows)[]) {
-  for (const direction of directions) await tap(page, ...arrows[direction])
+  for (const direction of directions) {
+    if (await page.locator('.warehouse-controls').count()) {
+      await page.locator(`[data-direction="${direction}"]`).click()
+      await page.waitForTimeout(220)
+    } else await tap(page, ...arrows[direction])
+  }
 }
 async function solution(page: Page, n: number) {
   if (n === 31) {
